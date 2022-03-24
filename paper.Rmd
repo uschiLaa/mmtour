@@ -1,0 +1,79 @@
+---
+title: |
+  A new simplified manual tour, with examples in mathematica
+type: Short Technical Note
+author:
+  - name: Alex Aumann
+    affil: a
+    email: aaum0002@student.monash.edu
+  - name: German Valencia
+    affil: a
+    email: german.valencia@monash.edu
+  - name: Ursula Laa
+    affil: b
+    email: ursula.laa@boku.ac.at
+  - name: Dianne Cook
+    affil: c
+    email: dicook@monash.edu
+affiliation:
+  - num: a
+    address: |
+      School of Physics and Astronomy, Monash University
+  - num: b
+    address: |
+      Institute of Statistics, University of Natural Resources and Life Sciences, Vienna
+  - num: b
+    address: |
+      Department of Econometrics and Business Statistics, Monash University
+bibliography: biblio.bib
+geometry: margin=2.5cm
+abstract: |
+  Something here
+keywords: |
+  data visualisation; grand tour; statistical computing; statistical graphics; multivariate data; dynamic graphics
+header-includes: |
+  \usepackage{hyperref}
+  \usepackage[utf8]{inputenc}
+  \def\tightlist{}
+  \usepackage{setspace}
+output: rticles::tf_article
+keep_tex: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+```
+
+%\doublespacing
+# Introduction
+
+<!-- Background -->
+
+# Manual tour {#sec:method}
+
+## Background
+
+## New definition
+
+
+
+
+
+# Implementation {#sec:implementation}
+
+
+
+# Applications {#sec:examples}
+
+
+# Discussion {#sec:discussion}
+
+
+
+# Acknowledgements {-}
+
+The authors gratefully acknowledge the support of the Australian Research Council. The paper was written in `rmarkdown` [@rmarkdown] using `knitr` [@knitr]. 
+
+# Supplementary material {-}
+
+The source material and animated gifs for this paper are available at 
