@@ -63,9 +63,26 @@ From a statistical perspective it is rare to have data that are strictly 3D, and
 One such direction of work develops the ideas from PRIM-9, to provide manual control of a tour. @cook_manual_1997 describes controls for 1D (or 2D) projections, in a 2D (or 3D) manipulation space, allowing the user to select any variable axis, and rotate it into or out of or around the projection through horizontal, vertical, oblique, radial or angular changes in value. @spyrison_spinifex_2020 refines this algorithm and implements them to generate animations. 
 
 <!-- Purpose -->
-Manual controls are especially useful for assessing sensitivity of structure to particular elements of the projection. There are many places where it is useful. In exploratory data analysis, where one sees clusters in a projection, can some variables be removed from the projection without affecting the clustering. For interpreting models, one can reduce or increase a variable's contribution to examine the variable importance. These controls can also be used to interactively generate facetted plots [@XXX], or spatiotemporal glyphmaps [@XXX]. 
+Manual controls are especially useful for assessing sensitivity of structure to particular elements of the projection. There are many places where it is useful. In exploratory data analysis, where one sees clusters in a projection, can some variables be removed from the projection without affecting the clustering. For interpreting models, one can reduce or increase a variable's contribution to examine the variable importance. These controls can also be used to interactively generate facetted plots [@XXX], or spatiotemporal glyphmaps [@XXX]. Having the user interact with a projection is extremely valuable for understanding high-dimensional data. However, these algorithms have two problems: (1) the pre-processing of creating a manipulation space overly complicates the algorithm, (2) extending to higher dimensional control is difficult. 
+
+Through experiments with the relatively new interactive graphics capabilities in mathematica(?), we have realized that there is a simpler approach, which is more direct, and extensible for generating user interaction. This paper explains this, and is organized as follows. The next section describes the new algorithm for manual control. This is followed by details on implementation. The applications section illustrate how these can be used. 
 
 # Manual tour {#sec:method}
+
+## Background
+
+Describe the manip space, out of manual tour
+
+## New definition
+
+1. Provide a k-D projection
+2. Select variable to control
+3. Detect or provide direction of change
+4. Update projection, and orthonormalise
+
+Need to think about how the values for selected variable are made exact, that is constrained orthonormalisation.
+
+Need to think about checks, and error catching, maybe in implementation section. If selected variable has 0 coefficient, will that generate an orthonormalisation error?
 
 ```{r manualsequence, outwidth="80%", width=12, height=8, fig.cap="Sequence of projections where V3 contribution is changed."}
 source("../code/manual.R")
@@ -84,11 +101,11 @@ A <- matrix(runif(p*d, min=-1), ncol=d, byrow=TRUE)
 colnames(A) <- c("P1", "P2")
 rownames(A) <- paste0("V", 1:p)
 A <- tourr::orthonormalise(A)
-plot_basis(A)
   
 # Now set a new position
 vchange <- 3
 eps <- 0.02
+plot_basis(A, vchange)
 
 # Iterate and save images
 for (i in 1:11) {
@@ -96,15 +113,10 @@ for (i in 1:11) {
   A[vchange,] <- A[vchange,]*(1-i*eps)
   A <- tourr::orthonormalise(A)
   #png(flname, width=250, height=250)
-  plot_basis(A)
+  plot_basis(A, vchange)
   #dev.off()
 }
 ```
-
-## Background
-
-## New definition
-
 
 
 

@@ -107,22 +107,56 @@ projection without affecting the clustering. For interpreting models,
 one can reduce or increase a variable's contribution to examine the
 variable importance. These controls can also be used to interactively
 generate facetted plots \citep{XXX}, or spatiotemporal glyphmaps
-\citep{XXX}.
+\citep{XXX}. Having the user interact with a projection is extremely
+valuable for understanding high-dimensional data. However, these
+algorithms have two problems: (1) the pre-processing of creating a
+manipulation space overly complicates the algorithm, (2) extending to
+higher dimensional control is difficult.
+
+Through experiments with the relatively new interactive graphics
+capabilities in mathematica(?), we have realized that there is a simpler
+approach, which is more direct, and extensible for generating user
+interaction. This paper explains this, and is organized as follows. The
+next section describes the new algorithm for manual control. This is
+followed by details on implementation. The applications section
+illustrate how these can be used.
 
 \hypertarget{sec:method}{%
 \section{Manual tour}\label{sec:method}}
+
+\hypertarget{background}{%
+\subsection{Background}\label{background}}
+
+Describe the manip space, out of manual tour
+
+\hypertarget{new-definition}{%
+\subsection{New definition}\label{new-definition}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Provide a k-D projection
+\item
+  Select variable to control
+\item
+  Detect or provide direction of change
+\item
+  Update projection, and orthonormalise
+\end{enumerate}
+
+Need to think about how the values for selected variable are made exact,
+that is constrained orthonormalisation.
+
+Need to think about checks, and error catching, maybe in implementation
+section. If selected variable has 0 coefficient, will that generate an
+orthonormalisation error?
 
 \begin{figure}
 \centering
 \includegraphics{paper_files/figure-latex/manualsequence-1.pdf}
 \caption{Sequence of projections where V3 contribution is changed.}
 \end{figure}
-
-\hypertarget{background}{%
-\subsection{Background}\label{background}}
-
-\hypertarget{new-definition}{%
-\subsection{New definition}\label{new-definition}}
 
 \hypertarget{sec:implementation}{%
 \section{Implementation}\label{sec:implementation}}
