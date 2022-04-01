@@ -71,7 +71,43 @@ data visualisation; grand tour; statistical computing; statistical
 graphics; multivariate data; dynamic graphics
 \end{keywords}
 
-\%\doublespacing \# Introduction
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+From a statistical perspective it is rare to have data that are strictly
+3D, and so unlike in most computer graphics applications, the more
+useful methods for data analysis show projections from an arbitrary
+dimensional space. These are dynamic data visualizations methods and are
+collected under the term \emph{tours}. Tours involve views of
+high-dimensional (\(p\)) data in low-dimensional (\(d\)) projections. In
+his original paper on the grand tour, \citet{As85} provided several
+algorithms for tour paths that could theoretically show the viewer the
+data \emph{from all sides}. Prior to Asimov's work, there were numerous
+preparatory developments including \citet{tukey}'s PRIM-9. PRIM-9 had
+user-controlled rotations on coordinate axes, allowing one to manually
+tour through low-dimensional projections. It is impractical to
+impossible to steer through all possible projections, unlike Asimov's
+tours which allows one to quickly see many, many different projections.
+After Asimov there have been many, many tour developments, as summarized
+in \citet{lee2021}.
+
+One such direction of work develops the ideas from PRIM-9, to provide
+manual control of a tour. \citet{cook_manual_1997} describes controls
+for 1D (or 2D) projections, in a 2D (or 3D) manipulation space, allowing
+the user to select any variable axis, and rotate it into or out of or
+around the projection through horizontal, vertical, oblique, radial or
+angular changes in value. \citet{spyrison_spinifex_2020} refines this
+algorithm and implements them to generate animations.
+
+Manual controls are especially useful for assessing sensitivity of
+structure to particular elements of the projection. There are many
+places where it is useful. In exploratory data analysis, where one sees
+clusters in a projection, can some variables be removed from the
+projection without affecting the clustering. For interpreting models,
+one can reduce or increase a variable's contribution to examine the
+variable importance. These controls can also be used to interactively
+generate facetted plots \citep{XXX}, or spatiotemporal glyphmaps
+\citep{XXX}.
 
 \hypertarget{sec:method}{%
 \section{Manual tour}\label{sec:method}}
