@@ -36,6 +36,7 @@
 \usepackage[utf8]{inputenc}
 \def\tightlist{}
 \usepackage{setspace}
+\usepackage{graphicx}
 
 
 \begin{document}
@@ -124,38 +125,120 @@ illustrate how these can be used.
 \hypertarget{sec:method}{%
 \section{Manual tour}\label{sec:method}}
 
+An orthonormal basis (\(A_{p\times d}\)) and a variable id
+(\(m \in \{1, ..., p\}\)) to control are provided to initialise a manual
+tour. A method to update the values of the component of the controlled
+variable \(V_m\) is needed.
+
 \hypertarget{background}{%
 \subsection{Background}\label{background}}
 
-Describe the manip space, out of manual tour
+In the original work, the method for updating component values, for a 2D
+projection, was built trackball controls in 3D. A 3D manipulation space
+is created, as illustrated in Figure \ref{manipspace}, where the
+controlled variable has full range of motion from -1 to 1. Movements of
+a cursor are recorded and converted into changes in the values of
+\(V_m\) to change it's values in the displayed 2D projection. Movement
+could also be constrained to be only in horizontal, vertical, radial or
+angular motions.
 
-\hypertarget{new-definition}{%
-\subsection{New definition}\label{new-definition}}
+\begin{figure*}[ht]
+\centerline{\includegraphics[width=0.8\textwidth]{figures/manip_space.pdf}}
+\caption{Original contruction of the manual tour designed for 2D projections and created a 3D space from which to utilise track ball controls to change it's contribution. (Figure 3 from Cook and Buja (1997).)}
+\label{manipspace}
+\end{figure*}
+
+\hypertarget{new-simpler-definition}{%
+\subsection{New simpler definition}\label{new-simpler-definition}}
+
+The new approach emerged from experiments in mathematica. The components
+corresponding to \(V_m\) are directly controlled by cursor movement,
+which updates row \(m\) of \(A\). The updated matrix is then
+orthonormalised.
+
+\hypertarget{algorithm-1}{%
+\subsubsection{Algorithm 1}\label{algorithm-1}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Provide \(A\), and \(m\). (Note that \(m\) could also be automatically
+  chosen as the component that is closest to the cursor position.)
+\item
+  Change values in row \(m\), giving \(A^*\). A large change in these
+  values would correspond to making a large jump from the current
+  projection. Small changes would correspond to tracking a cursor,
+  making small jumps from the current projection.
+\item
+  Orthonormalise \(A^*\), using Gram-Schmidt. For \(d=2\), and
+  \(A^* = \left[ {\boldmath a}_{.1}~{\boldmath a}_{.2}\right]\), the
+  steps are:
+
+  \begin{enumerate}
+  \def\labelenumii{\roman{enumii}.}
+  \tightlist
+  \item
+    Normalise \({\boldmath a}_{.1}\), and \({\boldmath a}_{.2}\).
+  \item
+    \({\boldmath a}^*_{.2} = {\boldmath a}_{.2} - {\boldmath a}_{.1}^T{\boldmath a}_{.2}{\boldmath a}_{.1}\).
+  \item
+    Normalise \({\boldmath a}^*_{.2}\).
+  \end{enumerate}
+\end{enumerate}
+
+This algorithm will produce the changes to a projection as illustrated
+in Figure \ref{fig:manualsequence} (top row). The controlled variable,
+\(V_m\), corresponds to the black line, and sequential changes to row
+\(m\) of \(A\) can be seen to roughly follow a specified position
+(orange dot). Changes in the other components happen as a result of the
+orthonormalisation, but are uncontrolled.
+
+\hypertarget{algorithm-2}{%
+\subsubsection{Algorithm 2}\label{algorithm-2}}
+
+The problem with Algorithm 1 is that the precise values for \(V_m\)
+cannot be specified because the orthonormalisation wil change them. This
+modification will maintain the components of \(V_m\) precisely (Figure
+\ref{fig:manualsequence} (bottom row)). The algorithm is as follows:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Provide a k-D projection
+  Provide \(A\), and \(m\).
 \item
-  Select variable to control
+  Change values in row \(m\), giving \(A^*\).
 \item
-  Detect or provide direction of change
+  Store row \(m\) separately, and zero the values of row \(m\) in
+  \(A^*\), giving \(A^{*0}\).
 \item
-  Update projection, and orthonormalise
+  Orthonormalise \(A^{*0}\), using Gram-Schmidt.
+\item
+  Replace row \(m\) with the original values, giving \(A^{**}\).
+\item
+  For \(d=2\), adjust the values of \({\boldmath a}^{**}_{.2}\) using
 \end{enumerate}
 
-Need to think about how the values for selected variable are made exact,
-that is constrained orthonormalisation.
+\[a^{**}_{j2}+\frac{a_{m1}a_{m2}}{p-1}, j=1, ..., p, j\neq m\].
 
-Need to think about checks, and error catching, maybe in implementation
-section. If selected variable has 0 coefficient, will that generate an
-orthonormalisation error?
+which ensures that
+
+\[\sum_{j=1, j\neq m}^p a^{**}_{j1}a^{**}_{j2} + a_{m1}a_{m2} = 0\].
+
+If \(d>2\) the process would be sequentially repeated in the same manner
+that Gram-Schmidt is applied sequentially to orthormalise the columns of
+a matrix. If \(d=1\) no orthonormalisation is needed, and the projection
+vector would simply need to be normalised after each adjustment.
 
 \begin{figure}
 \centering
 \includegraphics{paper_files/figure-latex/manualsequence-1.pdf}
-\caption{Sequence of projections where V3 contribution is changed.}
+\caption{Sequence of projections where contribution of one variable is
+controlled (black) is changed: (top) unconstrained orthonormalisation,
+(bottom) constrained as specified. The dot (orange) indicates the chosen
+values for the controlled variable. For the constrained
+orthonormalisation it can be seen to precisely match the axis, but not
+so for the unconstrained orthonormalisation.}
 \end{figure}
 
 \hypertarget{sec:implementation}{%

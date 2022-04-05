@@ -36,6 +36,7 @@ header-includes: |
   \usepackage[utf8]{inputenc}
   \def\tightlist{}
   \usepackage{setspace}
+  \usepackage{graphicx}
 output: rticles::tf_article
 keep_tex: true
 ---
@@ -69,29 +70,66 @@ Through experiments with the relatively new interactive graphics capabilities in
 
 # Manual tour {#sec:method}
 
+An orthonormal basis ($A_{p\times d}$) and a variable id ($m \in \{1, ..., p\}$) to control are provided to initialise a manual tour. A method to update the values of the component of the controlled variable $V_m$ is needed. 
+
 ## Background
 
-Describe the manip space, out of manual tour
+In the original work, the method for updating component values, for a 2D projection, was built trackball controls in 3D. A 3D manipulation space is created, as illustrated in Figure \ref{manipspace}, where the controlled variable has full range of motion from -1 to 1. Movements of a cursor are recorded and converted into changes in the values of $V_m$ to change it's values in the displayed 2D projection. Movement could also be constrained to be only in horizontal, vertical, radial or angular motions. 
 
-## New definition
+\begin{figure*}[ht]
+\centerline{\includegraphics[width=0.8\textwidth]{figures/manip_space.pdf}}
+\caption{Original contruction of the manual tour designed for 2D projections and created a 3D space from which to utilise track ball controls to change it's contribution. (Figure 3 from Cook and Buja (1997).)}
+\label{manipspace}
+\end{figure*}
 
-1. Provide a k-D projection
-2. Select variable to control
-3. Detect or provide direction of change
-4. Update projection, and orthonormalise
+## New simpler definition
 
-Need to think about how the values for selected variable are made exact, that is constrained orthonormalisation.
+The new approach emerged from experiments in mathematica. The components corresponding to $V_m$ are directly controlled by cursor movement, which updates row $m$ of $A$. The updated matrix is then orthonormalised. 
 
-Need to think about checks, and error catching, maybe in implementation section. If selected variable has 0 coefficient, will that generate an orthonormalisation error?
+### Algorithm 1
 
-```{r manualsequence, outwidth="80%", width=12, height=8, fig.cap="Sequence of projections where V3 contribution is changed."}
-source("../code/manual.R")
+1. Provide $A$, and $m$. (Note that $m$ could also be automatically chosen as the component that is closest to the cursor position.)
+2. Change values in row $m$, giving $A^*$. A large change in these values would correspond to making a large jump from the current projection. Small changes would correspond to tracking a cursor, making small jumps from the current projection.
+3. Orthonormalise $A^*$, using Gram-Schmidt. For $d=2$, and $A^* = \left[ {\boldmath a}_{.1}~{\boldmath a}_{.2}\right]$, the steps are:
+
+    i. Normalise ${\boldmath a}_{.1}$, and ${\boldmath a}_{.2}$.
+    ii. ${\boldmath a}^*_{.2} = {\boldmath a}_{.2} - {\boldmath a}_{.1}^T{\boldmath a}_{.2}{\boldmath a}_{.1}$.
+    iii. Normalise ${\boldmath a}^*_{.2}$.
+
+This algorithm will produce the changes to a projection as illustrated in Figure \ref{fig:manualsequence} (top row). The controlled variable, $V_m$, corresponds to the black line, and sequential changes to row $m$ of $A$ can be seen to roughly follow a specified position (orange dot). Changes in the other components happen as a result of the orthonormalisation, but are uncontrolled. 
+
+### Algorithm 2
+
+The problem with Algorithm 1 is that the precise values for $V_m$ cannot be specified because the orthonormalisation wil change them. This modification will maintain the components of $V_m$ precisely (Figure \ref{fig:manualsequence} (bottom row)). The algorithm is as follows:
+
+1. Provide $A$, and $m$.
+2. Change values in row $m$, giving $A^*$.
+3. Store row $m$ separately, and zero the values of row $m$ in $A^*$, giving $A^{*0}$. 
+4. Orthonormalise $A^{*0}$, using Gram-Schmidt.
+5. Replace row $m$ with the original values, giving $A^{**}$. 
+6. For $d=2$, adjust the values of ${\boldmath a}^{**}_{.2}$ using 
+
+$$a^{**}_{j2}+\frac{a_{m1}a_{m2}}{p-1}, j=1, ..., p, j\neq m$$.
+
+which ensures that 
+
+$$\sum_{j=1, j\neq m}^p a^{**}_{j1}a^{**}_{j2} + a_{m1}a_{m2} = 0$$.
+
+If $d>2$ the process would be sequentially repeated in the same manner that Gram-Schmidt is applied sequentially to orthormalise the columns of a matrix. If $d=1$ no orthonormalisation is needed, and the projection vector would simply need to be normalised after each adjustment. 
+
+<!-- Need to think about how the values for selected variable are made exact, that is constrained orthonormalisation.
+
+Need to think about checks, and error catching, maybe in implementation section. If selected variable has 0 coefficient, will that generate an orthonormalisation error?-->
+
+```{r manualsequence, outwidth="80%", width=12, height=5, fig.cap="Sequence of projections where contribution of one variable is controlled (black) is changed: (top) unconstrained orthonormalisation, (bottom) constrained as specified. The dot (orange) indicates the chosen values for the controlled variable. For the constrained orthonormalisation it can be seen to precisely match the axis, but not so for the unconstrained orthonormalisation."}
+source("../code/plot_basis.R")
+source("../code/linear_alg.R")
 
 # Base plot set up
 plot.new()
 par(pty="s", xaxt="n", yaxt="n", bty="n",
       omi=c(0,0,0,0), mar=c(0,0,0,0),
-    mfrow=c(3,4))
+    mfrow=c(2,4))
 
 # Create manual tour example
 p <- 4
@@ -104,17 +142,30 @@ A <- tourr::orthonormalise(A)
   
 # Now set a new position
 vchange <- 3
-eps <- 0.02
-plot_basis(A, vchange)
+eps <- 0.1
+plot_basis(A, vchange, vcol="black")
 
 # Iterate and save images
-for (i in 1:11) {
-  flname <- paste0("mtour_plots/mtour", i, ".png")
-  A[vchange,] <- A[vchange,]*(1-i*eps)
-  A <- tourr::orthonormalise(A)
-  #png(flname, width=250, height=250)
-  plot_basis(A, vchange)
-  #dev.off()
+# Unconstrained orthonormalisation
+Anew <- A
+for (i in 1:3) {
+  Anew[vchange,] <- A[vchange,]*(1-i*eps)
+  exact <- Anew[vchange,]
+  Anew <- tourr::orthonormalise(Anew)
+  plot_basis(Anew, vchange, vcol="black")
+  points(exact[1], exact[2], pch=16, col="orange")
+}
+
+# Iterate and save images
+# Constrained orthonormalisation
+Anew <- A
+plot_basis(A, vchange, vcol="black")
+for (i in 1:3) {
+  Anew[vchange,] <- A[vchange,]*(1-i*eps)
+  exact <- Anew[vchange,]
+  Anew <- orthonormalise_frozen(Anew, vchange)
+  plot_basis(Anew, vchange, vcol="black")
+  points(exact[1], exact[2], pch=16, col="orange")
 }
 ```
 
