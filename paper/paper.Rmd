@@ -1,6 +1,6 @@
 ---
 title: |
-  A new simplified manual tour, with examples in mathematica
+  A new simplified manual tour, with examples in mathematica and R
 type: Short Technical Note
 author:
   - name: Alex Aumann
