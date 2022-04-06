@@ -169,7 +169,16 @@ for (i in 1:3) {
 }
 ```
 
+### Potential Algorithm 3
 
+For now just sketching the idea:
+
+- first step is to click on the axis display to change the contribution of one variable $m$
+- capture that position and replace the corresponding row in the projection matrix
+- for 2D projection this gives components $m_1$ along "x" direction and $m_2$ along $y$ direction
+- next step: rotate basis such that direction of row m now corresponds to the first basis vector, this means we apply 2x2 rotation matrix to each row of the projection matrix, where the rotation angle is $tan(\theta) = m_2/m_1$ (that matrix can be written just in terms of that ratio, $x= m_2/m_1$, when $m_1<0$ I think we just need to translate $\theta \rightarrow \theta + \pi$)
+- take the rotated basis, apply Gram-Schmidt, now the direction of $m$ will not change (but the length will change during normalization)
+- rotated back to the original xy basis to update the plots
 
 
 # Implementation {#sec:implementation}
