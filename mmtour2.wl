@@ -3,7 +3,7 @@
 BeginPackage["mmtour`"];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Functions*)
 
 
@@ -318,13 +318,12 @@ slice ={},
 {i, 1, Length[dataSets]}];
 
 ListPlot[Map[Function[x, x . lst], sliceSet],
-AspectRatio->1,
 AxesLabel->{"\!\(\*
 StyleBox[\"P1\",\nFontSlant->\"Italic\"]\)", "\!\(\*
 StyleBox[\"P2\",\nFontSlant->\"Italic\"]\)"},
 PlotStyle->colours,
 LabelStyle->FontFamily->"Times New Roman",
-AspectRatio->Automatic,
+AspectRatio->1,PlotMarkers->{\[FilledSmallCircle]},
 ImageSize->500
 ]
 ]
