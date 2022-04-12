@@ -180,6 +180,70 @@ For now just sketching the idea:
 - take the rotated basis, apply Gram-Schmidt, now the direction of $m$ will not change (but the length will change during normalization)
 - rotated back to the original xy basis to update the plots
 
+```{r }
+source("../code/plot_basis.R")
+source("../code/linear_alg.R")
+
+# Base plot set up
+plot.new()
+par(pty="s", xaxt="n", yaxt="n", bty="n",
+      omi=c(0,0,0,0), mar=c(0,0,0,0),
+    mfrow=c(1,4))
+
+# Create manual tour example
+p <- 4
+d <- 2
+set.seed(24)
+A <- matrix(runif(p*d, min=-1), ncol=d, byrow=TRUE)
+colnames(A) <- c("P1", "P2")
+rownames(A) <- paste0("V", 1:p)
+A <- tourr::orthonormalise(A)
+  
+# Now set a new position
+vchange <- 3
+eps <- 0.1
+plot_basis(A, vchange, vcol="black")
+
+# j is the component that should be kept fixed
+orthonormalize_rotated <- function(A, j){
+  m1 <- A[j, 1]
+  m2 <- A[j, 2]
+  c <- 1 / (sqrt(1 + (m2/m1)^2))
+  s <- (m2/m1) / (sqrt(1 + (m2/m1)^2))
+  rot <- matrix(c(c, -s, s, c), nrow = 2)
+  rot_inv <- matrix(c(c, s, -s, c), nrow = 2)
+  for(i in 1:nrow(A)){
+    A[i,] <- rot %*% A[i,]
+  }
+  A[,1] <- normalize_w_fixed(A[,1], j)
+  A <- tourr::orthonormalise(A)
+  for(i in 1:nrow(A)){
+    A[i,] <- rot_inv %*% A[i,]
+    }
+  A
+}
+
+# normalize a vector while keeping component j fixed
+normalize_w_fixed <- function(v, j){
+  c <- v[j]
+  k <- sqrt((1-c^2) / sum(v[-j]^2))
+  v[-j] <- k * v[-j]
+  v
+}
+
+# Iterate and save images
+# Unconstrained orthonormalisation
+Anew <- A
+for (i in 1:3) {
+  Anew[vchange,] <- A[vchange,]*(1-i*eps)
+  exact <- Anew[vchange,]
+  Anew <- orthonormalize_rotated(Anew, vchange)
+  plot_basis(Anew, vchange, vcol="black")
+  points(exact[1], exact[2], pch=16, col="orange")
+}
+
+```
+
 
 # Implementation {#sec:implementation}
 

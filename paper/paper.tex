@@ -25,12 +25,9 @@
 \newtheorem{remark}{Remark}
 \newtheorem{notation}{Notation}
 
+% see https://stackoverflow.com/a/47122900
 
-% tightlist command for lists without linebreak
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
-
+% Pandoc citation processing
 
 \usepackage{hyperref}
 \usepackage[utf8]{inputenc}
@@ -40,7 +37,6 @@
 
 
 \begin{document}
-
 
 \articletype{Short Technical Note}
 
@@ -241,6 +237,38 @@ orthonormalisation it can be seen to precisely match the axis, but not
 so for the unconstrained orthonormalisation.}
 \end{figure}
 
+\hypertarget{potential-algorithm-3}{%
+\subsubsection{Potential Algorithm 3}\label{potential-algorithm-3}}
+
+For now just sketching the idea:
+
+\begin{itemize}
+\tightlist
+\item
+  first step is to click on the axis display to change the contribution
+  of one variable \(m\)
+\item
+  capture that position and replace the corresponding row in the
+  projection matrix
+\item
+  for 2D projection this gives components \(m_1\) along ``x'' direction
+  and \(m_2\) along \(y\) direction
+\item
+  next step: rotate basis such that direction of row m now corresponds
+  to the first basis vector, this means we apply 2x2 rotation matrix to
+  each row of the projection matrix, where the rotation angle is
+  \(tan(\theta) = m_2/m_1\) (that matrix can be written just in terms of
+  that ratio, \(x= m_2/m_1\), when \(m_1<0\) I think we just need to
+  translate \(\theta \rightarrow \theta + \pi\))
+\item
+  take the rotated basis, apply Gram-Schmidt, now the direction of \(m\)
+  will not change (but the length will change during normalization)
+\item
+  rotated back to the original xy basis to update the plots
+\end{itemize}
+
+\includegraphics{paper_files/figure-latex/unnamed-chunk-1-1.pdf}
+
 \hypertarget{sec:implementation}{%
 \section{Implementation}\label{sec:implementation}}
 
@@ -266,7 +294,6 @@ The source material and animated gifs for this paper are available at
 
 \bibliographystyle{tfcad}
 \bibliography{biblio.bib}
-
 
 
 
