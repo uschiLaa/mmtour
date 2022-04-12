@@ -180,6 +180,8 @@ For now just sketching the idea:
 - take the rotated basis, apply Gram-Schmidt, now the direction of $m$ will not change (but the length will change during normalization)
 - rotated back to the original xy basis to update the plots
 
+XXX need to check calculation of angle when $m_1 < 0$
+
 ```{r }
 source("../code/plot_basis.R")
 source("../code/linear_alg.R")
