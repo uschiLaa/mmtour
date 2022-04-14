@@ -1,7 +1,7 @@
 {\rtf1\ansi\ansicpg1252\cocoartf2513
 \cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
+{\colortbl;\red255\green255\blue255;\red26\green26\blue26;\red255\green255\blue255;}
+{\*\expandedcolortbl;;\cssrgb\c13333\c13333\c13333;\cssrgb\c100000\c100000\c100000;}
 \paperw11900\paperh16840\margl1440\margr1440\vieww16200\viewh13200\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
@@ -9,4 +9,23 @@
 \
 Some functions need small changes need to decide on that and on which functions to include in package\
 \
-I created two notebooks to show some of the features that work by importing the package and needed data sets}
+I created two notebooks to show some of the features that work by importing the package and needed data sets\
+\
+Attempted changes to SliceDynamic in mmtour2.wl (compares data sets)\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \expnd0\expndtw0\kerning0
+1. add to PlotList\'a0AspectRatio -> 1, PlotMarkers -> \{\\[FilledSmallCircle]\},\cb1 \
+\cb3 2. Try to fix the range of the plot for a given projection so that the axes do not change as I move the slice slider. \
+\
+Attempted with \
+\
+aux = Drop[data, \{\}, \{-1\}] . lst;\
+\
+And then add to ListPlot:\
+PlotRange -> \
+ 1.2*\{\{Min[aux[[1, All]]], Max[aux[[1, All]]]\}, \{Min[aux[[2, All]]], \
+    Max[aux[[2, All]]]\}\}\
+\
+Doing this found that when running SliceDynamic[paramSpace[[2 ;; -1]], A, \{0, 0, 0, 0\}, 1., \{0, 1\}]\
+(So full projection), the number of points changes as I change the projection. Something is wrong with the code.}
