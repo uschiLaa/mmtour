@@ -316,14 +316,14 @@ colours = Append[colours, {ColorData[97, dataSets[[i, 1, -1]]]}];];(*Here you co
 
 slice ={},
 {i, 1, Length[dataSets]}];
-Print[Dimensions[sliceSet,3]]
+
 ListPlot[Map[Function[x, x . lst], sliceSet],
 AxesLabel->{"\!\(\*
 StyleBox[\"P1\",\nFontSlant->\"Italic\"]\)", "\!\(\*
 StyleBox[\"P2\",\nFontSlant->\"Italic\"]\)"},
 PlotStyle->colours,
 LabelStyle->FontFamily->"Times New Roman",
-AspectRatio->Automatic,
+ AspectRatio->1,PlotMarkers->{\[FilledSmallCircle]},PlotRange->{{Min[Transpose[Drop[data,{},{-1}] . lst][[1]]],Max[Transpose[Drop[data,{},{-1}] . lst][[1]]]},{Min[Transpose[Drop[data,{},{-1}] . lst][[2]]],Max[Transpose[Drop[data,{},{-1}] . lst][[2]]]}},
 ImageSize->500
 ]
 ]

@@ -20,12 +20,9 @@ Attempted changes to SliceDynamic in mmtour2.wl (compares data sets)\
 \
 Attempted with \
 \
-aux = Drop[data, \{\}, \{-1\}] . lst;\
+PlotRange -> \{\{Min[Transpose[Drop[data, \{\}, \{-1\}] . lst][[1]]], \
+   Max[Transpose[Drop[data, \{\}, \{-1\}] . lst][[1]]]\}, \{Min[\
+    Transpose[Drop[data, \{\}, \{-1\}] . lst][[2]]], \
+   Max[Transpose[Drop[data, \{\}, \{-1\}] . lst][[2]]]\}\},\
 \
-And then add to ListPlot:\
-PlotRange -> \
- 1.2*\{\{Min[aux[[1, All]]], Max[aux[[1, All]]]\}, \{Min[aux[[2, All]]], \
-    Max[aux[[2, All]]]\}\}\
-\
-Doing this found that when running SliceDynamic[paramSpace[[2 ;; -1]], A, \{0, 0, 0, 0\}, 1., \{0, 1\}]\
-(So full projection), the number of points changes as I change the projection. Something is wrong with the code.}
+This appears to work, may not be the most elegant or efficient though}
