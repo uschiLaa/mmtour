@@ -37,6 +37,8 @@ header-includes: |
   \def\tightlist{}
   \usepackage{setspace}
   \usepackage{graphicx}
+  \usepackage{nicematrix}
+  \NiceMatrixOptions{code-for-first-row = \color{red} ,code-for-last-row = \color{red} ,code-for-first-col = \color{blue} ,code-for-last-col = \color{blue}}
 output: rticles::tf_article
 keep_tex: true
 ---
@@ -120,6 +122,38 @@ If $d>2$ the process would be sequentially repeated in the same manner that Gram
 <!-- Need to think about how the values for selected variable are made exact, that is constrained orthonormalisation.
 
 Need to think about checks, and error catching, maybe in implementation section. If selected variable has 0 coefficient, will that generate an orthonormalisation error?-->
+
+### Algorithm 3
+
+For $d=2$ projections, the projection matrix is the sub-matrix of $A$ formed by its first two columns. Whereas orthonormality of the basis for the p-dimensional space is given by $e_i\cdot e_j=\delta_{ij},{i,j,=1,\cdots,}$, orthonormality of the projection matrix is expressed as $P_i\cdot P_j=\delta_{ij}, {i,j=1,2}$. Movement of the cursor takes the two components ${x_{m1},x_{m2}}$ into a selected new value ${a,b}$. Although the motion is constrained by $a^2+b^2\leq 1$, this is not sufficient to guarantee orthonormality of the new projection matrix. One possible algorithm to achieve this is
+\begin{enumerate}
+\item Cursor movement takes ${x_{m1},x_{m2}}\to {a,b}$
+\item The freedom to change the components $A_{i3}\cdots A_{ip}$ (the columns of $A$ not corresponding to the projection matrix) is used to select a new orthonormal basis as follows:
+\begin{enumerate}
+\item For row $m$ one chooses $A_{m3}=\sqrt{1-a^2-b^2},~A_{m,k>3}=0$
+\item For other rows, $A_{i\neq m,j\geq3}$ random selections in the range $(-1,1)$ are made.
+\item The Gram-Schmidt algorithm is then used to obtain an orthonormal basis taking $e_m$ as the first vector (which is already normalised), and then proceeding as usual $e_1\to e_1-(e_1\cdot e_m) e_m$, $e_1\to e_1/(e_1\cdot e_1)$, etc.
+\end{enumerate}
+\item this results in the orthonormal basis $A^*$ and a new projection matrix with $P_{m1}=a,~P_{m2}=b$.
+\end{enumerate}
+The random choice for the components of $A$ not in the projection matrix allows the exploration of dimensions perpendicular to the projection plane.
+
+\begin{align}
+A=~~~& \begin{pNiceArray}{ccccc}[first-row,first-col]
+\CodeBefore
+       \columncolor{red!15}{1,2}
+              \rowcolor{blue!15}{4}
+     \Body
+       & \stackrel{P_1}{\downarrow} & \stackrel{P_2}{\downarrow} &  & &\\
+e_1\to & x_{11} & x_{12}  & x_{13} & \cdots & x_{1p} \\
+e_2 \to& x_{21}  & x_{22}  & \cdot  &\cdots & x_{2p} \\
+\vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\ 
+ e_m \to& x_{m1}  & x_{m2}  & \cdot  &\cdots & x_{mp} \\   
+\vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\
+e_p \to&x_{p1} & x_{p2} &\cdot &\cdots & x_{pp} 
+\end{pNiceArray},\quad (x_{m1},x_{m2})\to (a,b)
+\end{align}
+
 
 ```{r manualsequence, outwidth="80%", width=12, height=5, fig.cap="Sequence of projections where contribution of one variable is controlled (black) is changed: (top) unconstrained orthonormalisation, (bottom) constrained as specified. The dot (orange) indicates the chosen values for the controlled variable. For the constrained orthonormalisation it can be seen to precisely match the axis, but not so for the unconstrained orthonormalisation."}
 source("../code/plot_basis.R")
