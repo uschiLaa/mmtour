@@ -283,7 +283,47 @@ for (i in 1:3) {
 
 # Implementation {#sec:implementation}
 
+The following functions are implemented in the Mathematica package {\tt mmtour.wl}
 
+\begin{itemize}
+
+\item ProjectionPlot[data, projmat, xRange(=Automatic), yRange(=Automatic), 
+colour(=Automatic)] with arguments
+
+\begin{itemize}
+\item data: A list of data matrices (they must all have the same dimensionality)
+\item projmat: A projection matrix which describes the projection plane. This is the 
+initial projection and does not neet by orthonormal.
+\item xRange: A list which details the range of the horizontal axis.
+\item yRange: A list which details the range of the vertical axis.
+\item colour: A list of graphics directives to be applied to each data \
+matrix.
+\end{itemize}
+
+There are problems with the default values for x and y ranges and colour. It would be 
+better to fix the ranges and colour based on the data as well as the origin of axes 
+and the size of the points.
+
+The format for the printed projection matrix can be improved also. Maybe fix the 
+number of digits and the position of the label.
+
+\item SlicePlot[data, projmat, centrePoint, height, heightRange, 
+ptSize1(=0.005), ptSize2(=0.004), minDist(=0)] with arguments (used to be called SliceDynamic in Alex's first version, the name SliceDynamic was taken by something else below)
+
+\begin{itemize}
+\item data: A data matrix
+\item projmat: The inital projection matrix
+\item centrepoint: The initial position of the slice
+\item height: The initial height of the slice
+\item heightRange: The range of heights
+\item ptSize1: The size of the points that exist within the slice
+\item ptSize2: The size of the points that exist outside of the slice
+\end{itemize}
+
+This function requires some auxiliary functions. It does not accept more than one data set.
+
+
+\end{itemize}
 
 # Applications {#sec:examples}
 
