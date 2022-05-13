@@ -304,6 +304,8 @@ There are problems with the default values for x and y ranges and colour. It wou
 better to fix the ranges and colour based on the data as well as the origin of axes 
 and the size of the points.
 
+It would be good if the initial projection matrix (and maybe the centre) had default values. Perhaps a random matrix with the correct dimensions read from the data?
+
 The format for the printed projection matrix can be improved also. Maybe fix the 
 number of digits and the position of the label.
 
@@ -322,7 +324,35 @@ ptSize1(=0.005), ptSize2(=0.004), minDist(=0)] with arguments (used to be called
 
 This function requires some auxiliary functions. It does not accept more than one data set.
 
+It would be good if the initial projection matrix (and maybe the centre) had default values. Perhaps a random matrix with the correct dimensions read from the data?
 
+It may be good to fix the size of the points, the centre of the axes and the scales of the axes rather than allow them to change as the projection and slicing changes
+
+\item SliceDynamic[data, projmat, centrePoint, height, heightRange, 
+ ptSize1 : 0.005, ptSize2 : 0.004] with arguments
+
+\begin{itemize}
+\item data: A data matrix with an extra groupling or clustering column (numerical) 
+\item projmat: The inital projection matrix
+\item centrepoint: The initial position of the slice
+\item height: The initial height of the slice
+\item heightRange: The range of heights
+\item ptSize1: The size of the points that exist within the slice
+\item ptSize2: The size of the points that exist outside of the slice
+\end{itemize}
+
+Does this need to be a separate function from SlicePlot?
+
+It would be good if the initial projection matrix (and maybe the centre) had default values. Perhaps a random matrix with the correct dimensions read from the data?
+
+It may be good to fix the size of the points, the centre of the axes and the scales of the axes rather than allow them to change as the projection and slicing changes
+
+I have found it useful to input different data sets rather than have this function sort them automatically using the last column.
+
+\item Projected2DSliderPlot[]
+
+This function uses a different display for the projection that I find very useful. However as it stands it is specific to one data set. Needs to be generalised to arbitrary data if we want to keep it.
+   
 \end{itemize}
 
 # Applications {#sec:examples}
@@ -330,6 +360,20 @@ This function requires some auxiliary functions. It does not accept more than on
 
 # Discussion {#sec:discussion}
 
+- As was said before, we need to make sure the drawing range is fixed (no resizing of the axis when changing projection or slicing).
+- Should also make sure the size of the points is fixed (maybe this will be automatic if the drawing range is fixed?), bigger points would be preferred, currently the size is sometimes really tiny and it becomes difficult to see anything.
+- Can we have some heuristic to decide the range for the slice thickness slider? In the second graph there is a tiny part of the slider where the changes are interesting, difficult to navigate since this makes it super sensitive to any small movement, while most of the options are not interesting. My suggestion would be to keep (as I understand is the case now) the maximum thickness (all points in) as the upper bound, but instead of zero use a thickness below which slices tend to be empty as the lower bound.
+- For the olives example I think the relation between x2 and the blue region could be interesting.
+- pdfsense data: can we use random samples instead of the first 10k rows? Then we should still be able to see the bigger picture (with picking the first ones we get some artificial structure from how the data was sampled initially).
+
+I was playing around with this today. Looks like the axes are fixed when changing slice thickness, but not when rotating?
+
+Anyways, some observations that might be useful, but all of this seems difficult for including in a paper:
+
+- In the first example we can show how the yellow group is associated with the first variable (x1, I guess this is C9?) - when slicing through the center it only appears when x1 has a bigger component on the projection, it is associated with low values of x1. Since they are not near the average value of x1 the points do not get captured in a slice where x1 is not important in the projection. We can move the center point to -1 in the first component to then explore how the yellow group relates to the other three variables. Much less clear, maybe some indication of smaller x2 and larger x3 for this. 
+- The second example is too busy for manual exploration I would say (too many axes to move around separately).
+- Third example could be similar to the first: blue region requires small values of x2, can be understood from the exploration, then move center point to -0.5 in x2 to explore further. Now interpretation becomes tricky. Sometimes blue and yellow seem just randomly everywhere, sometimes blue more contained in an ellipsoid around the center (indicating some correlation between variables). For example try zeroing out components 2 and 3 to see this slice in x1 vs x4.
+- For the last example x4 seems to be the one to work with. I feel like this is again very similar, maybe better to instead explore other examples (maybe something without slicing?)
 
 
 # Acknowledgements {-}
