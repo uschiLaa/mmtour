@@ -25,18 +25,24 @@
 \newtheorem{remark}{Remark}
 \newtheorem{notation}{Notation}
 
-% see https://stackoverflow.com/a/47122900
 
-% Pandoc citation processing
+% tightlist command for lists without linebreak
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
 
 \usepackage{hyperref}
 \usepackage[utf8]{inputenc}
 \def\tightlist{}
 \usepackage{setspace}
 \usepackage{graphicx}
+\usepackage{nicematrix}
+\NiceMatrixOptions{code-for-first-row = \color{red} ,code-for-last-row = \color{red} ,code-for-first-col = \color{blue} ,code-for-last-col = \color{blue}}
 
 
 \begin{document}
+
 
 \articletype{Short Technical Note}
 
@@ -226,6 +232,51 @@ that Gram-Schmidt is applied sequentially to orthormalise the columns of
 a matrix. If \(d=1\) no orthonormalisation is needed, and the projection
 vector would simply need to be normalised after each adjustment.
 
+\hypertarget{algorithm-3}{%
+\subsubsection{Algorithm 3}\label{algorithm-3}}
+
+For \(d=2\) projections, the projection matrix is the sub-matrix of
+\(A\) formed by its first two columns. Whereas orthonormality of the
+basis for the p-dimensional space is given by
+\(e_i\cdot e_j=\delta_{ij},{i,j,=1,\cdots,}\), orthonormality of the
+projection matrix is expressed as
+\(P_i\cdot P_j=\delta_{ij}, {i,j=1,2}\). Movement of the cursor takes
+the two components \({x_{m1},x_{m2}}\) into a selected new value
+\({a,b}\). Although the motion is constrained by \(a^2+b^2\leq 1\), this
+is not sufficient to guarantee orthonormality of the new projection
+matrix. One possible algorithm to achieve this is
+
+\begin{enumerate}
+\item Cursor movement takes ${x_{m1},x_{m2}}\to {a,b}$
+\item The freedom to change the components $A_{i3}\cdots A_{ip}$ (the columns of $A$ not corresponding to the projection matrix) is used to select a new orthonormal basis as follows:
+\begin{enumerate}
+\item For row $m$ one chooses $A_{m3}=\sqrt{1-a^2-b^2},~A_{m,k>3}=0$
+\item For other rows, $A_{i\neq m,j\geq3}$ random selections in the range $(-1,1)$ are made.
+\item The Gram-Schmidt algorithm is then used to obtain an orthonormal basis taking $e_m$ as the first vector (which is already normalised), and then proceeding as usual $e_1\to e_1-(e_1\cdot e_m) e_m$, $e_1\to e_1/(e_1\cdot e_1)$, etc.
+\end{enumerate}
+\item this results in the orthonormal basis $A^*$ and a new projection matrix with $P_{m1}=a,~P_{m2}=b$.
+\end{enumerate}
+
+The random choice for the components of \(A\) not in the projection
+matrix allows the exploration of dimensions perpendicular to the
+projection plane.
+
+\begin{align}
+A=~~~& \begin{pNiceArray}{ccccc}[first-row,first-col]
+\CodeBefore
+       \columncolor{red!15}{1,2}
+              \rowcolor{blue!15}{4}
+     \Body
+       & \stackrel{P_1}{\downarrow} & \stackrel{P_2}{\downarrow} &  & &\\
+e_1\to & x_{11} & x_{12}  & x_{13} & \cdots & x_{1p} \\
+e_2 \to& x_{21}  & x_{22}  & \cdot  &\cdots & x_{2p} \\
+\vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\ 
+ e_m \to& x_{m1}  & x_{m2}  & \cdot  &\cdots & x_{mp} \\   
+\vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\
+e_p \to&x_{p1} & x_{p2} &\cdot &\cdots & x_{pp} 
+\end{pNiceArray},\quad (x_{m1},x_{m2})\to (a,b)
+\end{align}
+
 \begin{figure}
 \centering
 \includegraphics{paper_files/figure-latex/manualsequence-1.pdf}
@@ -267,16 +318,205 @@ For now just sketching the idea:
   rotated back to the original xy basis to update the plots
 \end{itemize}
 
+XXX need to check calculation of angle when \(m_1 < 0\)
+
 \includegraphics{paper_files/figure-latex/unnamed-chunk-1-1.pdf}
 
 \hypertarget{sec:implementation}{%
 \section{Implementation}\label{sec:implementation}}
+
+The following functions are implemented in the Mathematica package
+\texttt{mmtour.wl}:
+
+\begin{itemize}
+\item
+  \texttt{ProjectionPlot{[}data,\ projmat,\ xRange(=Automatic),\ yRange(=Automatic),\ \ colour(=Automatic){]}}
+  with arguments
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{data}: A list of data matrices (they must all have the same
+    dimensionality)
+  \item
+    `\texttt{projmat}: A projection matrix which describes the
+    projection plane. This is the initial projection and does not neet
+    by orthonormal.
+  \item
+    `\texttt{xRange}: A list which details the range of the horizontal
+    axis.
+  \item
+    `\texttt{yRange}: A list which details the range of the vertical
+    axis.
+  \item
+    `\texttt{colour}: A list of graphics directives to be applied to
+    each data\\
+    matrix.
+  \end{itemize}
+\end{itemize}
+
+There are problems with the default values for x and y ranges and
+colour. It would be better to fix the ranges and colour based on the
+data as well as the origin of axes and the size of the points.
+
+It would be good if the initial projection matrix (and maybe the centre)
+had default values. Perhaps a random matrix with the correct dimensions
+read from the data?
+
+The format for the printed projection matrix can be improved also. Maybe
+fix the number of digits and the position of the label.
+
+\begin{itemize}
+\item
+  \texttt{SlicePlot{[}data,\ projmat,\ centrePoint,\ height,\ heightRange,\ ptSize1(=0.005),\ ptSize2(=0.004),\ minDist(=0){]}}
+  with arguments (used to be called SliceDynamic in Alex's first
+  version, the name SliceDynamic was taken by something else below)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{data}: A data matrix
+  \item
+    \texttt{projmat}: The inital projection matrix
+  \item
+    \texttt{centrepoint}: The initial position of the slice
+  \item
+    \texttt{height}: The initial height of the slice
+  \item
+    \texttt{heightRange}: The range of heights
+  \item
+    \texttt{ptSize1}: The size of the points that exist within the slice
+  \item
+    \texttt{ptSize2}: The size of the points that exist outside of the
+    slice
+  \end{itemize}
+\end{itemize}
+
+This function requires some auxiliary functions. It does not accept more
+than one data set.
+
+It would be good if the initial projection matrix (and maybe the centre)
+had default values. Perhaps a random matrix with the correct dimensions
+read from the data?
+
+It may be good to fix the size of the points, the centre of the axes and
+the scales of the axes rather than allow them to change as the
+projection and slicing changes
+
+\begin{itemize}
+\item
+  \texttt{SliceDynamic{[}data,\ projmat,\ centrePoint,\ height,\ heightRange,\ ptSize1\ :\ 0.005,\ ptSize2\ :\ 0.004{]}}
+  with arguments
+\item
+  \texttt{data}: A data matrix with an extra groupling or clustering
+  column (numerical)
+\item
+  \texttt{projmat}: The inital projection matrix
+\item
+  \texttt{centrepoint}: The initial position of the slice
+\item
+  \texttt{height}: The initial height of the slice
+\item
+  \texttt{heightRange}: The range of heights
+\item
+  \texttt{ptSize1}: The size of the points that exist within the slice
+\item
+  \texttt{ptSize2}: The size of the points that exist outside of the
+  slice
+\end{itemize}
+
+Does this need to be a separate function from SlicePlot?
+
+It would be good if the initial projection matrix (and maybe the centre)
+had default values. Perhaps a random matrix with the correct dimensions
+read from the data?
+
+It may be good to fix the size of the points, the centre of the axes and
+the scales of the axes rather than allow them to change as the
+projection and slicing changes
+
+I have found it useful to input different data sets rather than have
+this function sort them automatically using the last column.
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{Projected2DSliderPlot{[}{]}}
+\end{itemize}
+
+This function uses a different display for the projection that I find
+very useful. However as it stands it is specific to one data set. Needs
+to be generalised to arbitrary data if we want to keep it.
 
 \hypertarget{sec:examples}{%
 \section{Applications}\label{sec:examples}}
 
 \hypertarget{sec:discussion}{%
 \section{Discussion}\label{sec:discussion}}
+
+\begin{itemize}
+\tightlist
+\item
+  As was said before, we need to make sure the drawing range is fixed
+  (no resizing of the axis when changing projection or slicing).
+\item
+  Should also make sure the size of the points is fixed (maybe this will
+  be automatic if the drawing range is fixed?), bigger points would be
+  preferred, currently the size is sometimes really tiny and it becomes
+  difficult to see anything.
+\item
+  Can we have some heuristic to decide the range for the slice thickness
+  slider? In the second graph there is a tiny part of the slider where
+  the changes are interesting, difficult to navigate since this makes it
+  super sensitive to any small movement, while most of the options are
+  not interesting. My suggestion would be to keep (as I understand is
+  the case now) the maximum thickness (all points in) as the upper
+  bound, but instead of zero use a thickness below which slices tend to
+  be empty as the lower bound.
+\item
+  For the olives example I think the relation between x2 and the blue
+  region could be interesting.
+\item
+  pdfsense data: can we use random samples instead of the first 10k
+  rows? Then we should still be able to see the bigger picture (with
+  picking the first ones we get some artificial structure from how the
+  data was sampled initially).
+\end{itemize}
+
+I was playing around with this today. Looks like the axes are fixed when
+changing slice thickness, but not when rotating?
+
+Anyways, some observations that might be useful, but all of this seems
+difficult for including in a paper:
+
+\begin{itemize}
+\tightlist
+\item
+  In the first example we can show how the yellow group is associated
+  with the first variable (x1, I guess this is C9?) - when slicing
+  through the center it only appears when x1 has a bigger component on
+  the projection, it is associated with low values of x1. Since they are
+  not near the average value of x1 the points do not get captured in a
+  slice where x1 is not important in the projection. We can move the
+  center point to -1 in the first component to then explore how the
+  yellow group relates to the other three variables. Much less clear,
+  maybe some indication of smaller x2 and larger x3 for this.
+\item
+  The second example is too busy for manual exploration I would say (too
+  many axes to move around separately).
+\item
+  Third example could be similar to the first: blue region requires
+  small values of x2, can be understood from the exploration, then move
+  center point to -0.5 in x2 to explore further. Now interpretation
+  becomes tricky. Sometimes blue and yellow seem just randomly
+  everywhere, sometimes blue more contained in an ellipsoid around the
+  center (indicating some correlation between variables). For example
+  try zeroing out components 2 and 3 to see this slice in x1 vs x4.
+\item
+  For the last example x4 seems to be the one to work with. I feel like
+  this is again very similar, maybe better to instead explore other
+  examples (maybe something without slicing?)
+\end{itemize}
 
 \hypertarget{acknowledgements}{%
 \section*{Acknowledgements}\label{acknowledgements}}
@@ -294,6 +534,7 @@ The source material and animated gifs for this paper are available at
 
 \bibliographystyle{tfcad}
 \bibliography{biblio.bib}
+
 
 
 
