@@ -155,7 +155,7 @@ e_p \to&x_{p1} & x_{p2} &\cdot &\cdots & x_{pp}
 \end{align}
 
 
-```{r manualsequence, outwidth="80%", width=12, height=5, fig.cap="Sequence of projections where contribution of one variable is controlled (black) is changed: (top) unconstrained orthonormalisation, (bottom) constrained as specified. The dot (orange) indicates the chosen values for the controlled variable. For the constrained orthonormalisation it can be seen to precisely match the axis, but not so for the unconstrained orthonormalisation."}
+```{r manualsequence, out.width="100%", width=12, height=4, fig.cap="Sequence of projections where contribution of one variable is controlled (black) is changed: (top) unconstrained orthonormalisation, (bottom) constrained as specified. The dot (orange) indicates the chosen values for the controlled variable. For the constrained orthonormalisation it can be seen to precisely match the axis, but not so for the unconstrained orthonormalisation."}
 source("../code/plot_basis.R")
 source("../code/linear_alg.R")
 
@@ -216,7 +216,7 @@ For now just sketching the idea:
 
 XXX need to check calculation of angle when $m_1 < 0$
 
-```{r }
+```{r othermethod, out.width="100%", width=12, height=4, fig.cap="Manual controls with algorithm 2. The precise location of the axis is maintained."}
 source("../code/plot_basis.R")
 source("../code/linear_alg.R")
 
@@ -293,14 +293,13 @@ colour(=Automatic)]` with arguments
 initial projection and does not neet by orthonormal.
     - ``xRange`: A list which details the range of the horizontal axis.
     - ``yRange`: A list which details the range of the vertical axis.
-    - ``colour`: A list of graphics directives to be applied to each data \
-matrix.
+    - ``colour`: A list of graphics directives to be applied to each data matrix.
 
 There are problems with the default values for x and y ranges and colour. It would be 
 better to fix the ranges and colour based on the data as well as the origin of axes 
 and the size of the points.
 
-It would be good if the initial projection matrix (and maybe the centre) had default values. Perhaps a random matrix with the correct dimensions read from the data?
+**It would be good if the initial projection matrix (and maybe the centre) had default values. Perhaps a random matrix with the correct dimensions read from the data?**
 
 The format for the printed projection matrix can be improved also. Maybe fix the 
 number of digits and the position of the label.
@@ -317,7 +316,7 @@ number of digits and the position of the label.
 
 This function requires some auxiliary functions. It does not accept more than one data set.
 
-It would be good if the initial projection matrix (and maybe the centre) had default values. Perhaps a random matrix with the correct dimensions read from the data?
+**It would be good if the initial projection matrix (and maybe the centre) had default values. Perhaps a random matrix with the correct dimensions read from the data?**
 
 It may be good to fix the size of the points, the centre of the axes and the scales of the axes rather than allow them to change as the projection and slicing changes
 
@@ -331,17 +330,19 @@ It may be good to fix the size of the points, the centre of the axes and the sca
 - `ptSize1`: The size of the points that exist within the slice
 - `ptSize2`: The size of the points that exist outside of the slice
 
-Does this need to be a separate function from SlicePlot?
+**Does this need to be a separate function from SlicePlot?**
 
 It would be good if the initial projection matrix (and maybe the centre) had default values. Perhaps a random matrix with the correct dimensions read from the data?
 
 It may be good to fix the size of the points, the centre of the axes and the scales of the axes rather than allow them to change as the projection and slicing changes
 
-I have found it useful to input different data sets rather than have this function sort them automatically using the last column.
+**I have found it useful to input different data sets rather than have this function sort them automatically using the last column.**
 
 - `Projected2DSliderPlot[]`
 
 This function uses a different display for the projection that I find very useful. However as it stands it is specific to one data set. Needs to be generalised to arbitrary data if we want to keep it.
+
+**We would need a screenshot (and video) for each of these.**
 
 # Applications {#sec:examples}
 

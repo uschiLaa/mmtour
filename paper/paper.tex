@@ -278,14 +278,7 @@ e_p \to&x_{p1} & x_{p2} &\cdot &\cdots & x_{pp}
 \end{align}
 
 \begin{figure}
-\centering
-\includegraphics{paper_files/figure-latex/manualsequence-1.pdf}
-\caption{Sequence of projections where contribution of one variable is
-controlled (black) is changed: (top) unconstrained orthonormalisation,
-(bottom) constrained as specified. The dot (orange) indicates the chosen
-values for the controlled variable. For the constrained
-orthonormalisation it can be seen to precisely match the axis, but not
-so for the unconstrained orthonormalisation.}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/manualsequence-1} \caption{Sequence of projections where contribution of one variable is controlled (black) is changed: (top) unconstrained orthonormalisation, (bottom) constrained as specified. The dot (orange) indicates the chosen values for the controlled variable. For the constrained orthonormalisation it can be seen to precisely match the axis, but not so for the unconstrained orthonormalisation.}\label{fig:manualsequence}
 \end{figure}
 
 \hypertarget{potential-algorithm-3}{%
@@ -320,7 +313,9 @@ For now just sketching the idea:
 
 XXX need to check calculation of angle when \(m_1 < 0\)
 
-\includegraphics{paper_files/figure-latex/unnamed-chunk-1-1.pdf}
+\begin{figure}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/othermethod-1} \caption{Manual controls with algorithm 2. The precise location of the axis is maintained.}\label{fig:othermethod}
+\end{figure}
 
 \hypertarget{sec:implementation}{%
 \section{Implementation}\label{sec:implementation}}
@@ -350,8 +345,7 @@ The following functions are implemented in the Mathematica package
     axis.
   \item
     `\texttt{colour}: A list of graphics directives to be applied to
-    each data\\
-    matrix.
+    each data matrix.
   \end{itemize}
 \end{itemize}
 
@@ -359,9 +353,9 @@ There are problems with the default values for x and y ranges and
 colour. It would be better to fix the ranges and colour based on the
 data as well as the origin of axes and the size of the points.
 
-It would be good if the initial projection matrix (and maybe the centre)
-had default values. Perhaps a random matrix with the correct dimensions
-read from the data?
+\textbf{It would be good if the initial projection matrix (and maybe the
+centre) had default values. Perhaps a random matrix with the correct
+dimensions read from the data?}
 
 The format for the printed projection matrix can be improved also. Maybe
 fix the number of digits and the position of the label.
@@ -395,9 +389,9 @@ fix the number of digits and the position of the label.
 This function requires some auxiliary functions. It does not accept more
 than one data set.
 
-It would be good if the initial projection matrix (and maybe the centre)
-had default values. Perhaps a random matrix with the correct dimensions
-read from the data?
+\textbf{It would be good if the initial projection matrix (and maybe the
+centre) had default values. Perhaps a random matrix with the correct
+dimensions read from the data?}
 
 It may be good to fix the size of the points, the centre of the axes and
 the scales of the axes rather than allow them to change as the
@@ -425,7 +419,7 @@ projection and slicing changes
   slice
 \end{itemize}
 
-Does this need to be a separate function from SlicePlot?
+\textbf{Does this need to be a separate function from SlicePlot?}
 
 It would be good if the initial projection matrix (and maybe the centre)
 had default values. Perhaps a random matrix with the correct dimensions
@@ -435,8 +429,8 @@ It may be good to fix the size of the points, the centre of the axes and
 the scales of the axes rather than allow them to change as the
 projection and slicing changes
 
-I have found it useful to input different data sets rather than have
-this function sort them automatically using the last column.
+\textbf{I have found it useful to input different data sets rather than
+have this function sort them automatically using the last column.}
 
 \begin{itemize}
 \tightlist
@@ -447,6 +441,8 @@ this function sort them automatically using the last column.
 This function uses a different display for the projection that I find
 very useful. However as it stands it is specific to one data set. Needs
 to be generalised to arbitrary data if we want to keep it.
+
+\textbf{We would need a screenshot (and video) for each of these.}
 
 \hypertarget{sec:examples}{%
 \section{Applications}\label{sec:examples}}
