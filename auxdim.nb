@@ -1,0 +1,118 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 13.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      3668,        108]
+NotebookOptionsPosition[      3318,         94]
+NotebookOutlinePosition[      3715,        110]
+CellTagsIndexPosition[      3672,        107]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AuxDim", "[", "data_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"cols", ",", "vars", ",", "names", ",", "centre", ",", "range"}],
+      "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"cols", "=", 
+      RowBox[{
+       RowBox[{"Dimensions", "[", "data", "]"}], "[", 
+       RowBox[{"[", "2", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"vars", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"Text", "[", 
+         RowBox[{"StringForm", "[", 
+          RowBox[{
+          "\"\<\!\(\*StyleBox[\"x\",FontWeight->\"Plain\"]\)``\>\"", ",", 
+           "i"}], "]"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", "cols"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"names", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"ToExpression", "[", 
+         RowBox[{"SubscriptBox", "[", 
+          RowBox[{"\"\<x\>\"", ",", 
+           RowBox[{"ToString", "[", "#", "]"}]}], "]"}], "]"}], "&"}], "/@", 
+       RowBox[{"Range", "[", "cols", "]"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"centre", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"Mean", "[", 
+         RowBox[{
+          RowBox[{"Out", "[", "7", "]"}], "[", 
+          RowBox[{"[", 
+           RowBox[{"All", ",", "i"}], "]"}], "]"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", "co"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"range", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"Min", "[", 
+           RowBox[{
+            RowBox[{"Out", "[", "7", "]"}], "[", 
+            RowBox[{"[", 
+             RowBox[{"All", ",", "i"}], "]"}], "]"}], "]"}], ",", 
+          RowBox[{"Max", "[", 
+           RowBox[{
+            RowBox[{"Out", "[", "7", "]"}], "[", 
+            RowBox[{"[", 
+             RowBox[{"All", ",", "i"}], "]"}], "]"}], "]"}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "1", ",", "co"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Return", "[", 
+      RowBox[{"{", 
+       RowBox[{
+       "cols", ",", "vars", ",", "names", ",", "centre", ",", "range"}], 
+       "}"}], "]"}]}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.860432694121792*^9, 3.860432778911832*^9}, {
+  3.860432884705233*^9, 3.86043289441781*^9}, {3.860432944223387*^9, 
+  3.860432966901228*^9}, {3.860433020118004*^9, 3.8604330367462254`*^9}, {
+  3.860433181914487*^9, 3.860433228494076*^9}, {3.860434231797213*^9, 
+  3.860434272772975*^9}, {3.860434685579852*^9, 
+  3.860434686393528*^9}},ExpressionUUID->"c323f0b4-01f4-4227-81c3-\
+56bd5dc51bdd"]
+},
+WindowSize->{808, 911},
+WindowMargins->{{380, Automatic}, {Automatic, 64}},
+FrontEndVersion->"13.0 for Mac OS X x86 (64-bit) (December 2, 2021)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"00f668dc-c13a-4c44-827b-610a9771fe42"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 2756, 72, 157, "Input",ExpressionUUID->"c323f0b4-01f4-4227-81c3-56bd5dc51bdd"]
+}
+]
+*)
+
+(* End of internal cache information *)
+
