@@ -93,11 +93,11 @@ tan: Same as cos.
 (* ::Input::Initialization:: *)
 ProjectionPlot[data_,projmat_,xRange_:Automatic,yRange_:Automatic,colour_:Automatic]:=
 DynamicModule[
-{lst=projmat,arrowData,legendData},
+{lst=If[projmat=="random",RandomMatrix[data[[1]]],projmat],arrowData,legendData},
 arrowData=Reap[Sow[Circle[{0,0},1]];Do[With[{i=i},
 Sow[Dynamic[Arrow[{{0,0},lst[[i]]}]]];
 Sow[Dynamic[Text[StringForm["\!\(\*
-StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+lst[[i]]/20]]];],{i,1,Length[projmat]}]][[2, 1]];
+StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+lst[[i]]/20]]];],{i,1,Length[data[[1, 1]]]}]][[2, 1]];
 legendData=Reap[Do[Sow[Text[StringForm["data``",i]]],{i, 1, Length[data]}]][[2, 1]];
 (*Grid formats the ouput of dynamic module*)
 Grid[{{
@@ -232,11 +232,11 @@ raneg2: A list which specifies the range for axis2.";
 
 (* ::Input::Initialization:: *)
 VisualiseSliceDynamic[data_,projmat_,centrePoint_,height_,heightRange_,ptSize1_:0.005,ptSize2_:0.004,minDist_:0]:=
-DynamicModule[{lst=projmat,centre =centrePoint ,h=height,arrowData},
+DynamicModule[{lst=If[projmat=="random",RandomMatrix[data],projmat],centre =centrePoint ,h=height,arrowData},
 arrowData=Reap[Sow[Circle[{0,0},1]];Do[With[{i=i},
 Sow[Dynamic[Arrow[{{0,0},lst[[i]]}]]];
 Sow[Dynamic[Text[StringForm["\!\(\*
-StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+lst[[i]]/20]]];],{i,1,Length[projmat]}]][[2, 1]];
+StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+lst[[i]]/20]]];],{i,1,Length[data[[1]]]}]][[2, 1]];
 
 Grid[{{"Centre Point"},
 {InputField[Dynamic[centre],FieldSize->15]},(*Grid formats the ouput of dynamic module*)
@@ -263,10 +263,6 @@ PlotLegends->Placed[{"In Slice","Not in Slice"},Above]]
 ],SpanFromAbove}},Frame->True]]
 
 
-(* ::Input:: *)
-(**)
-
-
 (* ::Input::Initialization:: *)
 CreateDataSets[data_]:=
 Module[{sortedData ={},lst={}, dataSets={}, val},
@@ -286,14 +282,23 @@ Return[dataSets]
 ]
 
 
+RandomMatrix[data_] :=
+    Module[{len = Length[data[[1]]], mat = {}},
+        Do[mat = AppendTo[mat, {RandomReal[{-1, 1}],RandomReal[{-1, 1}]}], len];
+        mat = Transpose[Orthogonalize[Transpose[mat]]];
+        Return[mat]
+    ]
+    (*Probably can compile this function*)
+
+
 (* ::Input::Initialization:: *)
-Clear[SliceDynamic]
 SliceDynamic[data_,projmat_,centrePoint_,height_,heightRange_,ptSize1_:0.005,ptSize2_:0.004]:=
-DynamicModule[{lst=projmat,centre =centrePoint ,h=height,dataSets,arrowData},
+DynamicModule[{lst=If[projmat=="random",RandomMatrix[data[[1;;1, 2;;-1]]],projmat],
+centre =centrePoint ,h=height,dataSets,arrowData},
 arrowData=Reap[Sow[Circle[{0,0},1]];Do[With[{i=i},
 Sow[Dynamic[Arrow[{{0,0},lst[[i]]}]]];
 Sow[Dynamic[Text[StringForm["\!\(\*
-StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+lst[[i]]/20]]];],{i,1,Length[projmat]}]][[2, 1]];
+StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+lst[[i]]/20]]];],{i,1,Length[data[[1]]] - 1}]][[2, 1]];
 dataSets=CreateDataSets[data];
 
 Grid[{{"Centre Point"},
@@ -424,15 +429,15 @@ cP: Ideally the cPrime function
 
 (* ::Input::Initialization:: *)
 VisualiseSlice[data_,projMat_,centerPt_,dist_,ptSize1_:0.005,ptSize2_:0.004,minDist_:0]:=
-Module[{tempData=data, v1={ConstantArray[0., Length[data[[1]]]]},v2={ConstantArray[0.,Length[ data[[1]]]]},arrowData},
-v1=Reap[Do[If[minDist<genDist[xPrime[data[[i]], projMat], cPrime[centerPt, projMat]]<dist, 
+Module[{tempData=data,lst=If[projMat=="random",RandomMatrix[data],projmat] ,v1={ConstantArray[0., Length[data[[1]]]]},v2={ConstantArray[0.,Length[ data[[1]]]]},arrowData},
+v1=Reap[Do[If[minDist<genDist[xPrime[data[[i]], lst], cPrime[centerPt,lst]]<dist, 
 Sow[data[[i]]];tempData[[i]]=Nothing],{i,1,Length[data]}]][[2]];
 v2=tempData;
 arrowData=Reap[Sow[Circle[{0,0},1]];
-Do[Sow[ Arrow[{{0,0},projMat[[i]]}]];Sow[Style[Text[StringForm["\!\(\*
-StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], projMat[[i]]+Normalize[projMat[[i]]]/20],{FontFamily->"Times New Roman",Black}]],{i,1,Length[projMat]}]][[2,1]];
+Do[Sow[ Arrow[{{0,0},lst[[i]]}]];Sow[Style[Text[StringForm["\!\(\*
+StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+Normalize[lst[[i]]]/20],{FontFamily->"Times New Roman",Black}]],{i,1,Length[lst]}]][[2,1]];
 Grid[{{
-ListPlot[{If[Length[v1]==0,{0,0},v1[[1]] . projMat],If[Length[v2]==0,{0,0}, v2 . projMat]},
+ListPlot[{If[Length[v1]==0,{0,0},v1[[1]] . lst],If[Length[v2]==0,{0,0}, v2 . lst]},
 AspectRatio->1,
 PlotStyle->{{Black,Opacity->1,PointSize[ptSize1]},{Lighter[Blue],Opacity->0.5,PointSize[ptSize2]}},
 AxesLabel->{"\!\(\*
@@ -458,19 +463,19 @@ ptSize2: A number indicating the point size of the point which exist outside of 
 
 (* ::Input::Initialization:: *)
 SlicePlot[data_, projMat_,centerPt_,dist_,colour_:Automatic,minDist_:0]:=
-Module[{dataSlice={}, arrowData,legendData},
-Do[dataSlice=Append[dataSlice,Reap[Do[If[minDist<genDist[xPrime[data[[i, j]], projMat], cPrime[centerPt, projMat]]<dist, 
+Module[{dataSlice={}, lst=If[projMat=="random",RandomMatrix[data[[1]]],projmat],arrowData,legendData},
+Do[dataSlice=Append[dataSlice,Reap[Do[If[minDist<genDist[xPrime[data[[i, j]], lst], cPrime[centerPt, lst]]<dist, 
 Sow[data[[i, j]]]],{j,1,Length[data[[i]]]}]][[2,1]] ],{i, 1, Length[data]}];
 
 arrowData=Reap[Sow[Circle[{0,0},1]];
-Do[Sow[ Arrow[{{0,0},projMat[[i]]}]];Sow[Style[Text[StringForm["\!\(\*
-StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], projMat[[i]]+Normalize[projMat[[i]]]/20],{FontFamily->"Times New Roman",Black}]],{i,1,Length[projMat]}]][[2,1]];
+Do[Sow[ Arrow[{{0,0},lst[[i]]}]];Sow[Style[Text[StringForm["\!\(\*
+StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+Normalize[lst[[i]]]/20],{FontFamily->"Times New Roman",Black}]],{i,1,Length[lst]}]][[2,1]];
 
 legendData=Reap[Do[Sow[Style[Text[StringForm["data``",i]],{FontFamily->"Times New Roman"}]],
 {i, 1, Length[data]}]][[2, 1]];
 
 Grid[{{
-ListPlot[MapThread[Dot, {dataSlice, ConstantArray[projMat,Length[data]]}],
+ListPlot[MapThread[Dot, {dataSlice, ConstantArray[lst,Length[data]]}],
 AspectRatio->1,
 PlotStyle->colour,
 AxesLabel->{"\!\(\*
