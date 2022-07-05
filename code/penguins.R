@@ -18,6 +18,8 @@ lda_samples <- penguins_lda %>%
 
 animate_slice(lda_samples[,1:4], col = lda_samples$species, v_rel = 0.01)
 
+write_csv(penguins_lda[, c(1:4,6)], file = "data/pengins_lda.csv")
+
 set.seed(21)
 penguins_rf <- classifly(penguins_data, species ~ . , randomForest)
 penguins_rf[,1:4] <- apply(penguins_rf[,1:4], 2,  function(x) (x-mean(x))/sd(x))
@@ -27,4 +29,5 @@ rf_samples <- penguins_rf %>%
 
 animate_slice(rf_samples[,1:4], col = rf_samples$species, v_rel = 0.01)
 
+write_csv(penguins_rf[, c(1:4,6)], file = "data/pengins_rf.csv")
 
