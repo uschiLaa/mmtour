@@ -33,3 +33,10 @@ animate_slice(rf_samples[,1:4], col = rf_samples$species, v_rel = 0.01)
 
 write_csv(rf_samples[, c(1:4,6, 12)], file = "data/penguins_rf.csv")
 
+# Plots for paper
+library(GGally)
+penguins_rf <- read_csv("data/penguins_rf.csv")
+penguins_lda <- read_csv("data/penguins_lda.csv")
+ggscatmat(penguins_data, columns = 2:5, col="species")
+ggscatmat(penguins_rf, columns = 1:4, col="species", alpha=0.1)
+ggscatmat(penguins_lda, columns = 1:4, col="species", alpha=0.1)
