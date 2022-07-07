@@ -70,7 +70,7 @@ Manual controls are especially useful for assessing sensitivity of structure to 
 
 Through experiments with the relatively new interactive graphics capabilities in mathematica(?), we have realized that there is a simpler approach, which is more direct, and extensible for generating user interaction. This paper explains this, and is organized as follows. The next section describes the new algorithm for manual control. This is followed by details on implementation. The applications section illustrate how these can be used. 
 
-# What is a manual tour {#sec:method}
+# What is a manual tour? {#sec:method}
 
 An orthonormal basis ($A_{p\times d}$) and a variable id ($m \in \{1, ..., p\}$) to control are provided to initialize a manual tour. A method to update the values of the component of the controlled variable $V_m$ is needed. 
 
@@ -372,7 +372,23 @@ This function uses a different display for the projection that I find very usefu
 
 # Applications {#sec:examples}
 
+To illustrate the usefulness of the manual tour use the penguins data [@penguins]. We will show how classification boundaries can be explored and better understood using a manual tour, on projections and slices through 4D space.
+
+```{r penguins-scatmat, out.width="100%", width=10, height=10, fig.cap="Scatterplot matrix of the penguins data."}
+library(tidyverse)
+library(palmerpenguins)
+library(GGally)
+penguins_data <- penguins[, c(1,3, 4, 5, 6)] %>%
+  drop_na() %>%
+  mutate(across(where(is.numeric), function(x) (x-mean(x))/sd(x)))
+ggscatmat(penguins_data, columns = 2:5, col="species") +
+  theme(legend.position = "bottom")
+```
+
+
 # Extension added in the R package `tourr`
+
+Explain `radial_tour`
 
 # What would be desirable for implementations in R?
 
