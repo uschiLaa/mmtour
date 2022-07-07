@@ -1,6 +1,6 @@
 ---
 title: |
-  A new simplified manual tour, with examples in mathematica and R
+  A new simplified manual tour, with application to exploring classification boundaries in high dimensions
 type: Short Technical Note
 author:
   - name: Alex Aumann

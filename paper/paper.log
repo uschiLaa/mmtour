@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.6.29)  6 JUL 2022 18:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.6.29)  7 JUL 2022 19:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -628,41 +628,41 @@ Package hyperref Info: Link coloring OFF on input line 44.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <13> not available
-(Font)              size <12> substituted on input line 67.
+(Font)              size <12> substituted on input line 68.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <13> not available
-(Font)              size <12> substituted on input line 67.
+(Font)              size <12> substituted on input line 68.
 
-LaTeX Font Info:    Calculating math sizes for size <11> on input line 67.
+LaTeX Font Info:    Calculating math sizes for size <11> on input line 68.
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 67.
+(Font)              size <5> substituted on input line 68.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <5.5> not available
-(Font)              size <5> substituted on input line 67.
+(Font)              size <5> substituted on input line 68.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 67.
+(Font)              size <5> substituted on input line 68.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 67.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 68.
 (/Users/cookd/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 67.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 68.
 (/Users/cookd/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 
-Package natbib Warning: Citation `tukey' on page 1 undefined on input line 89.
-
-
-Package natbib Warning: Citation `XXX' on page 1 undefined on input line 112.
+Package natbib Warning: Citation `tukey' on page 1 undefined on input line 90.
 
 
 Package natbib Warning: Citation `XXX' on page 1 undefined on input line 113.
+
+
+Package natbib Warning: Citation `XXX' on page 1 undefined on input line 114.
 
 [1
 
@@ -672,41 +672,41 @@ Package natbib Warning: Citation `XXX' on page 1 undefined on input line 113.
 <figures/manip_space.pdf, id=103, 362.51248pt x 188.74498pt>
 File: figures/manip_space.pdf Graphic file (type pdf)
 <use figures/manip_space.pdf>
-Package pdftex.def Info: figures/manip_space.pdf  used on input line 148.
+Package pdftex.def Info: figures/manip_space.pdf  used on input line 149.
 (pdftex.def)             Requested size: 326.40125pt x 169.94666pt.
 [2 <./figures/manip_space.pdf>]
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 177.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 178.
 
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 177.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 178.
 
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 184.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 185.
 
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 184.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 185.
 
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 186.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 187.
 
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 186.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 187.
 
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 186.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 187.
 
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 186.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 187.
 
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 186.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 187.
 
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 188.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 189.
 
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 223.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 224.
 
 [3]
 \g__nicematrix_max_cell_width_dim=\dimen313
@@ -735,37 +735,37 @@ LaTeX Font Warning: Command \mathversion invalid in math mode on input line 223.
 <paper_files/figure-latex/manualsequence-1.pdf, id=153, 453.695pt x 262.9825pt>
 File: paper_files/figure-latex/manualsequence-1.pdf Graphic file (type pdf)
 <use paper_files/figure-latex/manualsequence-1.pdf>
-Package pdftex.def Info: paper_files/figure-latex/manualsequence-1.pdf  used on input line 283.
+Package pdftex.def Info: paper_files/figure-latex/manualsequence-1.pdf  used on input line 284.
 (pdftex.def)             Requested size: 408.0pt x 236.49745pt.
 [4]
 <paper_files/figure-latex/othermethod-1.pdf, id=169, 453.695pt x 100.375pt>
 File: paper_files/figure-latex/othermethod-1.pdf Graphic file (type pdf)
 <use paper_files/figure-latex/othermethod-1.pdf>
-Package pdftex.def Info: paper_files/figure-latex/othermethod-1.pdf  used on input line 319.
+Package pdftex.def Info: paper_files/figure-latex/othermethod-1.pdf  used on input line 320.
 (pdftex.def)             Requested size: 408.0pt x 90.26619pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 339--341
+Underfull \hbox (badness 10000) in paragraph at lines 340--342
 []\OT1/cmtt/m/n/10.95 ProjectionPlot[data, projmat, xRange(=Automatic),
  []
 
 [5 <./paper_files/figure-latex/manualsequence-1.pdf> <./paper_files/figure-latex/othermethod-1.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 376--379
+Underfull \hbox (badness 10000) in paragraph at lines 377--380
 []\OT1/cmtt/m/n/10.95 SlicePlot[data, projmat, centrePoint, height, heightRange,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 413--416
+Underfull \hbox (badness 10000) in paragraph at lines 414--417
 []\OT1/cmtt/m/n/10.95 SliceDynamic[data, projmat, centrePoint, height, heightRange,
  []
 
 [6]
-Underfull \hbox (badness 10000) in paragraph at lines 468--469
+Underfull \hbox (badness 10000) in paragraph at lines 469--470
 []\OT1/cmr/bx/n/10.95 Code con-sis-tent for ap-pli-ca-tions to work - see
  []
 
 [7]
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <11> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 540.
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 541.
 (./paper.bbl [8])
 
 Package natbib Warning: There were undefined citations.
@@ -787,7 +787,7 @@ Here is how much of TeX's memory you used:
  14 hyphenation exceptions out of 8191
  85i,20n,90p,565b,626s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
-Output written on paper.pdf (9 pages, 583482 bytes).
+Output written on paper.pdf (9 pages, 583453 bytes).
 PDF statistics:
  321 PDF objects out of 1000 (max. 8388607)
  256 compressed objects within 3 object streams
