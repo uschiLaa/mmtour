@@ -37,88 +37,39 @@ MathFont[txt]
 txt: A string of text to change fonts.";
 
 
-(* ::Input::Initialization:: *)
-HiggsProjectionPlot[data1_,data2_:{{0,0}},xRange_:{0,0},yRange_:{0,0},cos_:{0.6,-0.05},tan_:{0.3,0.27},\[Lambda]1_:{0.0,0.6},\[Lambda]2_:{-0.3,0.3},\[Lambda]3_:{-0.6,0.05}, \[Lambda]4_:{-0.3,-0.3}, \[Lambda]5_:{0.,-0.6}]:=
-DynamicModule[
-{lst={cos,tan,\[Lambda]1,\[Lambda]2,\[Lambda]3,\[Lambda]4,\[Lambda]5}},
-(*Grid formats the ouput of dynamic module*)
-Grid[{{
-LocatorPane[Dynamic[lst,({lst[[All, 1]], lst[[All,2]]}=Orthogonalize[{#[[All, 1]], #[[All, 2]]}])&],(*The line above preserves orthonormality*)
-Graphics[
-(*This part of the code creates the projected dimensions within a unit circle*)
-{Circle[{0,0},1],
-Dynamic[Arrow[{{0,0},lst[[1]]}]],Dynamic[ArrowText[lst[[1]], MathFont["cos(\[Beta]-\[Alpha])"]]],
-Dynamic[Arrow[{{0,0},lst[[2]]}]],Dynamic[ArrowText[lst[[2]], MathFont["tan(\[Beta])"]]],
-Dynamic[Arrow[{{0,0},lst[[3]]}]],Dynamic[ArrowText[lst[[3]], MathFont["\!\(\*SubscriptBox[\(\[Lambda]\), \(1\)]\)"]]],
-Dynamic[Arrow[{{0,0},lst[[4]]}]],Dynamic[ArrowText[lst[[4]], MathFont["\!\(\*SubscriptBox[\(\[Lambda]\), \(2\)]\)"]]],
-Dynamic[Arrow[{{0,0},lst[[5]]}]],Dynamic[ArrowText[lst[[5]], MathFont["\!\(\*SubscriptBox[\(\[Lambda]\), \(3\)]\)"]]],
-Dynamic[Arrow[{{0,0},lst[[6]]}]],Dynamic[ArrowText[lst[[6]], MathFont["\!\(\*SubscriptBox[\(\[Lambda]\), \(4\)]\)"]]],
-Dynamic[Arrow[{{0,0},lst[[7]]}]],Dynamic[ArrowText[lst[[7]], MathFont["\!\(\*SubscriptBox[\(\[Lambda]\), \(5\)]\)"]]]
-},Frame->True,ImageSize->165],Appearance->None],
-(*This creates the scatter plot of the projected data*)
-Dynamic[ListPlot[
-(*The projection matrix is being applied to the data*)
-{data1 . lst,If[data2=={{0,0}},Nothing,data2 . lst]},
-PlotStyle->{Black, Red},
-AxesOrigin->{0,0},
-PlotRange->If[xRange=={0,0}\[And]yRange=={0,0},Automatic,{xRange, yRange}],
-LabelStyle->FontFamily->"Times New Roman",
-PerformanceGoal->"Speed",
-AxesLabel->{"\!\(\*SubscriptBox[\(P\), \(1\)]\)", "\!\(\*SubscriptBox[\(P\), \(2\)]\)"},
-ImageSize->675
-]]},{"Proj. Matrix:" Dynamic[Text[ SetPrecision[lst//MatrixForm,3]]]}
-},Background->Lighter[Gray,0.975],Frame->True]]
-
-
-(* ::Input::Initialization:: *)
-HiggsProjectionPlot::usage=
-"An dynamic plot of the projected data onto a 2D plane. The projection matrix can be 
-determined and applied to the data by moving the projected axes/dimensions within
-the unit circle. Orthonormality of the projection matrix is preserved within this dynamic.
-HiggsProjectionPlot[data1, data2(={{0,0}}), xRange, yRange, cos, tan, \[Lambda]1, \[Lambda]2, \[Lambda]3, \[Lambda]4, \[Lambda]5]
-data1: A data matrix which consists of 7 dimensions. The dimensions need to be in the following order:
-         (cos(\[Beta]-\[Alpha]), tan(\[Beta]), \[Lambda]1, \[Lambda]2, \[Lambda]3, \[Lambda]4, \[Lambda]5)
-data2: Same as data1
-xRange: A list which details the range of the horizontal axis.
-yRange: A list which details the range of the vertical axis.
-cos: A vector which represents the projected axis/dimension of this parameter.
-tan: Same as cos.
-\[Lambda]1:  Same as cos.
-\[Lambda]2:  Same as cos.
-\[Lambda]3:  Same as cos. 
-\[Lambda]4:  Same as cos.
-\[Lambda]5:  Same as cos.";
-
-
-(* ::Input::Initialization:: *)
-ProjectionPlot[data_,projmat_,xRange_:Automatic,yRange_:Automatic,colour_:Automatic]:=
-DynamicModule[
-{lst=If[projmat=="random",RandomMatrix[data[[1]]],projmat],arrowData,legendData},
-arrowData=Reap[Sow[Circle[{0,0},1]];Do[With[{i=i},
+ProjectionPlot[data_,projmat_,colorFunc_:ColorData[97]]:=
+DynamicModule[{lst=If[TrueQ[projmat=="random"],RandomMatrix[data, 1],projmat],arrowData,pntSize=0.01},
+arrowData=Reap[Sow[Circle[{0,0},1]];
+Do[With[{i=i},
 Sow[Dynamic[Arrow[{{0,0},lst[[i]]}]]];
 Sow[Dynamic[Text[StringForm["\!\(\*
-StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+lst[[i]]/20]]];],{i,1,Length[data[[1, 1]]]}]][[2, 1]];
-legendData=Reap[Do[Sow[Text[StringForm["data``",i]]],{i, 1, Length[data]}]][[2, 1]];
+StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+lst[[i]]/20]]];],{i,1,Length[data[[1]]]-1}]][[2, 1]];
 (*Grid formats the ouput of dynamic module*)
 Grid[{{
-(*The line above preserves orthonormality*)
+Slider[Dynamic[pntSize],{0,0.02}]},
+{Text[PointSize: Dynamic[pntSize 50]]},
+{(*The line below preserves orthonormality*)
 LocatorPane[Dynamic[lst,({lst[[All, 1]], lst[[All,2]]}=Orthogonalize[{#[[All, 1]], #[[All, 2]]}])&],
 (*This part of the code creates the projected dimensions within a unit circle*)
 Graphics[arrowData,Frame->True,ImageSize->165],Appearance->None],
 (*This creates the scatter plot of the projected data*)
-Dynamic[ListPlot[
-Map[Function[x, x . lst],data],
+Dynamic[Module[{dataSets={}, colours={},range=Max[Map[Norm, data[[All, 1;;-2]]]]},
+dataSets=CreateDataSets[data];
+Do[colours = Append[colours, {colorFunc[dataSets[[i, 1, -1]]], PointSize[pntSize]}];,
+{i, 1, Length[dataSets]}];
+ListPlot[
+Map[Function[x, Style[x . lst]],dataSets[[All,All,1;;-2]]],
 (*The projection matrix is being applied to the data*)
-PlotStyle->colour,
+PlotStyle->colours,
 AxesOrigin->{0,0},
-PlotRange->{xRange,yRange},
+PlotRange->{{-range,range},{-range,range}},
+AspectRatio->1,
 LabelStyle->FontFamily->"Times New Roman",
-PlotLegends->Placed[legendData,Above],
 PerformanceGoal->"Speed",
 AxesLabel->{"\!\(\*SubscriptBox[\(P\), \(1\)]\)", "\!\(\*SubscriptBox[\(P\), \(2\)]\)"},
-ImageSize->675
-]]},
-{"Proj. Matrix:" Dynamic[Text[lst//MatrixForm]], SpanFromLeft}
+ImageSize->650
+]]]},
+{"Proj. Matrix:" Dynamic[Text[lst//MatrixForm]]}
 },Background->Lighter[Gray,0.975],Frame->True]]
 
 
@@ -192,47 +143,8 @@ tan: Same as cos.
 
 
 (* ::Input::Initialization:: *)
-RegFunction[axis1_,axis2_,label1_,label2_,range1_,range2_]:=
-DynamicModule[{\[Alpha], \[Beta], \[Lambda]1, \[Lambda]2, \[Lambda]3, \[Lambda]4, \[Lambda]5,v=246, tbi, sabi, x1, x2},
-Grid[{
-(*There's a better way to go about this, I want to try and remove the invalid sliders via list methods or something similar*)
-{\[Beta][tbi_]=ArcTan[tbi];
-\[Alpha][sabi_,tbi_]=\[Beta][tbi]-ArcCos[sabi];},(*This is calculating cos and tan*)
-If[TrueQ[axis1==tbi\[Or]axis2==tbi],Nothing,{Slider[Dynamic[tbi], {-3, 3}], Text[Style["Tan[\[Beta]] =", FontFamily->"Times New Roman"]],InputField[Dynamic[tbi],ImageSize->Small]}],
-If[TrueQ[axis1==sabi\[Or]axis2==sabi],Nothing,{Slider[Dynamic[sabi], {-1, 0.999}], Text[Style["Cos[\[Beta]-\[Alpha]] =", FontFamily->"Times New Roman"]],InputField[Dynamic[sabi],ImageSize->Small]}],
-If[TrueQ[axis1==\[Lambda]1\[Or]axis2==\[Lambda]1],Nothing,{Slider[Dynamic[\[Lambda]1], {-5, 5}],Text[Style["\!\(\*SubscriptBox[\(\[Lambda]\), \(1\)]\) =", FontFamily->"Times New Roman"]],InputField[Dynamic[\[Lambda]1],ImageSize->Small]}], 
-If[TrueQ[axis1==\[Lambda]2\[Or]axis2==\[Lambda]2],Nothing,{Slider[Dynamic[\[Lambda]2], {-5, 5}],Text[Style["\!\(\*SubscriptBox[\(\[Lambda]\), \(2\)]\) =", FontFamily->"Times New Roman"]],InputField[Dynamic[\[Lambda]2],ImageSize->Small] }], 
-If[TrueQ[axis1==\[Lambda]3\[Or]axis2==\[Lambda]3],Nothing,{Slider[Dynamic[\[Lambda]3], {-5, 5}], Text[Style["\!\(\*SubscriptBox[\(\[Lambda]\), \(3\)]\) =", FontFamily->"Times New Roman"]],InputField[Dynamic[\[Lambda]3],ImageSize->Small]}],If[TrueQ[axis1==\[Lambda]4\[Or]axis2==\[Lambda]4],Nothing,{Slider[Dynamic[\[Lambda]4], {-5, 5}],Text[Style["\!\(\*SubscriptBox[\(\[Lambda]\), \(4\)]\) =", FontFamily->"Times New Roman"]],InputField[Dynamic[\[Lambda]4],ImageSize->Small]}],If[TrueQ[axis1==\[Lambda]5\[Or]axis2==\[Lambda]5],Nothing,{Slider[Dynamic[\[Lambda]5], {-5, 5}], Text[Style["\!\(\*SubscriptBox[\(\[Lambda]\), \(5\)]\) =", FontFamily->"Times New Roman"]],InputField[Dynamic[\[Lambda]5],ImageSize->Small]}],
-{Checkbox[Dynamic[x1]],"Positivity Condition"},
-{Checkbox[Dynamic[x2]], "Unitarity Condition"},
-{Dynamic[
-RegionPlot[
-{PositiveMasses[v, \[Alpha][sabi, tbi],\[Beta][tbi], \[Lambda]1, \[Lambda]2, \[Lambda]3, \[Lambda]4, \[Lambda]5]\[And]If[x1, !(NegPositivityCondition[\[Lambda]1, \[Lambda]2, \[Lambda]3, \[Lambda]4, \[Lambda]5]), True]\[And]If[x2, !(NegUnitarityCond[\[Lambda]1, \[Lambda]2, \[Lambda]3, \[Lambda]4, \[Lambda]5]), True]},
-{axis1,range1[[1]], range1[[2]]},{axis2, range2[[1]],range2[[2]]},
-PlotRange->{range1,range2},
-FrameLabel->{label1,label2},
-ImageSize->Medium,
-PerformanceGoal->"Speed"
-]
-]}
-}]]
-
-
-(* ::Input::Initialization:: *)
-RegFunction::usage="A function which details the a region which satisifies certain inequality constraints. The dimensions of
-the plot are chosen, and then the values of the other paramters can be chosen afterwards.
-RegFunction[axis1, axis2, label1, label2, range1, range2]
-axis1: The first dimension to plot against.
-axis2: The second dimension to plot against.
-label1: A string which provides a label for axis1.
-label2: A string which provides a label for axis2.
-range1: A list which specifies the range for axis1.
-raneg2: A list which specifies the range for axis2.";
-
-
-(* ::Input::Initialization:: *)
-VisualiseSliceDynamic[data_,projmat_,centrePoint_,height_,heightRange_,ptSize1_:0.005,ptSize2_:0.004,minDist_:0]:=
-DynamicModule[{lst=If[projmat=="random",RandomMatrix[data],projmat],centre =centrePoint ,h=height,arrowData},
+VisualiseSliceDynamic[data_,projmat_,centrePoint_,height_,heightRange_,minDist_:0]:=
+DynamicModule[{lst=If[TrueQ[projmat=="random"],RandomMatrix[data, 0],projmat],centre =centrePoint ,h=height,arrowData, pntSize1=0.005, pntSize2=0.004},
 arrowData=Reap[Sow[Circle[{0,0},1]];Do[With[{i=i},
 Sow[Dynamic[Arrow[{{0,0},lst[[i]]}]]];
 Sow[Dynamic[Text[StringForm["\!\(\*
@@ -243,6 +155,10 @@ Grid[{{"Centre Point"},
 {"Slice Height"},
 {Slider[Dynamic[h],heightRange]},
 {Dynamic[h]},(*The line above preserves orthonormality*)
+{"Size of Points in Slice"},
+{Slider[Dynamic[pntSize1],{0, 0.01}]},
+{"Size of Points Outside of Slice"},
+{Slider[Dynamic[pntSize2],{0, 0.01}]},
 {LocatorPane[Dynamic[lst,({lst[[All, 1]], lst[[All,2]]}=Orthogonalize[{#[[All, 1]], #[[All, 2]]}])&],
 Graphics[arrowData,Frame->True,ImageSize->165],Appearance->None],
 Dynamic[Module[{tempData=data, v1,v2},
@@ -251,7 +167,7 @@ Sow[data[[i]]];tempData[[i]]=Nothing],{i,1,Length[data]}]][[2, 1]];
 v2=tempData;
 ListPlot[{If[Length[v1]==0,{0,0},v1 . lst],If[Length[v2]==0,{0,0},v2 . lst]},
 AspectRatio->1,
-PlotStyle->{{Black,Opacity->1,PointSize[ptSize1]},{Lighter[Blue],Opacity->0.5,PointSize[ptSize2]}},
+PlotStyle->{{Black,Opacity->1,PointSize[pntSize1]},{Lighter[Blue],Opacity->0.5,PointSize[pntSize2]}},
 AxesLabel->{"\!\(\*
 StyleBox[\"P1\",\nFontSlant->\"Italic\"]\)", "\!\(\*
 StyleBox[\"P2\",\nFontSlant->\"Italic\"]\)"},
@@ -282,8 +198,8 @@ Return[dataSets]
 ]
 
 
-RandomMatrix[data_] :=
-    Module[{len = Length[data[[1]]], mat = {}},
+RandomMatrix[data_,col_] :=
+    Module[{len = Length[data[[1]]] - col, mat = {}},
         Do[mat = AppendTo[mat, {RandomReal[{-1, 1}],RandomReal[{-1, 1}]}], len];
         mat = Transpose[Orthogonalize[Transpose[mat]]];
         Return[mat]
@@ -292,9 +208,9 @@ RandomMatrix[data_] :=
 
 
 (* ::Input::Initialization:: *)
-SliceDynamic[data_,projmat_,centrePoint_,height_,heightRange_,ptSize1_:0.005,ptSize2_:0.004]:=
-DynamicModule[{lst=If[projmat=="random",RandomMatrix[data[[1;;1, 2;;-1]]],projmat],
-centre =centrePoint ,h=height,dataSets,arrowData},
+SliceDynamic[data_,projmat_,centrePoint_,height_,heightRange_]:=
+DynamicModule[{lst=If[TrueQ[projmat=="random"],RandomMatrix[data, 1],projmat],
+centre =centrePoint ,h=height,dataSets,arrowData,pntSize=0.006},
 arrowData=Reap[Sow[Circle[{0,0},1]];Do[With[{i=i},
 Sow[Dynamic[Arrow[{{0,0},lst[[i]]}]]];
 Sow[Dynamic[Text[StringForm["\!\(\*
@@ -306,9 +222,10 @@ Grid[{{"Centre Point"},
 {"Slice Height"},
 {Slider[Dynamic[h],heightRange]},
 {Dynamic[h]},(*The line above preserves orthonormality*)
+{Slider[Dynamic[pntSize],{0,0.01}]},
 {LocatorPane[Dynamic[lst,({lst[[All, 1]], lst[[All,2]]}=Orthogonalize[{#[[All, 1]], #[[All, 2]]}])&],
 Graphics[arrowData,Frame->True,ImageSize->165],Appearance->None],
-Dynamic[Module[{slice={}, colours={}, sliceSet={}},
+Dynamic[Module[{slice={}, colours={},sliceSet={}},
 
 Do[Do[If[genDist[xPrime[dataSets[[i,j, 1;;- 2]], lst], cPrime[centre, lst]]<h,
 slice = Append[slice, dataSets[[i,j,1;;-2]]];
@@ -317,7 +234,7 @@ slice = Append[slice, dataSets[[i,j,1;;-2]]];
 (*I'm ensuring that I won't have a list of empty lists. Multiply a single empty list, {}, with projmat is fine.*)
 If[Length[slice]>0, 
 sliceSet = Append[sliceSet, slice];
-colours = Append[colours, {ColorData[97, dataSets[[i, 1, -1]]]}];];(*Here you could develop some colour function if you'd like. I'm just using the default scheme (ColorData[97, n]).*)
+colours = Append[colours, {ColorData[97, dataSets[[i, 1, -1]]], PointSize[pntSize]}];];(*Here you could develop some colour function if you'd like. I'm just using the default scheme (ColorData[97, n]).*)
 
 slice ={},
 {i, 1, Length[dataSets]}];
@@ -328,41 +245,11 @@ StyleBox[\"P1\",\nFontSlant->\"Italic\"]\)", "\!\(\*
 StyleBox[\"P2\",\nFontSlant->\"Italic\"]\)"},
 PlotStyle->colours,
 LabelStyle->FontFamily->"Times New Roman",
- AspectRatio->1,PlotMarkers->{\[FilledSmallCircle]},PlotRange->{{Min[Transpose[Drop[data,{},{-1}] . lst][[1]]],Max[Transpose[Drop[data,{},{-1}] . lst][[1]]]},{Min[Transpose[Drop[data,{},{-1}] . lst][[2]]],Max[Transpose[Drop[data,{},{-1}] . lst][[2]]]}},
+ AspectRatio->1,PlotRange->{{Min[Transpose[Drop[data,{},{-1}] . lst][[1]]],Max[Transpose[Drop[data,{},{-1}] . lst][[1]]]},{Min[Transpose[Drop[data,{},{-1}] . lst][[2]]],Max[Transpose[Drop[data,{},{-1}] . lst][[2]]]}},
 ImageSize->500
 ]
 ]
 ],SpanFromAbove}},Frame->True]]
-
-
-(* ::Input:: *)
-(*VisualiseSliceDynamic2[data_,projmat_,centrePoint_,height_,heightRange_,ptSize1_:0.005,ptSize2_:0.004,minDist_:0]:=*)
-(*DynamicModule[{lst=projmat,centre =centrePoint ,h=height,arrowData,legendData},*)
-(*arrowData=Reap[Sow[Circle[{0,0},1]];Do[With[{i=i},*)
-(*Sow[Dynamic[Arrow[{{0,0},lst[[i]]}]]];*)
-(*Sow[Dynamic[Text[StringForm["\!\(\*StyleBox[\"x\",FontWeight->\"Plain\"]\)``",i], lst[[i]]+lst[[i]]/20]]];],{i,1,Length[projmat]}]][[2, 1]];*)
-(**)
-(*Grid[{{"Centre Point"},*)
-(*{InputField[Dynamic[centre],FieldSize->15]},(*Grid formats the ouput of dynamic module*)*)
-(*{"Slice Height"},*)
-(*{Slider[Dynamic[h],heightRange]},*)
-(*{Dynamic[h]},(*The line above preserves orthonormality*)*)
-(*{LocatorPane[Dynamic[lst,({lst[[All, 1]], lst[[All,2]]}=Orthogonalize[{#[[All, 1]], #[[All, 2]]}])&],*)
-(*Graphics[arrowData,Frame->True,ImageSize->165],Appearance->None],*)
-(*Dynamic[Module[{tempData=data, v1,v2},*)
-(*v1=Reap[Do[If[minDist<genDist[xPrime[data[[i]], lst], cPrime[centrePoint, lst]]<h, *)
-(*Sow[data[[i]]];tempData[[i]]=Nothing],{i,1,Length[data]}]][[2]];*)
-(*v2=tempData;*)
-(*ListPlot[{If[Length[v1]==0,{0,0},v1[[1]] . lst],If[Length[v2]==0,{0,0},v2 . lst]},*)
-(*AspectRatio->1,*)
-(*PlotStyle->{{Black,Opacity->1,PointSize[ptSize1]},{Lighter[Blue],Opacity->0.05,PointSize[ptSize2]}},*)
-(*AxesLabel->{"\!\(\*StyleBox[\"P1\",FontSlant->\"Italic\"]\)", "\!\(\*StyleBox[\"P2\",FontSlant->\"Italic\"]\)"},*)
-(*LabelStyle->FontFamily->"Times New Roman",*)
-(*AspectRatio->Automatic,*)
-(*ImageSize->500,*)
-(*PlotLegends->Placed[{"In Slice","Not in Slice"},Above]]*)
-(*]*)
-(*],SpanFromAbove}},Frame->True]]*)
 
 
 (* ::Input::Initialization:: *)
@@ -429,7 +316,7 @@ cP: Ideally the cPrime function
 
 (* ::Input::Initialization:: *)
 VisualiseSlice[data_,projMat_,centerPt_,dist_,ptSize1_:0.005,ptSize2_:0.004,minDist_:0]:=
-Module[{tempData=data,lst=If[projMat=="random",RandomMatrix[data],projmat] ,v1={ConstantArray[0., Length[data[[1]]]]},v2={ConstantArray[0.,Length[ data[[1]]]]},arrowData},
+Module[{tempData=data,lst=If[projMat=="random",RandomMatrix[data],projMat] ,v1={ConstantArray[0., Length[data[[1]]]]},v2={ConstantArray[0.,Length[ data[[1]]]]},arrowData},
 v1=Reap[Do[If[minDist<genDist[xPrime[data[[i]], lst], cPrime[centerPt,lst]]<dist, 
 Sow[data[[i]]];tempData[[i]]=Nothing],{i,1,Length[data]}]][[2]];
 v2=tempData;
@@ -463,7 +350,7 @@ ptSize2: A number indicating the point size of the point which exist outside of 
 
 (* ::Input::Initialization:: *)
 SlicePlot[data_, projMat_,centerPt_,dist_,colour_:Automatic,minDist_:0]:=
-Module[{dataSlice={}, lst=If[projMat=="random",RandomMatrix[data[[1]]],projmat],arrowData,legendData},
+Module[{dataSlice={}, lst=If[projMat=="random",RandomMatrix[data[[1]]],projMat],arrowData,legendData},
 Do[dataSlice=Append[dataSlice,Reap[Do[If[minDist<genDist[xPrime[data[[i, j]], lst], cPrime[centerPt, lst]]<dist, 
 Sow[data[[i, j]]]],{j,1,Length[data[[i]]]}]][[2,1]] ],{i, 1, Length[data]}];
 
