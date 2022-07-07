@@ -60,10 +60,10 @@ library(plotrix)
 # Introduction
 
 <!-- Background -->
-From a statistical perspective it is rare to have data that are strictly 3D, and so unlike in most computer graphics applications, the more useful methods for data analysis show projections from an arbitrary dimensional space. These are dynamic data visualizations methods and are collected under the term *tours*. Tours involve views of high-dimensional ($p$) data in low-dimensional ($d$) projections. In his original paper on the grand tour, @As85 provided several algorithms for tour paths that could theoretically show the viewer the data *from all sides*. Prior to Asimov's work, there were numerous preparatory developments including @tukey's PRIM-9. PRIM-9 had user-controlled rotations on coordinate axes, allowing one to manually tour through low-dimensional projections. It is impractical to impossible to steer through all possible projections, unlike Asimov's tours which allows one to quickly see many, many different projections. After Asimov there have been many, many tour developments, as summarized in @lee2021. 
+From a statistical perspective it is rare to have data that are strictly 3D, and so unlike in most computer graphics applications, the more useful methods for data analysis show projections from an arbitrary dimensional space. These are dynamic data visualizations methods and are collected under the term *tours*. Tours involve views of high-dimensional ($p$) data with low-dimensional ($d$) projections. In his original paper on the grand tour, @As85 provided several algorithms for tour paths that could theoretically show the viewer the data *from all sides*. Prior to Asimov's work, there were numerous preparatory developments including @tukey's PRIM-9. PRIM-9 had user-controlled rotations on coordinate axes, allowing one to manually tour through low-dimensional projections. (A video illustrating the capabilities is available through video library of @ASA22.) Steering through all possible projections is impossible, unlike Asimov's tours which allows one to quickly see many, many different projections. After Asimov there have been many, many tour developments, which are summarized in @lee2021. 
 
 <!-- Manual tours -->
-One such direction of work develops the ideas from PRIM-9, to provide manual control of a tour. @cook_manual_1997 describes controls for 1D (or 2D) projections, in a 2D (or 3D) manipulation space, allowing the user to select any variable axis, and rotate it into or out of or around the projection through horizontal, vertical, oblique, radial or angular changes in value. @spyrison_spinifex_2020 refines this algorithm and implements them to generate animations. 
+One such direction of work develops the ideas from PRIM-9, to provide manual control of a tour. @cook_manual_1997 describe controls for 1D (or 2D) projections, respectively in a 2D (or 3D) manipulation space, allowing the user to select any variable axis, and rotate it into, or out of, or around the projection through horizontal, vertical, oblique, radial or angular changes in value. @spyrison_spinifex_2020 refined this algorithm and implements them to generate animation sequences. 
 
 <!-- Purpose -->
 Manual controls are especially useful for assessing sensitivity of structure to particular elements of the projection. There are many places where it is useful. In exploratory data analysis, where one sees clusters in a projection, can some variables be removed from the projection without affecting the clustering. For interpreting models, one can reduce or increase a variable's contribution to examine the variable importance. These controls can also be used to interactively generate faceted plots [@XXX], or spatiotemporal glyphmaps [@XXX]. Having the user interact with a projection is extremely valuable for understanding high-dimensional data. However, these algorithms have two problems: (1) the pre-processing of creating a manipulation space overly complicates the algorithm, (2) extending to higher dimensional control is difficult. 
@@ -84,11 +84,11 @@ In the original work, the method for updating component values, for a 2D project
 \label{manipspace}
 \end{figure*}
 
-## The new simpler definition
+## A new simpler and broadly applicable approach
 
 The new approach emerged from experiments in mathematica. The components corresponding to $V_m$ are directly controlled by cursor movement, which updates row $m$ of $A$. The updated matrix is then orthonormalised. 
 
-### Algorithm 1
+### Algorithm 
 
 1. Provide $A$, and $m$. (Note that $m$ could also be automatically chosen as the component that is closest to the cursor position.)
 2. Change values in row $m$, giving $A^*$. A large change in these values would correspond to making a large jump from the current projection. Small changes would correspond to tracking a cursor, making small jumps from the current projection.
@@ -99,60 +99,6 @@ The new approach emerged from experiments in mathematica. The components corresp
     iii. Normalise ${\boldmath a}^*_{.2}$.
 
 This algorithm will produce the changes to a projection as illustrated in Figure \ref{fig:manualsequence} (top row). The controlled variable, $V_m$, corresponds to the black line, and sequential changes to row $m$ of $A$ can be seen to roughly follow a specified position (orange dot). Changes in the other components happen as a result of the orthonormalisation, but are uncontrolled. 
-
-### Algorithm 2
-
-The problem with Algorithm 1 is that the precise values for $V_m$ cannot be specified because the orthonormalisation will change them. This modification will maintain the components of $V_m$ precisely (Figure \ref{fig:manualsequence} (bottom row)). The algorithm is as follows:
-
-1. Provide $A$, and $m$.
-2. Change values in row $m$, giving $A^*$.
-3. Store row $m$ separately, and zero the values of row $m$ in $A^*$, giving $A^{*0}$. 
-4. Orthonormalise $A^{*0}$, using Gram-Schmidt.
-5. Replace row $m$ with the original values, giving $A^{**}$. 
-6. For $d=2$, adjust the values of ${\boldmath a}^{**}_{.2}$ using 
-
-$$a^{**}_{j2}+\frac{a_{m1}a_{m2}}{p-1}, j=1, ..., p, j\neq m$$.
-
-which ensures that 
-
-$$\sum_{j=1, j\neq m}^p a^{**}_{j1}a^{**}_{j2} + a_{m1}a_{m2} = 0$$.
-
-If $d>2$ the process would be sequentially repeated in the same manner that Gram-Schmidt is applied sequentially to orthormalise the columns of a matrix. If $d=1$ no orthonormalisation is needed, and the projection vector would simply need to be normalized after each adjustment. 
-
-<!-- Need to think about how the values for selected variable are made exact, that is constrained orthonormalisation.
-
-Need to think about checks, and error catching, maybe in implementation section. If selected variable has 0 coefficient, will that generate an orthonormalisation error?-->
-
-### Algorithm 3
-
-For $d=2$ projections, the projection matrix is the sub-matrix of $A$ formed by its first two columns. Whereas orthonormality of the basis for the p-dimensional space is given by $e_i\cdot e_j=\delta_{ij},{i,j,=1,\cdots,}$, orthonormality of the projection matrix is expressed as $P_i\cdot P_j=\delta_{ij}, {i,j=1,2}$. Movement of the cursor takes the two components ${x_{m1},x_{m2}}$ into a selected new value ${a,b}$. Although the motion is constrained by $a^2+b^2\leq 1$, this is not sufficient to guarantee orthonormality of the new projection matrix. One possible algorithm to achieve this is
-\begin{enumerate}
-\item Cursor movement takes ${x_{m1},x_{m2}}\to {a,b}$
-\item The freedom to change the components $A_{i3}\cdots A_{ip}$ (the columns of $A$ not corresponding to the projection matrix) is used to select a new orthonormal basis as follows:
-\begin{enumerate}
-\item For row $m$ one chooses $A_{m3}=\sqrt{1-a^2-b^2},~A_{m,k>3}=0$
-\item For other rows, $A_{i\neq m,j\geq3}$ random selections in the range $(-1,1)$ are made.
-\item The Gram-Schmidt algorithm is then used to obtain an orthonormal basis taking $e_m$ as the first vector (which is already normalized), and then proceeding as usual $e_1\to e_1-(e_1\cdot e_m) e_m$, $e_1\to e_1/(e_1\cdot e_1)$, etc.
-\end{enumerate}
-\item this results in the orthonormal basis $A^*$ and a new projection matrix with $P_{m1}=a,~P_{m2}=b$.
-\end{enumerate}
-The random choice for the components of $A$ not in the projection matrix allows the exploration of dimensions perpendicular to the projection plane.
-
-\begin{align}
-A=~~~& \begin{pNiceArray}{ccccc}[first-row,first-col]
-\CodeBefore
-       \columncolor{red!15}{1,2}
-              \rowcolor{blue!15}{4}
-     \Body
-       & \stackrel{P_1}{\downarrow} & \stackrel{P_2}{\downarrow} &  & &\\
-e_1\to & x_{11} & x_{12}  & x_{13} & \cdots & x_{1p} \\
-e_2 \to& x_{21}  & x_{22}  & \cdot  &\cdots & x_{2p} \\
-\vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\ 
- e_m \to& x_{m1}  & x_{m2}  & \cdot  &\cdots & x_{mp} \\   
-\vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\
-e_p \to&x_{p1} & x_{p2} &\cdot &\cdots & x_{pp} 
-\end{pNiceArray},\quad (x_{m1},x_{m2})\to (a,b)
-\end{align}
 
 
 ```{r manualsequence, out.width="100%", width=12, height=4, fig.cap="Sequence of projections where contribution of one variable is controlled (black) is changed: (top) unconstrained orthonormalisation, (bottom) constrained as specified. The dot (orange) indicates the chosen values for the controlled variable. For the constrained orthonormalisation it can be seen to precisely match the axis, but not so for the unconstrained orthonormalisation."}
@@ -203,7 +149,67 @@ for (i in 1:3) {
 }
 ```
 
-### Potential Algorithm 3
+## Refinements to enforce exact position
+
+The problem with new simple method (Algorithm 1) is that the precise values for $V_m$ cannot be specified because the orthonormalisation will change them. 
+
+### Adjustment method 1
+
+A small modification to algorithm 1 will maintain the components of $V_m$ precisely (Figure \ref{fig:manualsequence} (bottom row)). It is as follows:
+
+1. Provide $A$, and $m$.
+2. Change values in row $m$, giving $A^*$.
+3. Store row $m$ separately, and zero the values of row $m$ in $A^*$, giving $A^{*0}$. 
+4. Orthonormalise $A^{*0}$, using Gram-Schmidt.
+5. Replace row $m$ with the original values, giving $A^{**}$. 
+6. For $d=2$, adjust the values of ${\boldmath a}^{**}_{.2}$ using 
+
+$$a^{**}_{j2}+\frac{a_{m1}a_{m2}}{p-1}, j=1, ..., p, j\neq m$$.
+
+which ensures that 
+
+$$\sum_{j=1, j\neq m}^p a^{**}_{j1}a^{**}_{j2} + a_{m1}a_{m2} = 0$$.
+
+If $d>2$ the process would be sequentially repeated in the same manner that Gram-Schmidt is applied sequentially to orthormalise the columns of a matrix. If $d=1$ no orthonormalisation is needed, and the projection vector would simply need to be normalized after each adjustment. 
+
+<!-- Need to think about how the values for selected variable are made exact, that is constrained orthonormalisation.
+
+Need to think about checks, and error catching, maybe in implementation section. If selected variable has 0 coefficient, will that generate an orthonormalisation error?-->
+
+### Adjustment method 2
+
+For $d=2$ projections, the projection matrix is the sub-matrix of $A$ formed by its first two columns. Whereas orthonormality of the basis for the p-dimensional space is given by $e_i\cdot e_j=\delta_{ij},{i,j,=1,\cdots,}$, orthonormality of the projection matrix is expressed as $P_i\cdot P_j=\delta_{ij}, {i,j=1,2}$. Movement of the cursor takes the two components ${x_{m1},x_{m2}}$ into a selected new value ${a,b}$. Although the motion is constrained by $a^2+b^2\leq 1$, this is not sufficient to guarantee orthonormality of the new projection matrix. One possible algorithm to achieve this is
+\begin{enumerate}
+\item Cursor movement takes ${x_{m1},x_{m2}}\to {a,b}$
+\item The freedom to change the components $A_{i3}\cdots A_{ip}$ (the columns of $A$ not corresponding to the projection matrix) is used to select a new orthonormal basis as follows:
+\begin{enumerate}
+\item For row $m$ one chooses $A_{m3}=\sqrt{1-a^2-b^2},~A_{m,k>3}=0$
+\item For other rows, $A_{i\neq m,j\geq3}$ random selections in the range $(-1,1)$ are made.
+\item The Gram-Schmidt algorithm is then used to obtain an orthonormal basis taking $e_m$ as the first vector (which is already normalized), and then proceeding as usual $e_1\to e_1-(e_1\cdot e_m) e_m$, $e_1\to e_1/(e_1\cdot e_1)$, etc.
+\end{enumerate}
+\item this results in the orthonormal basis $A^*$ and a new projection matrix with $P_{m1}=a,~P_{m2}=b$.
+\end{enumerate}
+The random choice for the components of $A$ not in the projection matrix allows the exploration of dimensions perpendicular to the projection plane.
+
+\begin{align}
+A=~~~& \begin{pNiceArray}{ccccc}[first-row,first-col]
+\CodeBefore
+       \columncolor{red!15}{1,2}
+              \rowcolor{blue!15}{4}
+     \Body
+       & \stackrel{P_1}{\downarrow} & \stackrel{P_2}{\downarrow} &  & &\\
+e_1\to & x_{11} & x_{12}  & x_{13} & \cdots & x_{1p} \\
+e_2 \to& x_{21}  & x_{22}  & \cdot  &\cdots & x_{2p} \\
+\vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\ 
+ e_m \to& x_{m1}  & x_{m2}  & \cdot  &\cdots & x_{mp} \\   
+\vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\
+e_p \to&x_{p1} & x_{p2} &\cdot &\cdots & x_{pp} 
+\end{pNiceArray},\quad (x_{m1},x_{m2})\to (a,b)
+\end{align}
+
+
+
+### Adjustment method 3
 
 For now just sketching the idea:
 

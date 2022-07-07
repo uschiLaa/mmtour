@@ -83,25 +83,27 @@ From a statistical perspective it is rare to have data that are strictly
 useful methods for data analysis show projections from an arbitrary
 dimensional space. These are dynamic data visualizations methods and are
 collected under the term \emph{tours}. Tours involve views of
-high-dimensional (\(p\)) data in low-dimensional (\(d\)) projections. In
-his original paper on the grand tour, \citet{As85} provided several
+high-dimensional (\(p\)) data with low-dimensional (\(d\)) projections.
+In his original paper on the grand tour, \citet{As85} provided several
 algorithms for tour paths that could theoretically show the viewer the
 data \emph{from all sides}. Prior to Asimov's work, there were numerous
 preparatory developments including \citet{tukey}'s PRIM-9. PRIM-9 had
 user-controlled rotations on coordinate axes, allowing one to manually
-tour through low-dimensional projections. It is impractical to
-impossible to steer through all possible projections, unlike Asimov's
+tour through low-dimensional projections. (A video illustrating the
+capabilities is available through video library of \citet{ASA22}.)
+Steering through all possible projections is impossible, unlike Asimov's
 tours which allows one to quickly see many, many different projections.
-After Asimov there have been many, many tour developments, as summarized
-in \citet{lee2021}.
+After Asimov there have been many, many tour developments, which are
+summarized in \citet{lee2021}.
 
 One such direction of work develops the ideas from PRIM-9, to provide
-manual control of a tour. \citet{cook_manual_1997} describes controls
-for 1D (or 2D) projections, in a 2D (or 3D) manipulation space, allowing
-the user to select any variable axis, and rotate it into or out of or
-around the projection through horizontal, vertical, oblique, radial or
-angular changes in value. \citet{spyrison_spinifex_2020} refines this
-algorithm and implements them to generate animations.
+manual control of a tour. \citet{cook_manual_1997} describe controls for
+1D (or 2D) projections, respectively in a 2D (or 3D) manipulation space,
+allowing the user to select any variable axis, and rotate it into, or
+out of, or around the projection through horizontal, vertical, oblique,
+radial or angular changes in value. \citet{spyrison_spinifex_2020}
+refined this algorithm and implements them to generate animation
+sequences.
 
 Manual controls are especially useful for assessing sensitivity of
 structure to particular elements of the projection. There are many
@@ -151,17 +153,17 @@ angular motions.
 \label{manipspace}
 \end{figure*}
 
-\hypertarget{the-new-simpler-definition}{%
-\subsection{The new simpler
-definition}\label{the-new-simpler-definition}}
+\hypertarget{a-new-simpler-and-broadly-applicable-approach}{%
+\subsection{A new simpler and broadly applicable
+approach}\label{a-new-simpler-and-broadly-applicable-approach}}
 
 The new approach emerged from experiments in mathematica. The components
 corresponding to \(V_m\) are directly controlled by cursor movement,
 which updates row \(m\) of \(A\). The updated matrix is then
 orthonormalised.
 
-\hypertarget{algorithm-1}{%
-\subsubsection{Algorithm 1}\label{algorithm-1}}
+\hypertarget{algorithm}{%
+\subsubsection{Algorithm}\label{algorithm}}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -197,14 +199,24 @@ in Figure \ref{fig:manualsequence} (top row). The controlled variable,
 (orange dot). Changes in the other components happen as a result of the
 orthonormalisation, but are uncontrolled.
 
-\hypertarget{algorithm-2}{%
-\subsubsection{Algorithm 2}\label{algorithm-2}}
+\begin{figure}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/manualsequence-1} \caption{Sequence of projections where contribution of one variable is controlled (black) is changed: (top) unconstrained orthonormalisation, (bottom) constrained as specified. The dot (orange) indicates the chosen values for the controlled variable. For the constrained orthonormalisation it can be seen to precisely match the axis, but not so for the unconstrained orthonormalisation.}\label{fig:manualsequence}
+\end{figure}
 
-The problem with Algorithm 1 is that the precise values for \(V_m\)
-cannot be specified because the orthonormalisation will change them.
-This modification will maintain the components of \(V_m\) precisely
-(Figure \ref{fig:manualsequence} (bottom row)). The algorithm is as
-follows:
+\hypertarget{refinements-to-enforce-exact-position}{%
+\subsection{Refinements to enforce exact
+position}\label{refinements-to-enforce-exact-position}}
+
+The problem with new simple method (Algorithm 1) is that the precise
+values for \(V_m\) cannot be specified because the orthonormalisation
+will change them.
+
+\hypertarget{adjustment-method-1}{%
+\subsubsection{Adjustment method 1}\label{adjustment-method-1}}
+
+A small modification to algorithm 1 will maintain the components of
+\(V_m\) precisely (Figure \ref{fig:manualsequence} (bottom row)). It is
+as follows:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -235,8 +247,8 @@ that Gram-Schmidt is applied sequentially to orthormalise the columns of
 a matrix. If \(d=1\) no orthonormalisation is needed, and the projection
 vector would simply need to be normalized after each adjustment.
 
-\hypertarget{algorithm-3}{%
-\subsubsection{Algorithm 3}\label{algorithm-3}}
+\hypertarget{adjustment-method-2}{%
+\subsubsection{Adjustment method 2}\label{adjustment-method-2}}
 
 For \(d=2\) projections, the projection matrix is the sub-matrix of
 \(A\) formed by its first two columns. Whereas orthonormality of the
@@ -280,12 +292,8 @@ e_p \to&x_{p1} & x_{p2} &\cdot &\cdots & x_{pp}
 \end{pNiceArray},\quad (x_{m1},x_{m2})\to (a,b)
 \end{align}
 
-\begin{figure}
-\includegraphics[width=1\linewidth]{paper_files/figure-latex/manualsequence-1} \caption{Sequence of projections where contribution of one variable is controlled (black) is changed: (top) unconstrained orthonormalisation, (bottom) constrained as specified. The dot (orange) indicates the chosen values for the controlled variable. For the constrained orthonormalisation it can be seen to precisely match the axis, but not so for the unconstrained orthonormalisation.}\label{fig:manualsequence}
-\end{figure}
-
-\hypertarget{potential-algorithm-3}{%
-\subsubsection{Potential Algorithm 3}\label{potential-algorithm-3}}
+\hypertarget{adjustment-method-3}{%
+\subsubsection{Adjustment method 3}\label{adjustment-method-3}}
 
 For now just sketching the idea:
 

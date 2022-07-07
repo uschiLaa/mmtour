@@ -16,6 +16,7 @@
 \nicematrix@redefine@check@rerun 
 \citation{As85}
 \citation{tukey}
+\citation{ASA22}
 \citation{lee2021}
 \citation{cook_manual_1997}
 \citation{spyrison_spinifex_2020}
@@ -29,12 +30,18 @@
 \newlabel{existing-methods}{{2.1}{2}{Existing methods}{subsection.2.1}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Original contruction of the manual tour designed for 2D projections and created a 3D space from which to utilise track ball controls to change it's contribution. (Figure 3 from Cook and Buja (1997).)}}{2}{figure.1}\protected@file@percent }
 \newlabel{manipspace}{{1}{2}{Original contruction of the manual tour designed for 2D projections and created a 3D space from which to utilise track ball controls to change it's contribution. (Figure 3 from Cook and Buja (1997).)}{figure.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}The new simpler definition}{3}{subsection.2.2}\protected@file@percent }
-\newlabel{the-new-simpler-definition}{{2.2}{3}{The new simpler definition}{subsection.2.2}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.1}Algorithm 1}{3}{subsubsection.2.2.1}\protected@file@percent }
-\newlabel{algorithm-1}{{2.2.1}{3}{Algorithm 1}{subsubsection.2.2.1}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.2}Algorithm 2}{3}{subsubsection.2.2.2}\protected@file@percent }
-\newlabel{algorithm-2}{{2.2.2}{3}{Algorithm 2}{subsubsection.2.2.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Sequence of projections where contribution of one variable is controlled (black) is changed: (top) unconstrained orthonormalisation, (bottom) constrained as specified. The dot (orange) indicates the chosen values for the controlled variable. For the constrained orthonormalisation it can be seen to precisely match the axis, but not so for the unconstrained orthonormalisation.}}{3}{figure.2}\protected@file@percent }
+\newlabel{fig:manualsequence}{{2}{3}{Sequence of projections where contribution of one variable is controlled (black) is changed: (top) unconstrained orthonormalisation, (bottom) constrained as specified. The dot (orange) indicates the chosen values for the controlled variable. For the constrained orthonormalisation it can be seen to precisely match the axis, but not so for the unconstrained orthonormalisation}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}A new simpler and broadly applicable approach}{3}{subsection.2.2}\protected@file@percent }
+\newlabel{a-new-simpler-and-broadly-applicable-approach}{{2.2}{3}{A new simpler and broadly applicable approach}{subsection.2.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.1}Algorithm}{3}{subsubsection.2.2.1}\protected@file@percent }
+\newlabel{algorithm}{{2.2.1}{3}{Algorithm}{subsubsection.2.2.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Refinements to enforce exact position}{4}{subsection.2.3}\protected@file@percent }
+\newlabel{refinements-to-enforce-exact-position}{{2.3}{4}{Refinements to enforce exact position}{subsection.2.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.1}Adjustment method 1}{4}{subsubsection.2.3.1}\protected@file@percent }
+\newlabel{adjustment-method-1}{{2.3.1}{4}{Adjustment method 1}{subsubsection.2.3.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.2}Adjustment method 2}{4}{subsubsection.2.3.2}\protected@file@percent }
+\newlabel{adjustment-method-2}{{2.3.2}{4}{Adjustment method 2}{subsubsection.2.3.2}{}}
 \ExplSyntaxOn \cs_if_free:NT \pgfsyspdfmark {\cs_set_eq:NN \pgfsyspdfmark \@gobblethree }\ExplSyntaxOff 
 \ExplSyntaxOn 
 \char_set_catcode_space:n {32}
@@ -44,102 +51,98 @@
 \char_set_catcode_space:n {32}
 \tl_gset:cn {c__nicematrix_2_tl}{\seq_gset_from_clist:Nn \g__nicematrix_size_seq {0,6,6,0,5,5}}
 \ExplSyntaxOff 
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.3}Algorithm 3}{4}{subsubsection.2.2.3}\protected@file@percent }
-\newlabel{algorithm-3}{{2.2.3}{4}{Algorithm 3}{subsubsection.2.2.3}{}}
-\pgfsyspdfmark {nm-2-position}{11603503}{21819667}
-\pgfsyspdfmark {pgfid68}{11603503}{21819667}
-\pgfsyspdfmark {pgfid69}{11603503}{21819667}
-\pgfsyspdfmark {pgfid71}{14010896}{25233659}
-\pgfsyspdfmark {pgfid72}{14617986}{25233659}
-\pgfsyspdfmark {pgfid73}{16487525}{25233659}
-\pgfsyspdfmark {nm-2-row-1}{13683215}{24964959}
-\pgfsyspdfmark {pgfid74}{13683215}{24978066}
-\pgfsyspdfmark {pgfid75}{14010896}{24381691}
-\pgfsyspdfmark {pgfid76}{12598911}{24381691}
-\pgfsyspdfmark {pgfid77}{14617986}{24381691}
-\pgfsyspdfmark {pgfid78}{16487525}{24381691}
-\pgfsyspdfmark {pgfid79}{18249960}{24381691}
-\pgfsyspdfmark {pgfid80}{19823915}{24381691}
-\pgfsyspdfmark {pgfid81}{21505915}{24381691}
-\pgfsyspdfmark {nm-2-row-2}{13683215}{24112991}
-\pgfsyspdfmark {pgfid82}{13683215}{24126098}
-\pgfsyspdfmark {pgfid83}{14010896}{23529723}
-\pgfsyspdfmark {pgfid84}{12598911}{23529723}
-\pgfsyspdfmark {pgfid85}{14617986}{23529723}
-\pgfsyspdfmark {pgfid86}{16487525}{23529723}
-\pgfsyspdfmark {pgfid87}{18249960}{23529723}
-\pgfsyspdfmark {pgfid88}{19823915}{23529723}
-\pgfsyspdfmark {pgfid89}{21505915}{23529723}
-\pgfsyspdfmark {nm-2-row-3}{13683215}{23261023}
-\pgfsyspdfmark {pgfid90}{13683215}{23274130}
-\pgfsyspdfmark {pgfid91}{14010896}{22280878}
-\pgfsyspdfmark {pgfid92}{12921632}{22280878}
-\pgfsyspdfmark {pgfid93}{14617986}{22280878}
-\pgfsyspdfmark {pgfid94}{16487525}{22280878}
-\pgfsyspdfmark {pgfid95}{18249960}{22280878}
-\pgfsyspdfmark {pgfid96}{19823915}{22280878}
-\pgfsyspdfmark {pgfid97}{21505915}{22280878}
-\pgfsyspdfmark {nm-2-row-4}{13683215}{22012178}
-\pgfsyspdfmark {pgfid98}{13683215}{22025285}
-\pgfsyspdfmark {pgfid99}{14010896}{21428910}
-\pgfsyspdfmark {pgfid100}{12491807}{21428910}
-\pgfsyspdfmark {pgfid101}{14617986}{21428910}
-\pgfsyspdfmark {pgfid102}{16487525}{21428910}
-\pgfsyspdfmark {pgfid103}{18249960}{21428910}
-\pgfsyspdfmark {pgfid104}{19823915}{21428910}
-\pgfsyspdfmark {pgfid105}{21505915}{21428910}
-\pgfsyspdfmark {nm-2-row-5}{13683215}{21160210}
-\pgfsyspdfmark {pgfid106}{13683215}{21173317}
-\pgfsyspdfmark {pgfid107}{14010896}{20180065}
-\pgfsyspdfmark {pgfid108}{12921632}{20180065}
-\pgfsyspdfmark {pgfid109}{14617986}{20180065}
-\pgfsyspdfmark {pgfid110}{16487525}{20180065}
-\pgfsyspdfmark {pgfid111}{18249960}{20180065}
-\pgfsyspdfmark {pgfid112}{19823915}{20180065}
-\pgfsyspdfmark {pgfid113}{21505915}{20180065}
-\pgfsyspdfmark {nm-2-row-6}{13683215}{19911365}
-\pgfsyspdfmark {pgfid114}{13683215}{19924472}
-\pgfsyspdfmark {pgfid115}{14010896}{19328097}
-\pgfsyspdfmark {pgfid116}{12597971}{19328097}
-\pgfsyspdfmark {pgfid117}{14617986}{19328097}
-\pgfsyspdfmark {pgfid118}{16487525}{19328097}
-\pgfsyspdfmark {pgfid119}{18249960}{19328097}
-\pgfsyspdfmark {pgfid120}{19823915}{19328097}
-\pgfsyspdfmark {pgfid121}{21505915}{19328097}
-\pgfsyspdfmark {nm-2-row-7}{13683215}{19059397}
-\pgfsyspdfmark {pgfid122}{13683215}{19072504}
-\pgfsyspdfmark {nm-2-col-0}{11251249}{19072504}
-\pgfsyspdfmark {pgfid123}{11251249}{19072504}
-\pgfsyspdfmark {nm-2-col-1}{13670109}{19072504}
-\pgfsyspdfmark {pgfid124}{13683216}{19072504}
-\pgfsyspdfmark {nm-2-col-2}{15539648}{19072504}
-\pgfsyspdfmark {pgfid125}{15552755}{19072504}
-\pgfsyspdfmark {nm-2-col-3}{17409187}{19072504}
-\pgfsyspdfmark {pgfid126}{17422294}{19072504}
-\pgfsyspdfmark {nm-2-col-4}{19064518}{19072504}
-\pgfsyspdfmark {pgfid127}{19077625}{19072504}
-\pgfsyspdfmark {nm-2-col-5}{20557097}{19072504}
-\pgfsyspdfmark {pgfid128}{20570204}{19072504}
-\pgfsyspdfmark {nm-2-col-6}{22428518}{19072504}
-\pgfsyspdfmark {pgfid129}{22441625}{19072504}
-\pgfsyspdfmark {pgfid130}{22744731}{21819667}
-\pgfsyspdfmark {pgfid132}{22744731}{21819667}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.4}Potential Algorithm 3}{4}{subsubsection.2.2.4}\protected@file@percent }
-\newlabel{potential-algorithm-3}{{2.2.4}{4}{Potential Algorithm 3}{subsubsection.2.2.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Sequence of projections where contribution of one variable is controlled (black) is changed: (top) unconstrained orthonormalisation, (bottom) constrained as specified. The dot (orange) indicates the chosen values for the controlled variable. For the constrained orthonormalisation it can be seen to precisely match the axis, but not so for the unconstrained orthonormalisation.}}{5}{figure.2}\protected@file@percent }
-\newlabel{fig:manualsequence}{{2}{5}{Sequence of projections where contribution of one variable is controlled (black) is changed: (top) unconstrained orthonormalisation, (bottom) constrained as specified. The dot (orange) indicates the chosen values for the controlled variable. For the constrained orthonormalisation it can be seen to precisely match the axis, but not so for the unconstrained orthonormalisation}{figure.2}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Manual controls with algorithm 2. The precise location of the axis is maintained.}}{5}{figure.3}\protected@file@percent }
 \newlabel{fig:othermethod}{{3}{5}{Manual controls with algorithm 2. The precise location of the axis is maintained}{figure.3}{}}
+\pgfsyspdfmark {nm-2-position}{11603503}{30736089}
+\pgfsyspdfmark {pgfid68}{11603503}{30736089}
+\pgfsyspdfmark {pgfid69}{11603503}{30736089}
+\pgfsyspdfmark {pgfid71}{14010896}{34150081}
+\pgfsyspdfmark {pgfid72}{14617986}{34150081}
+\pgfsyspdfmark {pgfid73}{16487525}{34150081}
+\pgfsyspdfmark {nm-2-row-1}{13683215}{33881381}
+\pgfsyspdfmark {pgfid74}{13683215}{33894488}
+\pgfsyspdfmark {pgfid75}{14010896}{33298113}
+\pgfsyspdfmark {pgfid76}{12598911}{33298113}
+\pgfsyspdfmark {pgfid77}{14617986}{33298113}
+\pgfsyspdfmark {pgfid78}{16487525}{33298113}
+\pgfsyspdfmark {pgfid79}{18249960}{33298113}
+\pgfsyspdfmark {pgfid80}{19823915}{33298113}
+\pgfsyspdfmark {pgfid81}{21505915}{33298113}
+\pgfsyspdfmark {nm-2-row-2}{13683215}{33029413}
+\pgfsyspdfmark {pgfid82}{13683215}{33042520}
+\pgfsyspdfmark {pgfid83}{14010896}{32446145}
+\pgfsyspdfmark {pgfid84}{12598911}{32446145}
+\pgfsyspdfmark {pgfid85}{14617986}{32446145}
+\pgfsyspdfmark {pgfid86}{16487525}{32446145}
+\pgfsyspdfmark {pgfid87}{18249960}{32446145}
+\pgfsyspdfmark {pgfid88}{19823915}{32446145}
+\pgfsyspdfmark {pgfid89}{21505915}{32446145}
+\pgfsyspdfmark {nm-2-row-3}{13683215}{32177445}
+\pgfsyspdfmark {pgfid90}{13683215}{32190552}
+\pgfsyspdfmark {pgfid91}{14010896}{31197300}
+\pgfsyspdfmark {pgfid92}{12921632}{31197300}
+\pgfsyspdfmark {pgfid93}{14617986}{31197300}
+\pgfsyspdfmark {pgfid94}{16487525}{31197300}
+\pgfsyspdfmark {pgfid95}{18249960}{31197300}
+\pgfsyspdfmark {pgfid96}{19823915}{31197300}
+\pgfsyspdfmark {pgfid97}{21505915}{31197300}
+\pgfsyspdfmark {nm-2-row-4}{13683215}{30928600}
+\pgfsyspdfmark {pgfid98}{13683215}{30941707}
+\pgfsyspdfmark {pgfid99}{14010896}{30345332}
+\pgfsyspdfmark {pgfid100}{12491807}{30345332}
+\pgfsyspdfmark {pgfid101}{14617986}{30345332}
+\pgfsyspdfmark {pgfid102}{16487525}{30345332}
+\pgfsyspdfmark {pgfid103}{18249960}{30345332}
+\pgfsyspdfmark {pgfid104}{19823915}{30345332}
+\pgfsyspdfmark {pgfid105}{21505915}{30345332}
+\pgfsyspdfmark {nm-2-row-5}{13683215}{30076632}
+\pgfsyspdfmark {pgfid106}{13683215}{30089739}
+\pgfsyspdfmark {pgfid107}{14010896}{29096487}
+\pgfsyspdfmark {pgfid108}{12921632}{29096487}
+\pgfsyspdfmark {pgfid109}{14617986}{29096487}
+\pgfsyspdfmark {pgfid110}{16487525}{29096487}
+\pgfsyspdfmark {pgfid111}{18249960}{29096487}
+\pgfsyspdfmark {pgfid112}{19823915}{29096487}
+\pgfsyspdfmark {pgfid113}{21505915}{29096487}
+\pgfsyspdfmark {nm-2-row-6}{13683215}{28827787}
+\pgfsyspdfmark {pgfid114}{13683215}{28840894}
+\pgfsyspdfmark {pgfid115}{14010896}{28244519}
+\pgfsyspdfmark {pgfid116}{12597971}{28244519}
+\pgfsyspdfmark {pgfid117}{14617986}{28244519}
+\pgfsyspdfmark {pgfid118}{16487525}{28244519}
+\pgfsyspdfmark {pgfid119}{18249960}{28244519}
+\pgfsyspdfmark {pgfid120}{19823915}{28244519}
+\pgfsyspdfmark {pgfid121}{21505915}{28244519}
+\pgfsyspdfmark {nm-2-row-7}{13683215}{27975819}
+\pgfsyspdfmark {pgfid122}{13683215}{27988926}
+\pgfsyspdfmark {nm-2-col-0}{11251249}{27988926}
+\pgfsyspdfmark {pgfid123}{11251249}{27988926}
+\pgfsyspdfmark {nm-2-col-1}{13670109}{27988926}
+\pgfsyspdfmark {pgfid124}{13683216}{27988926}
+\pgfsyspdfmark {nm-2-col-2}{15539648}{27988926}
+\pgfsyspdfmark {pgfid125}{15552755}{27988926}
+\pgfsyspdfmark {nm-2-col-3}{17409187}{27988926}
+\pgfsyspdfmark {pgfid126}{17422294}{27988926}
+\pgfsyspdfmark {nm-2-col-4}{19064518}{27988926}
+\pgfsyspdfmark {pgfid127}{19077625}{27988926}
+\pgfsyspdfmark {nm-2-col-5}{20557097}{27988926}
+\pgfsyspdfmark {pgfid128}{20570204}{27988926}
+\pgfsyspdfmark {nm-2-col-6}{22428518}{27988926}
+\pgfsyspdfmark {pgfid129}{22441625}{27988926}
+\pgfsyspdfmark {pgfid130}{22744731}{30736089}
+\pgfsyspdfmark {pgfid132}{22744731}{30736089}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.3}Adjustment method 3}{5}{subsubsection.2.3.3}\protected@file@percent }
+\newlabel{adjustment-method-3}{{2.3.3}{5}{Adjustment method 3}{subsubsection.2.3.3}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Experimenting with new techniques using Mathematica}{5}{section.3}\protected@file@percent }
 \newlabel{sec:implementation}{{3}{5}{Experimenting with new techniques using Mathematica}{section.3}{}}
 \citation{rmarkdown}
 \citation{knitr}
 \bibstyle{tfcad}
 \bibdata{biblio.bib}
-\bibcite{As85}{{1}{1985}{{Asimov}}{{}}}
-\bibcite{cook_manual_1997}{{2}{1997}{{Cook and Buja}}{{}}}
-\bibcite{lee2021}{{3}{2021}{{Lee et~al.}}{{}}}
-\bibcite{spyrison_spinifex_2020}{{4}{2020}{{Spyrison and Cook}}{{}}}
+\bibcite{ASA22}{{1}{2022}{{ASA Statistical Graphics Section}}{{}}}
+\bibcite{As85}{{2}{1985}{{Asimov}}{{}}}
+\bibcite{cook_manual_1997}{{3}{1997}{{Cook and Buja}}{{}}}
+\bibcite{tukey}{{4}{1974}{{Fisherkeller, Friedman, and Tukey}}{{}}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Applications}{8}{section.4}\protected@file@percent }
 \newlabel{sec:examples}{{4}{8}{Applications}{section.4}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Extension added in the R package \texttt  {tourr}}{8}{section.5}\protected@file@percent }
@@ -152,6 +155,8 @@
 \@writefile{toc}{\contentsline {section}{Acknowledgements}{8}{section*.1}\protected@file@percent }
 \newlabel{supplementary-material}{{7}{8}{Supplementary material}{section*.2}{}}
 \@writefile{toc}{\contentsline {section}{Supplementary material}{8}{section*.2}\protected@file@percent }
-\bibcite{knitr}{{5}{2015}{{Xie}}{{}}}
-\bibcite{rmarkdown}{{6}{2018}{{Xie, Allaire, and Grolemund}}{{}}}
+\bibcite{lee2021}{{5}{2021}{{Lee et~al.}}{{}}}
+\bibcite{spyrison_spinifex_2020}{{6}{2020}{{Spyrison and Cook}}{{}}}
+\bibcite{knitr}{{7}{2015}{{Xie}}{{}}}
+\bibcite{rmarkdown}{{8}{2018}{{Xie, Allaire, and Grolemund}}{{}}}
 \gdef \@abspage@last{9}
