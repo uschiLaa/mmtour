@@ -66,15 +66,15 @@ From a statistical perspective it is rare to have data that are strictly 3D, and
 One such direction of work develops the ideas from PRIM-9, to provide manual control of a tour. @cook_manual_1997 describes controls for 1D (or 2D) projections, in a 2D (or 3D) manipulation space, allowing the user to select any variable axis, and rotate it into or out of or around the projection through horizontal, vertical, oblique, radial or angular changes in value. @spyrison_spinifex_2020 refines this algorithm and implements them to generate animations. 
 
 <!-- Purpose -->
-Manual controls are especially useful for assessing sensitivity of structure to particular elements of the projection. There are many places where it is useful. In exploratory data analysis, where one sees clusters in a projection, can some variables be removed from the projection without affecting the clustering. For interpreting models, one can reduce or increase a variable's contribution to examine the variable importance. These controls can also be used to interactively generate facetted plots [@XXX], or spatiotemporal glyphmaps [@XXX]. Having the user interact with a projection is extremely valuable for understanding high-dimensional data. However, these algorithms have two problems: (1) the pre-processing of creating a manipulation space overly complicates the algorithm, (2) extending to higher dimensional control is difficult. 
+Manual controls are especially useful for assessing sensitivity of structure to particular elements of the projection. There are many places where it is useful. In exploratory data analysis, where one sees clusters in a projection, can some variables be removed from the projection without affecting the clustering. For interpreting models, one can reduce or increase a variable's contribution to examine the variable importance. These controls can also be used to interactively generate faceted plots [@XXX], or spatiotemporal glyphmaps [@XXX]. Having the user interact with a projection is extremely valuable for understanding high-dimensional data. However, these algorithms have two problems: (1) the pre-processing of creating a manipulation space overly complicates the algorithm, (2) extending to higher dimensional control is difficult. 
 
 Through experiments with the relatively new interactive graphics capabilities in mathematica(?), we have realized that there is a simpler approach, which is more direct, and extensible for generating user interaction. This paper explains this, and is organized as follows. The next section describes the new algorithm for manual control. This is followed by details on implementation. The applications section illustrate how these can be used. 
 
-# Manual tour {#sec:method}
+# What is a manual tour {#sec:method}
 
-An orthonormal basis ($A_{p\times d}$) and a variable id ($m \in \{1, ..., p\}$) to control are provided to initialise a manual tour. A method to update the values of the component of the controlled variable $V_m$ is needed. 
+An orthonormal basis ($A_{p\times d}$) and a variable id ($m \in \{1, ..., p\}$) to control are provided to initialize a manual tour. A method to update the values of the component of the controlled variable $V_m$ is needed. 
 
-## Background
+## Existing methods
 
 In the original work, the method for updating component values, for a 2D projection, was built trackball controls in 3D. A 3D manipulation space is created, as illustrated in Figure \ref{manipspace}, where the controlled variable has full range of motion from -1 to 1. Movements of a cursor are recorded and converted into changes in the values of $V_m$ to change it's values in the displayed 2D projection. Movement could also be constrained to be only in horizontal, vertical, radial or angular motions. 
 
@@ -84,7 +84,7 @@ In the original work, the method for updating component values, for a 2D project
 \label{manipspace}
 \end{figure*}
 
-## New simpler definition
+## The new simpler definition
 
 The new approach emerged from experiments in mathematica. The components corresponding to $V_m$ are directly controlled by cursor movement, which updates row $m$ of $A$. The updated matrix is then orthonormalised. 
 
@@ -102,7 +102,7 @@ This algorithm will produce the changes to a projection as illustrated in Figure
 
 ### Algorithm 2
 
-The problem with Algorithm 1 is that the precise values for $V_m$ cannot be specified because the orthonormalisation wil change them. This modification will maintain the components of $V_m$ precisely (Figure \ref{fig:manualsequence} (bottom row)). The algorithm is as follows:
+The problem with Algorithm 1 is that the precise values for $V_m$ cannot be specified because the orthonormalisation will change them. This modification will maintain the components of $V_m$ precisely (Figure \ref{fig:manualsequence} (bottom row)). The algorithm is as follows:
 
 1. Provide $A$, and $m$.
 2. Change values in row $m$, giving $A^*$.
@@ -117,7 +117,7 @@ which ensures that
 
 $$\sum_{j=1, j\neq m}^p a^{**}_{j1}a^{**}_{j2} + a_{m1}a_{m2} = 0$$.
 
-If $d>2$ the process would be sequentially repeated in the same manner that Gram-Schmidt is applied sequentially to orthormalise the columns of a matrix. If $d=1$ no orthonormalisation is needed, and the projection vector would simply need to be normalised after each adjustment. 
+If $d>2$ the process would be sequentially repeated in the same manner that Gram-Schmidt is applied sequentially to orthormalise the columns of a matrix. If $d=1$ no orthonormalisation is needed, and the projection vector would simply need to be normalized after each adjustment. 
 
 <!-- Need to think about how the values for selected variable are made exact, that is constrained orthonormalisation.
 
@@ -132,7 +132,7 @@ For $d=2$ projections, the projection matrix is the sub-matrix of $A$ formed by 
 \begin{enumerate}
 \item For row $m$ one chooses $A_{m3}=\sqrt{1-a^2-b^2},~A_{m,k>3}=0$
 \item For other rows, $A_{i\neq m,j\geq3}$ random selections in the range $(-1,1)$ are made.
-\item The Gram-Schmidt algorithm is then used to obtain an orthonormal basis taking $e_m$ as the first vector (which is already normalised), and then proceeding as usual $e_1\to e_1-(e_1\cdot e_m) e_m$, $e_1\to e_1/(e_1\cdot e_1)$, etc.
+\item The Gram-Schmidt algorithm is then used to obtain an orthonormal basis taking $e_m$ as the first vector (which is already normalized), and then proceeding as usual $e_1\to e_1-(e_1\cdot e_m) e_m$, $e_1\to e_1/(e_1\cdot e_1)$, etc.
 \end{enumerate}
 \item this results in the orthonormal basis $A^*$ and a new projection matrix with $P_{m1}=a,~P_{m2}=b$.
 \end{enumerate}
@@ -281,7 +281,10 @@ for (i in 1:3) {
 ```
 
 
-# Implementation {#sec:implementation}
+# Experimenting with new techniques using Mathematica {#sec:implementation}
+
+- **Why is this a good sandbox**
+- **Explain the functionality available in the notebooks**
 
 The following functions are implemented in the Mathematica package `mmtour.wl`:
 
@@ -290,7 +293,7 @@ colour(=Automatic)]` with arguments
 
     - `data`: A list of data matrices (they must all have the same dimensionality)
     - ``projmat`: A projection matrix which describes the projection plane. This is the 
-initial projection and does not neet by orthonormal.
+initial projection and does not need to be orthonormal (XXX is this right?).
     - ``xRange`: A list which details the range of the horizontal axis.
     - ``yRange`: A list which details the range of the vertical axis.
     - ``colour`: A list of graphics directives to be applied to each data matrix.
@@ -299,7 +302,7 @@ There are problems with the default values for x and y ranges and colour. It wou
 better to fix the ranges and colour based on the data as well as the origin of axes 
 and the size of the points.
 
-**It would be good if the initial projection matrix (and maybe the centre) had default values. Perhaps a random matrix with the correct dimensions read from the data?**
+**It would be good if the initial projection matrix (and maybe the center) had default values. Perhaps a random matrix with the correct dimensions read from the data? Fix 1**
 
 The format for the printed projection matrix can be improved also. Maybe fix the 
 number of digits and the position of the label.
@@ -316,53 +319,58 @@ number of digits and the position of the label.
 
 This function requires some auxiliary functions. It does not accept more than one data set.
 
-**It would be good if the initial projection matrix (and maybe the centre) had default values. Perhaps a random matrix with the correct dimensions read from the data?**
+**It would be good if the initial projection matrix (and maybe the center) had default values. Perhaps a random matrix with the correct dimensions read from the data?**
 
-It may be good to fix the size of the points, the centre of the axes and the scales of the axes rather than allow them to change as the projection and slicing changes
+It may be good to fix the size of the points, the center of the axes and the scales of the axes rather than allow them to change as the projection and slicing changes
 
 - `SliceDynamic[data, projmat, centrePoint, height, heightRange, ptSize1 : 0.005, ptSize2 : 0.004]` with arguments
 
-- `data`: A data matrix with an extra groupling or clustering column (numerical) 
-- `projmat`: The inital projection matrix
+- `data`: A data matrix with an extra grouping or clustering column (numerical) 
+- `projmat`: The initial projection matrix
 - `centrepoint`: The initial position of the slice
 - `height`: The initial height of the slice
 - `heightRange`: The range of heights
 - `ptSize1`: The size of the points that exist within the slice
 - `ptSize2`: The size of the points that exist outside of the slice
 
-**Does this need to be a separate function from SlicePlot?**
+**Does this need to be a separate function from SlicePlot? Fix 2**
 
-It would be good if the initial projection matrix (and maybe the centre) had default values. Perhaps a random matrix with the correct dimensions read from the data?
+**It would be good if the initial projection matrix (and maybe the center) had default values. Perhaps a random matrix with the correct dimensions read from the data? Fix 3**
 
-It may be good to fix the size of the points, the centre of the axes and the scales of the axes rather than allow them to change as the projection and slicing changes
+**It may be good to fix the size of the points, the center of the axes and the scales of the axes rather than allow them to change as the projection and slicing changes. Fix 4**
 
-**I have found it useful to input different data sets rather than have this function sort them automatically using the last column.**
+**I have found it useful to input different data sets rather than have this function sort them automatically using the last column. One data set with a flag column at the end, is best! Is the code too complicated? Fix 5**
 
 - `Projected2DSliderPlot[]`
 
 This function uses a different display for the projection that I find very useful. However as it stands it is specific to one data set. Needs to be generalised to arbitrary data if we want to keep it.
 
-**We would need a screenshot (and video) for each of these.**
+**For Alex to do**
+
+- **We would need a screenshot (and video) for each of these.**
+- **Fix 1, 2, 3, 4, 5**
+- **Code consistent for applications to work - see slice_tour_compare_sets.nb. See below**
+    - **We need to make sure the drawing range is fixed (no resizing of the axis when changing projection or slicing). It could be nice if there was a manual zoom in/zoom out to change scale occasionally.**
+    - **Should also make sure the size of the points is fixed (maybe this will be automatic if the drawing range is fixed?), bigger points would be preferred, currently the size is sometimes really tiny and it becomes difficult to see anything.**
+    - **Can we have some heuristic to decide the range for the slice thickness slider? In the second graph there is a tiny part of the slider where the changes are interesting, difficult to navigate since this makes it super sensitive to any small movement, while most of the options are not interesting. My suggestion would be to keep (as I understand is the case now) the maximum thickness (all points in) as the upper bound, but instead of zero use a thickness below which slices tend to be empty as the lower bound.**
+    - **For the olives example I think the relation between x2 and the blue region could be interesting.**
+    - **pdfsense data: can we use random samples instead of the first 10k rows? Then we should still be able to see the bigger picture (with picking the first ones we get some artificial structure from how the data was sampled initially).**
+    - **I was playing around with this today. Looks like the axes are fixed when changing slice thickness, but not when rotating?**
+    - **Anyways, some observations that might be useful, but all of this seems difficult for including in a paper:**
+    - **In the first example we can show how the yellow group is associated with the first variable (x1, I guess this is C9?) - when slicing through the center it only appears when x1 has a bigger component on the projection, it is associated with low values of x1. Since they are not near the average value of x1 the points do not get captured in a slice where x1 is not important in the projection. We can move the center point to -1 in the first component to then explore how the yellow group relates to the other three variables. Much less clear, maybe some indication of smaller x2 and larger x3 for this.** 
+    - **The second example is too busy for manual exploration I would say (too many axes to move around separately).**
+    - **Third example could be similar to the first: blue region requires small values of x2, can be understood from the exploration, then move center point to -0.5 in x2 to explore further. Now interpretation becomes tricky. Sometimes blue and yellow seem just randomly everywhere, sometimes blue more contained in an ellipsoid around the center (indicating some correlation between variables). For example try zeroing out components 2 and 3 to see this slice in x1 vs x4.**
+    - **For the last example x4 seems to be the one to work with. I feel like this is again very similar, maybe better to instead explore other examples (maybe something without slicing?)**
+
+
 
 # Applications {#sec:examples}
 
+# Extension added in the R package `tourr`
+
+# What would be desirable for implementations in R?
 
 # Discussion {#sec:discussion}
-
-- As was said before, we need to make sure the drawing range is fixed (no resizing of the axis when changing projection or slicing).
-- Should also make sure the size of the points is fixed (maybe this will be automatic if the drawing range is fixed?), bigger points would be preferred, currently the size is sometimes really tiny and it becomes difficult to see anything.
-- Can we have some heuristic to decide the range for the slice thickness slider? In the second graph there is a tiny part of the slider where the changes are interesting, difficult to navigate since this makes it super sensitive to any small movement, while most of the options are not interesting. My suggestion would be to keep (as I understand is the case now) the maximum thickness (all points in) as the upper bound, but instead of zero use a thickness below which slices tend to be empty as the lower bound.
-- For the olives example I think the relation between x2 and the blue region could be interesting.
-- pdfsense data: can we use random samples instead of the first 10k rows? Then we should still be able to see the bigger picture (with picking the first ones we get some artificial structure from how the data was sampled initially).
-
-I was playing around with this today. Looks like the axes are fixed when changing slice thickness, but not when rotating?
-
-Anyways, some observations that might be useful, but all of this seems difficult for including in a paper:
-
-- In the first example we can show how the yellow group is associated with the first variable (x1, I guess this is C9?) - when slicing through the center it only appears when x1 has a bigger component on the projection, it is associated with low values of x1. Since they are not near the average value of x1 the points do not get captured in a slice where x1 is not important in the projection. We can move the center point to -1 in the first component to then explore how the yellow group relates to the other three variables. Much less clear, maybe some indication of smaller x2 and larger x3 for this. 
-- The second example is too busy for manual exploration I would say (too many axes to move around separately).
-- Third example could be similar to the first: blue region requires small values of x2, can be understood from the exploration, then move center point to -0.5 in x2 to explore further. Now interpretation becomes tricky. Sometimes blue and yellow seem just randomly everywhere, sometimes blue more contained in an ellipsoid around the center (indicating some correlation between variables). For example try zeroing out components 2 and 3 to see this slice in x1 vs x4.
-- For the last example x4 seems to be the one to work with. I feel like this is again very similar, maybe better to instead explore other examples (maybe something without slicing?)
 
 
 # Acknowledgements {-}
