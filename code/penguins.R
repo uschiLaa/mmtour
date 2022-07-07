@@ -40,3 +40,13 @@ penguins_lda <- read_csv("data/penguins_lda.csv")
 ggscatmat(penguins_data, columns = 2:5, col="species")
 ggscatmat(penguins_rf, columns = 1:4, col="species", alpha=0.1)
 ggscatmat(penguins_lda, columns = 1:4, col="species", alpha=0.1)
+
+
+# saving the data to look at in mathematica
+penguins_data %>%
+  dplyr::select(c(2,3,4,5,1)) %>%
+  mutate(species_flag =
+           as.numeric(factor(species,
+                             levels = # making sure we have the same flags
+                               levels(as.factor(rf_samples$species))))) %>%
+  write_csv(file = "data/penguins.csv")
