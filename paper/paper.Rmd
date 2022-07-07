@@ -387,6 +387,30 @@ ggscatmat(penguins_data, columns = 2:5, col="species") +
 ```
 
 
+We use the `classifly` package [@classifly] to generate predictions across the 4D space spanned by the data, with two classification models (linear discriminant analysis and random forest).
+
+The first projection we will start from is looking at bill depth vs flipper length (x2 vs x3). In a projection of the data we see that the Gentoo penguins are separate from the other two species which are on top of each other. If we instead look at a slice through the center of the distribution, we see that shifting the center point to large values of x1 (bill length), e.g. x1=2, results in Adelie penguins dropping out of the slice, while a slice with low values (x1=-2) in the center point only contains Adelie penguin observations.
+
+We can next explore how this is mapped in the two classification models. Both random forest and LDA can separate out the region for Gentoo penguins in a thin slice through the center (h = 0.5), while Adelie and Chinstrap predictions overlap (blue and yellow, an effect of the slice thickness). We also notice the different boundaries: while LDA produces linear boundaries by construction, random forest insead produces "boxes" from cutting up the data in the tree structure.
+
+\begin{figure*}[ht]
+\centerline{\includegraphics[width=0.4\textwidth]{figures/view1_lda.png}
+\includegraphics[width=0.4\textwidth]{figures/view1_rf.png}}
+\caption{Model predictions in a centered slice defined by the projection onto bill depth vs flipper length, from an LDA and RF model. The colors are the same as used in the SPLOM, we see that Gentoo penugins are clearly separated, while the other two species are overlapping, and we can see the distinugishing features of the two models in terms of the different boundaries.}
+\label{view1}
+\end{figure*}
+
+
+We can then start shifting the slice along x1 as we did when looking at the data, again moving to $\pm 1$ will separate the Adelie from the Chinstrap penguins, now in terms of the model predictions. (Could include screenshot here as well.)
+
+Thus, stepping through the different slices shows the relation between the species and the first variable (x1, bill length). Instead of moving the center point we could also keep the slice fixed as passing through the center of the distribution, and use the manual controls to rotate x1 into the projection. Here we started from the projected view of the data to identify a combination that can separate all three species, and then use the projection matrix as input to the slice displays for the model. Interestingly, the two models agree on how to classify the "empty" regions (where there are no data points) for this example. (this is applying A3 as the starting projection).
+
+Finally we use the manual tour on the random forest predictions first, to identify a centered slice with an interesting classification boundary. Here a combination of all four predictors is found to result in an interesting slice, where the predictions for the Gentoo penguins gets split into two regions of the slice, indicating the non-linearity of the random forest model. While x4 (body mass) is already contributing a lot in the projection, we can learn more by also moving the center point along that direction. Moving to high values (x4 = 2) results in a much larger part of the slice being predicted as Gentoo penguins, while now the yellow region (Chinstrap penguins) gets split. Moving in the opposite direction (x4 = -1) instead shows primarily Chinstrap penguins in the predictions, with Gentoo only appearing along the edge.
+
+Looking at the data, and shifting a fat slice (h = 1.5) as specified above (x4 = -1, 0, 2) we see that slices through x4 = -1, 0 do not have observations from the Gentoo species, while x4 = 2 contains the Gentoo observations, but hardly any of the Chinstrap penguins.
+
+The last step is comparing to the LDA predictions in those same slices. With RF we could see the non-linear aspects in the boundaries, while LDA can only produce linear boundaries, so these look very different. On the other hand, the same dependence is observed when shifting the slice along the x4 direction.
+
 # Extension added in the R package `tourr`
 
 Explain `radial_tour`
