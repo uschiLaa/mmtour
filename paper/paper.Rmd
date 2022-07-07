@@ -374,7 +374,7 @@ This function uses a different display for the projection that I find very usefu
 
 To illustrate the usefulness of the manual tour use the penguins data [@penguins]. We will show how classification boundaries can be explored and better understood using a manual tour, on projections and slices through 4D space.
 
-```{r penguins-scatmat, out.width="100%", width=10, height=10, fig.cap="Scatterplot matrix of the penguins data."}
+```{r penguins-scatmat, out.width="100%", width=10, height=10, fig.cap="Scatterplot matrix of the (standardised) penguins data."}
 library(tidyverse)
 library(palmerpenguins)
 library(GGally)
@@ -382,6 +382,7 @@ penguins_data <- penguins[, c(1,3, 4, 5, 6)] %>%
   drop_na() %>%
   mutate(across(where(is.numeric), function(x) (x-mean(x))/sd(x)))
 ggscatmat(penguins_data, columns = 2:5, col="species") +
+  scale_colour_manual("", values=c("Adelie" = "#5E82B6", "Chinstrap" = "#E19C24", "Gentoo" = "#8FB132")) +
   theme(legend.position = "bottom")
 ```
 
