@@ -46,8 +46,9 @@
 
 \articletype{Short Technical Note}
 
-\title{A new simplified manual tour, with application to exploring
-classification boundaries in high dimensions}
+\title{New and simplified manual controls for projection and slice
+tours, with application to exploring classification boundaries in high
+dimensions}
 
 
 \author{\name{Alex Aumann$^{a}$, German Valencia$^{a}$, Ursula
@@ -559,7 +560,28 @@ measuring the size of the penguins from three species (Adelie, Chinstrap
 and Gentoo). The scatterplot matrix shows that the three species appear
 to be likely separable, and that at least the Gentoo can be
 distinguished from the other two species when \texttt{bd} is paired with
-\texttt{fl} or \texttt{bm}.
+\texttt{fl} or \texttt{bm}. The steps for exploring boundaries are as
+follows:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Build classification model, here we use a random forest and linear
+  discriminant analysis.
+\item
+  Predict the class for a dense grid of values covering the data space.
+\item
+  Examine projections, using a manual tour so that the contribution of
+  any variable is controlled.
+\item
+  Slice through the center, to explore where the boundaries will likely
+  meet.
+\item
+  Move the slice by changing the center in the direction of a single
+  variable to explore the extent of a boundary for a single group
+  relative to a variable.
+\end{enumerate}
 
 \begin{figure}
 
@@ -570,9 +592,17 @@ distinguished from the other two species when \texttt{bd} is paired with
 \caption{Scatterplot matrix of the (standardised) penguins data. The three species are reasonably different in size, with Gentoo distinguised from the other two on body depth relative to flipper length and body mass.}\label{fig:penguins-scatmat}
 \end{figure}
 
+\hypertarget{constructing-the-4d-prediction-regions}{%
+\subsection{Constructing the 4D prediction
+regions}\label{constructing-the-4d-prediction-regions}}
+
 We use the \texttt{classifly} package \citep{classifly} to generate
 predictions across the 4D space spanned by the data, with two
 classification models (linear discriminant analysis and random forest).
+
+\hypertarget{exploring-projections-manually}{%
+\subsection{Exploring projections
+manually}\label{exploring-projections-manually}}
 
 The first projection we will start from is looking at bill depth vs
 flipper length (x2 vs x3). In a projection of the data we see that the
@@ -598,10 +628,17 @@ linear boundaries by construction, random forest insead produces
 \label{view1}
 \end{figure*}
 
+\hypertarget{slicing-through-the-center}{%
+\subsection{Slicing through the
+center}\label{slicing-through-the-center}}
+
 We can then start shifting the slice along x1 as we did when looking at
 the data, again moving to \(\pm 1\) will separate the Adelie from the
 Chinstrap penguins, now in terms of the model predictions. (Could
 include screenshot here as well.)
+
+\hypertarget{shiftinh-the-slice-center}{%
+\subsection{Shiftinh the slice center}\label{shiftinh-the-slice-center}}
 
 Thus, stepping through the different slices shows the relation between
 the species and the first variable (x1, bill length). Instead of moving
@@ -631,6 +668,10 @@ Looking at the data, and shifting a fat slice (h = 1.5) as specified
 above (x4 = -1, 0, 2) we see that slices through x4 = -1, 0 do not have
 observations from the Gentoo species, while x4 = 2 contains the Gentoo
 observations, but hardly any of the Chinstrap penguins.
+
+\hypertarget{comparison-of-boundaries-produced-by-different-classifiers}{%
+\subsection{Comparison of boundaries produced by different
+classifiers}\label{comparison-of-boundaries-produced-by-different-classifiers}}
 
 The last step is comparing to the LDA predictions in those same slices.
 With RF we could see the non-linear aspects in the boundaries, while LDA

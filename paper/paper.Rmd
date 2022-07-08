@@ -1,6 +1,6 @@
 ---
 title: |
-  A new simplified manual tour, with application to exploring classification boundaries in high dimensions
+  New and simplified manual controls for projection and slice tours, with application to exploring classification boundaries in high dimensions
 type: Short Technical Note
 author:
   - name: Alex Aumann
@@ -372,7 +372,13 @@ This function uses a different display for the projection that I find very usefu
 
 # Application {#sec:examples}
 
-To illustrate the usefulness of the manual tour we use the 4D penguins data [@penguins]. We will show how classification boundaries can be explored and better understood using a manual tour, on projections and slices through 4D space. Figure \ref(fig:penguins-scatmat) shows a scatterplot matrix of this data. There are four variables (`bl = bill_length_mm, bd = bill_depth_mm, fl = flipper_length_mm, bm = body_mass_g`) measuring the size of the penguins from three species (Adelie, Chinstrap and Gentoo). The scatterplot matrix shows that the three species appear to be likely separable, and that at least the Gentoo can be distinguished from the other two species when `bd` is paired with `fl` or `bm`.
+To illustrate the usefulness of the manual tour we use the 4D penguins data [@penguins]. We will show how classification boundaries can be explored and better understood using a manual tour, on projections and slices through 4D space. Figure \ref(fig:penguins-scatmat) shows a scatterplot matrix of this data. There are four variables (`bl = bill_length_mm, bd = bill_depth_mm, fl = flipper_length_mm, bm = body_mass_g`) measuring the size of the penguins from three species (Adelie, Chinstrap and Gentoo). The scatterplot matrix shows that the three species appear to be likely separable, and that at least the Gentoo can be distinguished from the other two species when `bd` is paired with `fl` or `bm`. The steps for exploring boundaries are as follows:
+
+1. Build classification model, here we use a random forest and linear discriminant analysis.
+2. Predict the class for a dense grid of values covering the data space.
+3. Examine projections, using a manual tour so that the contribution of any variable is controlled.
+4. Slice through the center, to explore where the boundaries will likely meet.
+5. Move the slice by changing the center in the direction of a single variable to explore the extent of a boundary for a single group relative to a variable.
 
 ```{r penguins-scatmat, out.width="80%", width=10, height=10, fig.align='center', fig.cap="Scatterplot matrix of the (standardised) penguins data. The three species are reasonably different in size, with Gentoo distinguised from the other two on body depth relative to flipper length and body mass."}
 library(tidyverse)
@@ -391,7 +397,11 @@ ggscatmat(penguins_data, columns = 2:5, col="species") +
 ```
 
 
+## Constructing the 4D prediction regions
+
 We use the `classifly` package [@classifly] to generate predictions across the 4D space spanned by the data, with two classification models (linear discriminant analysis and random forest).
+
+## Exploring projections manually
 
 The first projection we will start from is looking at bill depth vs flipper length (x2 vs x3). In a projection of the data we see that the Gentoo penguins are separate from the other two species which are on top of each other. If we instead look at a slice through the center of the distribution, we see that shifting the center point to large values of x1 (bill length), e.g. x1=2, results in Adelie penguins dropping out of the slice, while a slice with low values (x1=-2) in the center point only contains Adelie penguin observations.
 
@@ -404,14 +414,19 @@ We can next explore how this is mapped in the two classification models. Both ra
 \label{view1}
 \end{figure*}
 
+## Slicing through the center
 
 We can then start shifting the slice along x1 as we did when looking at the data, again moving to $\pm 1$ will separate the Adelie from the Chinstrap penguins, now in terms of the model predictions. (Could include screenshot here as well.)
+
+## Shiftinh the slice center
 
 Thus, stepping through the different slices shows the relation between the species and the first variable (x1, bill length). Instead of moving the center point we could also keep the slice fixed as passing through the center of the distribution, and use the manual controls to rotate x1 into the projection. Here we started from the projected view of the data to identify a combination that can separate all three species, and then use the projection matrix as input to the slice displays for the model. Interestingly, the two models agree on how to classify the "empty" regions (where there are no data points) for this example. (this is applying A3 as the starting projection).
 
 Finally we use the manual tour on the random forest predictions first, to identify a centered slice with an interesting classification boundary. Here a combination of all four predictors is found to result in an interesting slice, where the predictions for the Gentoo penguins gets split into two regions of the slice, indicating the non-linearity of the random forest model. While x4 (body mass) is already contributing a lot in the projection, we can learn more by also moving the center point along that direction. Moving to high values (x4 = 2) results in a much larger part of the slice being predicted as Gentoo penguins, while now the yellow region (Chinstrap penguins) gets split. Moving in the opposite direction (x4 = -1) instead shows primarily Chinstrap penguins in the predictions, with Gentoo only appearing along the edge.
 
 Looking at the data, and shifting a fat slice (h = 1.5) as specified above (x4 = -1, 0, 2) we see that slices through x4 = -1, 0 do not have observations from the Gentoo species, while x4 = 2 contains the Gentoo observations, but hardly any of the Chinstrap penguins.
+
+## Comparison of boundaries produced by different classifiers 
 
 The last step is comparing to the LDA predictions in those same slices. With RF we could see the non-linear aspects in the boundaries, while LDA can only produce linear boundaries, so these look very different. On the other hand, the same dependence is observed when shifting the slice along the x4 direction.
 
