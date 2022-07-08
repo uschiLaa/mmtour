@@ -222,7 +222,7 @@ For now just sketching the idea:
 
 XXX need to check calculation of angle when $m_1 < 0$
 
-```{r othermethod, out.width="100%", width=12, height=4, fig.cap="Manual controls with algorithm 2. The precise location of the axis is maintained."}
+```{r othermethod, eval=FALSE, out.width="100%", width=12, height=4, fig.cap="Manual controls with algorithm 2. The precise location of the axis is maintained."}
 source("../code/plot_basis.R")
 source("../code/linear_alg.R")
 
@@ -372,7 +372,7 @@ This function uses a different display for the projection that I find very usefu
 
 # Application {#sec:examples}
 
-To illustrate the usefulness of the manual tour we use the 4D penguins data [@penguins]. We will show how classification boundaries can be explored and better understood using a manual tour, on projections and slices through 4D space. Figure \ref(fig:penguins-scatmat) shows a scatterplot matrix of this data. There are four variables (`bl = bill_length_mm, bd = bill_depth_mm, fl = flipper_length_mm, bm = body_mass_g`) measuring the size of the penguins from three species (Adelie, Chinstrap and Gentoo). The scatterplot matrix shows that the three species appear to be likely separable, and that at least the Gentoo can be distinguished from the other two species when `bd` is paired with `fl` or `bm`. The steps for exploring boundaries are as follows:
+To illustrate the usefulness of the manual tour we use the 4D penguins data [@penguins]. We will show how classification boundaries can be explored and better understood using a manual tour, on projections and slices through 4D space. Figure \ref{fig:penguins-scatmat} shows a scatterplot matrix of this data. There are four variables (`bl = bill_length_mm, bd = bill_depth_mm, fl = flipper_length_mm, bm = body_mass_g`) measuring the size of the penguins from three species (Adelie, Chinstrap and Gentoo). The scatterplot matrix shows that the three species appear to be likely separable, and that at least the Gentoo can be distinguished from the other two species when `bd` is paired with `fl` or `bm`. The steps for exploring boundaries are as follows:
 
 1. Build classification model, here we use a random forest and linear discriminant analysis.
 2. Predict the class for a dense grid of values covering the data space.
