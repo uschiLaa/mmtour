@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.6.29)  7 JUL 2022 22:40
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.6.29)  8 JUL 2022 15:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -669,20 +669,13 @@ Package natbib Warning: Citation `XXX' on page 1 undefined on input line 116.
 <figures/manip_space.pdf, id=114, 362.51248pt x 188.74498pt>
 File: figures/manip_space.pdf Graphic file (type pdf)
 <use figures/manip_space.pdf>
-Package pdftex.def Info: figures/manip_space.pdf  used on input line 151.
+Package pdftex.def Info: figures/manip_space.pdf  used on input line 153.
 (pdftex.def)             Requested size: 326.40125pt x 169.94666pt.
-[2 <./figures/manip_space.pdf>]
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 180.
-
-
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 180.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 182.
 
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 187.
-
-
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 187.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 182.
 
 
 LaTeX Font Warning: Command \mathversion invalid in math mode on input line 189.
@@ -690,28 +683,34 @@ LaTeX Font Warning: Command \mathversion invalid in math mode on input line 189.
 
 LaTeX Font Warning: Command \mathversion invalid in math mode on input line 189.
 
+[2]
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 189.
-
-
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 189.
-
-
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 189.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 191.
 
 
 LaTeX Font Warning: Command \mathversion invalid in math mode on input line 191.
 
-<paper_files/figure-latex/manualsequence-1.pdf, id=143, 453.695pt x 262.9825pt>
+
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 191.
+
+
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 191.
+
+
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 191.
+
+
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 193.
+
+<paper_files/figure-latex/manualsequence-1.pdf, id=131, 453.695pt x 262.9825pt>
 File: paper_files/figure-latex/manualsequence-1.pdf Graphic file (type pdf)
 <use paper_files/figure-latex/manualsequence-1.pdf>
-Package pdftex.def Info: paper_files/figure-latex/manualsequence-1.pdf  used on input line 203.
+Package pdftex.def Info: paper_files/figure-latex/manualsequence-1.pdf  used on input line 205.
 (pdftex.def)             Requested size: 408.0pt x 236.49745pt.
-[3 <./paper_files/figure-latex/manualsequence-1.pdf>]
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 236.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 238.
 
-[4]
+[3 <./figures/manip_space.pdf>] [4 <./paper_files/figure-latex/manualsequence-1.pdf>]
 \g__nicematrix_max_cell_width_dim=\dimen313
 \c@iRow=\count338
 \c@jCol=\count339
@@ -735,28 +734,28 @@ LaTeX Font Warning: Command \mathversion invalid in math mode on input line 236.
 \l__nicematrix_initial_j_int=\count343
 \l__nicematrix_final_i_int=\count344
 \l__nicematrix_final_j_int=\count345
-<paper_files/figure-latex/othermethod-1.pdf, id=182, 453.695pt x 100.375pt>
+<paper_files/figure-latex/othermethod-1.pdf, id=181, 453.695pt x 100.375pt>
 File: paper_files/figure-latex/othermethod-1.pdf Graphic file (type pdf)
 <use paper_files/figure-latex/othermethod-1.pdf>
-Package pdftex.def Info: paper_files/figure-latex/othermethod-1.pdf  used on input line 328.
+Package pdftex.def Info: paper_files/figure-latex/othermethod-1.pdf  used on input line 330.
 (pdftex.def)             Requested size: 408.0pt x 90.26619pt.
 [5 <./paper_files/figure-latex/othermethod-1.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 348--350
+Underfull \hbox (badness 10000) in paragraph at lines 350--352
 []\OT1/cmtt/m/n/10.95 ProjectionPlot[data, projmat, xRange(=Automatic),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 385--388
+Underfull \hbox (badness 10000) in paragraph at lines 387--390
 []\OT1/cmtt/m/n/10.95 SlicePlot[data, projmat, centrePoint, height, heightRange,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 422--425
+Underfull \hbox (badness 10000) in paragraph at lines 424--427
 []\OT1/cmtt/m/n/10.95 SliceDynamic[data, projmat, centrePoint, height, heightRange,
  []
 
 [6]
-Underfull \hbox (badness 10000) in paragraph at lines 477--478
+Underfull \hbox (badness 10000) in paragraph at lines 479--480
 []\OT1/cmr/bx/n/10.95 Code con-sis-tent for ap-pli-ca-tions to work - see
  []
 
@@ -764,35 +763,46 @@ Underfull \hbox (badness 10000) in paragraph at lines 477--478
 <paper_files/figure-latex/penguins-scatmat-1.pdf, id=210, 277.035pt x 310.15875pt>
 File: paper_files/figure-latex/penguins-scatmat-1.pdf Graphic file (type pdf)
 <use paper_files/figure-latex/penguins-scatmat-1.pdf>
-Package pdftex.def Info: paper_files/figure-latex/penguins-scatmat-1.pdf  used on input line 553.
+Package pdftex.def Info: paper_files/figure-latex/penguins-scatmat-1.pdf  used on input line 555.
 (pdftex.def)             Requested size: 408.0pt x 456.78448pt.
+<figures/view1_lda.png, id=213, 1017.8025pt x 562.1pt>
+File: figures/view1_lda.png Graphic file (type png)
+<use figures/view1_lda.png>
+Package pdftex.def Info: figures/view1_lda.png  used on input line 581.
+(pdftex.def)             Requested size: 163.19751pt x 90.12653pt.
+<figures/view1_rf.png, id=215, 1003.75pt x 565.11125pt>
+File: figures/view1_rf.png Graphic file (type png)
+<use figures/view1_rf.png>
+Package pdftex.def Info: figures/view1_rf.png  used on input line 581.
+(pdftex.def)             Requested size: 163.19751pt x 91.8769pt.
+[8] [9 <./paper_files/figure-latex/penguins-scatmat-1.pdf>]
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <11> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 558.
-(./paper.bbl [8] [9 <./paper_files/figure-latex/penguins-scatmat-1.pdf>])
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 628.
+[10 <./figures/view1_lda.png> <./figures/view1_rf.png>] (./paper.bbl)
 
 Package natbib Warning: There were undefined citations.
 
-[10] (./paper.aux)
+[11] (./paper.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 0304C11429F836E8B607C1B82C6DF4EA;2935.
+(rerunfilecheck)             Checksum: 58065001438136833C3FDD638265B28D;2973.
  ) 
 Here is how much of TeX's memory you used:
- 21724 strings out of 479997
- 423866 string characters out of 5887598
- 699454 words of memory out of 5000000
- 39486 multiletter control sequences out of 15000+600000
+ 21746 strings out of 479997
+ 424290 string characters out of 5887598
+ 700046 words of memory out of 5000000
+ 39502 multiletter control sequences out of 15000+600000
  480277 words of font info for 72 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  85i,20n,90p,565b,626s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></Users/cookd/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
-Output written on paper.pdf (10 pages, 728624 bytes).
+Output written on paper.pdf (11 pages, 1161970 bytes).
 PDF statistics:
- 356 PDF objects out of 1000 (max. 8388607)
- 287 compressed objects within 3 object streams
- 76 named destinations out of 1000 (max. 500000)
- 161 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 371 PDF objects out of 1000 (max. 8388607)
+ 297 compressed objects within 3 object streams
+ 79 named destinations out of 1000 (max. 500000)
+ 171 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -128,12 +128,14 @@ followed by details on implementation. The applications section
 illustrate how these can be used.
 
 \hypertarget{sec:method}{%
-\section{What is a manual tour?}\label{sec:method}}
+\section{How to construct a manual tour}\label{sec:method}}
 
-An orthonormal basis (\(A_{p\times d}\)) and a variable id
-(\(m \in \{1, ..., p\}\)) to control are provided to initialize a manual
-tour. A method to update the values of the component of the controlled
-variable \(V_m\) is needed.
+A manual tour allows the user to alter the coefficients of one (or more)
+variables contributing to a \(d-D\) projection. The initial ingredients
+are an orthonormal basis (\(A_{p\times d}\)) defining the projection of
+the data, and a variable id (\(m \in \{1, ..., p\}\)) specifying which
+coefficient will be changed. A method to update the values of the
+component of the controlled variable \(V_m\) is then needed.
 
 \hypertarget{existing-methods}{%
 \subsection{Existing methods}\label{existing-methods}}
@@ -542,7 +544,7 @@ to be generalised to arbitrary data if we want to keep it.
 \end{itemize}
 
 \hypertarget{sec:examples}{%
-\section{Applications}\label{sec:examples}}
+\section{Application}\label{sec:examples}}
 
 To illustrate the usefulness of the manual tour use the penguins data
 \citep{penguins}. We will show how classification boundaries can be
