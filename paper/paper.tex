@@ -140,14 +140,17 @@ component of the controlled variable \(V_m\) is then needed.
 \hypertarget{existing-methods}{%
 \subsection{Existing methods}\label{existing-methods}}
 
-In the original work, the method for updating component values, for a 2D
-projection, was built trackball controls in 3D. A 3D manipulation space
-is created, as illustrated in Figure \ref{manipspace}, where the
-controlled variable has full range of motion from -1 to 1. Movements of
-a cursor are recorded and converted into changes in the values of
-\(V_m\) to change it's values in the displayed 2D projection. Movement
-could also be constrained to be only in horizontal, vertical, radial or
-angular motions.
+The method for updating component values in \citet{cook_manual_1997}
+(and utilised in \citet{spyrison_spinifex_2020}) are prescribed
+primarily for a 2D projection, to take advantage of (then) newly
+developed 3D trackball controls made available for computer gaming. The
+first step was to construct a 3D manipulation space from a 2D
+projection, as illustrated in Figure \ref{manipspace}. In this space the
+coefficient of the controlled variable ranges between -1 and 1.
+Movements of a cursor are recorded and converted into changes in the
+values of \(V_m\) thus changing the displayed 2D projection. The
+algorithm also provided constraints to horizontal, vertical, radial or
+angular motions only.
 
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.8\textwidth]{figures/manip_space.pdf}}
@@ -546,13 +549,25 @@ to be generalised to arbitrary data if we want to keep it.
 \hypertarget{sec:examples}{%
 \section{Application}\label{sec:examples}}
 
-To illustrate the usefulness of the manual tour use the penguins data
-\citep{penguins}. We will show how classification boundaries can be
+To illustrate the usefulness of the manual tour we use the 4D penguins
+data \citep{penguins}. We will show how classification boundaries can be
 explored and better understood using a manual tour, on projections and
-slices through 4D space.
+slices through 4D space. Figure \ref(fig:penguins-scatmat) shows a
+scatterplot matrix of this data. There are four variables
+(\texttt{bl\ =\ bill\_length\_mm,\ bd\ =\ bill\_depth\_mm,\ fl\ =\ flipper\_length\_mm,\ bm\ =\ body\_mass\_g})
+measuring the size of the penguins from three species (Adelie, Chinstrap
+and Gentoo). The scatterplot matrix shows that the three species appear
+to be likely separable, and that at least the Gentoo can be
+distinguished from the other two species when \texttt{bd} is paired with
+\texttt{fl} or \texttt{bm}.
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{paper_files/figure-latex/penguins-scatmat-1} \caption{Scatterplot matrix of the (standardised) penguins data.}\label{fig:penguins-scatmat}
+
+{\centering \includegraphics[width=0.8\linewidth]{paper_files/figure-latex/penguins-scatmat-1} 
+
+}
+
+\caption{Scatterplot matrix of the (standardised) penguins data. The three species are reasonably different in size, with Gentoo distinguised from the other two on body depth relative to flipper length and body mass.}\label{fig:penguins-scatmat}
 \end{figure}
 
 We use the \texttt{classifly} package \citep{classifly} to generate
