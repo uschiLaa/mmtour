@@ -37,38 +37,64 @@ MathFont[txt]
 txt: A string of text to change fonts.";
 
 
+Clear[ProjectionPlot]
 ProjectionPlot[data_,projmat_,colorFunc_:ColorData[97]]:=
-DynamicModule[{lst=If[TrueQ[projmat=="random"],RandomMatrix[data, 1],projmat],arrowData,pntSize=0.01},
+DynamicModule[{tempData = If[StringQ[data[[1, 1]]], data[[2;;-1]], data],
+ lst=If[TrueQ[projmat=="random"], RandomMatrix[If[StringQ[data[[1, 1]]], data[[2;;-1]], data], 1],projmat], arrowData, pntSize=0.01,legend={},
+dataSets={}, colours={}, range=Max[Map[Norm, If[StringQ[data[[1, 1]]], data[[2;;-1, 1;;-2]], data[[All, 1;;-2]]]]], 
+boolVal, checkbox={}},
+
+
+If[StringQ[data[[1, 1]]], 
+arrowData=Reap[Sow[Circle[{0,0},1]];
+Do[With[{i=i},
+Sow[Dynamic[Arrow[{{0,0},lst[[i]]}]]];
+Sow[Dynamic[Text[StringForm[data[[1, i]]], lst[[i]]+lst[[i]]/20]]];],{i,1,Length[tempData[[1]]]-1}]][[2, 1]],
+
 arrowData=Reap[Sow[Circle[{0,0},1]];
 Do[With[{i=i},
 Sow[Dynamic[Arrow[{{0,0},lst[[i]]}]]];
 Sow[Dynamic[Text[StringForm["\!\(\*
-StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+lst[[i]]/20]]];],{i,1,Length[data[[1]]]-1}]][[2, 1]];
+StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+lst[[i]]/20]]];],{i,1,Length[tempData[[1]]]-1}]][[2, 1]]
+
+];
+
+dataSets=CreateDataSets[tempData];
+
+boolVal=ConstantArray[True, Length[dataSets]];
+
+Do[With[{n = i}, AppendTo[checkbox, Checkbox[Dynamic[boolVal[[n]]]]]],{i, 1, Length[dataSets]} ];
+
+Do[With[{n=i}, AppendTo[legend,Style[StringForm["Index ``",i],
+FontFamily->"Times New Roman"]]],{i, 1, Length[dataSets]}];
+
+Do[With[{n = i}, AppendTo[colours, {colorFunc[dataSets[[n, 1, -1]]], PointSize[Dynamic[pntSize]]}]];,
+{i, 1, Length[dataSets]}];
+
+
 (*Grid formats the ouput of dynamic module*)
 Grid[{{
 Slider[Dynamic[pntSize],{0,0.02}]},
 {Text[PointSize: Dynamic[pntSize 50]]},
+checkbox,
 {(*The line below preserves orthonormality*)
 LocatorPane[Dynamic[lst,({lst[[All, 1]], lst[[All,2]]}=Orthogonalize[{#[[All, 1]], #[[All, 2]]}])&],
 (*This part of the code creates the projected dimensions within a unit circle*)
 Graphics[arrowData,Frame->True,ImageSize->165],Appearance->None],
 (*This creates the scatter plot of the projected data*)
-Dynamic[Module[{dataSets={}, colours={},range=Max[Map[Norm, data[[All, 1;;-2]]]]},
-dataSets=CreateDataSets[data];
-Do[colours = Append[colours, {colorFunc[dataSets[[i, 1, -1]]], PointSize[pntSize]}];,
-{i, 1, Length[dataSets]}];
-ListPlot[
-Map[Function[x, Style[x . lst]],dataSets[[All,All,1;;-2]]],
+Dynamic[
+ListPlot[Map[Function[x, Style[x . lst]], dataSets[[All,All,1;;-2]]],
 (*The projection matrix is being applied to the data*)
 PlotStyle->colours,
 AxesOrigin->{0,0},
 PlotRange->{{-range,range},{-range,range}},
 AspectRatio->1,
+PlotLegends->Placed[PointLegend[legend,LegendMarkerSize->15,LegendMarkers->{{"\[FilledCircle]",15}}],Above],
 LabelStyle->FontFamily->"Times New Roman",
 PerformanceGoal->"Speed",
 AxesLabel->{"\!\(\*SubscriptBox[\(P\), \(1\)]\)", "\!\(\*SubscriptBox[\(P\), \(2\)]\)"},
 ImageSize->650
-]]]},
+]]},
 {"Proj. Matrix:" Dynamic[Text[lst//MatrixForm]]}
 },Background->Lighter[Gray,0.975],Frame->True]]
 
@@ -87,38 +113,37 @@ colour: A list of graphics directives to be applied to each data matrix.\[Indent
 
 
 (* ::Input::Initialization:: *)
-Projected2DSliderPlot[data1_,data2_:{{0,0}},cos_:{0.6,-0.05},tan_:{0.3,0.27},\[Lambda]1_:{0.0,0.6},\[Lambda]2_:{-0.3,0.3},\[Lambda]3_:{-0.6,0.05}, \[Lambda]4_:{-0.3,-0.3}, \[Lambda]5_:{0.,-0.6}]:=
+Projected2DSliderPlot[data_,projmat_, colorFunc_:ColorData[97]]:=
 DynamicModule[
-{lst={cos, tan, \[Lambda]1, \[Lambda]2, \[Lambda]3, \[Lambda]4, \[Lambda]5}},
-Grid[{(*This portion creates the titles for the 2D sliders*)
-{MathFont["cos(\[Beta]-\[Alpha])"],MathFont["tan(\[Beta])"],MathFont["\!\(\*SubscriptBox[\(\[Lambda]\), \(1\)]\)"],
-MathFont["\!\(\*SubscriptBox[\(\[Lambda]\), \(2\)]\)"],MathFont["\!\(\*SubscriptBox[\(\[Lambda]\), \(3\)]\)"],MathFont["\!\(\*SubscriptBox[\(\[Lambda]\), \(4\)]\)"],MathFont["\!\(\*SubscriptBox[\(\[Lambda]\), \(5\)]\)"]},
-(*This portion creates the 2D sliders while ensuring the projection matrix is orthonormal*)
-{LocatorPane[Dynamic[lst[[1]],({lst[[All, 1]], lst[[All, 2]]}=Orthogonalize[
-{Join[{#[[1]]}, lst[[2;;7, 1]]], Join[{#[[2]]}, lst[[2;;7, 2]]]}])&],Graphics[{Circle[{0,0},1],Dynamic[Arrow[{{0,0},lst[[1]]}]]},ImageSize->120,Axes->True],Appearance->None],
-LocatorPane[Dynamic[lst[[2]],({lst[[All, 1]], lst[[All, 2]]}=Orthogonalize[
-{Join[{lst[[1, 1]]}, {#[[1]]},lst[[3;;7, 1]]], Join[{lst[[1, 2]]}, {#[[2]]},lst[[3;;7, 2]]]}])&],Graphics[{Circle[{0,0},1],Dynamic[Arrow[{{0,0},lst[[2]]}]]},ImageSize->120,Axes->True],Appearance->None],
-LocatorPane[Dynamic[lst[[3]],({lst[[All, 1]], lst[[All, 2]]}=Orthogonalize[
-{Join[lst[[1;;2, 1]], {#[[1]]},lst[[4;;7, 1]]], Join[lst[[1;;2, 2]], {#[[2]]},lst[[4;;7, 2]]]}])&],Graphics[{Circle[{0,0},1],Dynamic[Arrow[{{0,0},lst[[3]]}]]},ImageSize->120,Axes->True],Appearance->None],
-LocatorPane[Dynamic[lst[[4]],({lst[[All, 1]], lst[[All, 2]]}=Orthogonalize[
-{Join[lst[[1;;3, 1]], {#[[1]]},lst[[5;;7, 1]]], Join[lst[[1;;3, 2]], {#[[2]]},lst[[5;;7, 2]]]}])&],Graphics[{Circle[{0,0},1],Dynamic[Arrow[{{0,0},lst[[4]]}]]},ImageSize->120,Axes->True],Appearance->None],
-LocatorPane[Dynamic[lst[[5]],({lst[[All, 1]], lst[[All, 2]]}=Orthogonalize[
-{Join[lst[[1;;4, 1]], {#[[1]]},lst[[6;;7, 1]]], Join[lst[[1;;4, 2]], {#[[2]]},lst[[6;;7, 2]]]}])&],Graphics[{Circle[{0,0},1],Dynamic[Arrow[{{0,0},lst[[5]]}]]},ImageSize->120,Axes->True],Appearance->None],
-LocatorPane[Dynamic[lst[[6]],({lst[[All, 1]], lst[[All, 2]]}=Orthogonalize[
-{Join[lst[[1;;5, 1]], {#[[1]]},{lst[[7, 1]]}], Join[lst[[1;;5, 2]], {#[[2]]},{lst[[7, 2]]}]}])&],Graphics[{Circle[{0,0},1],Dynamic[Arrow[{{0,0},lst[[6]]}]]},ImageSize->120,Axes->True],Appearance->None],
-LocatorPane[Dynamic[lst[[7]],({lst[[All, 1]], lst[[All, 2]]}=Orthogonalize[
-{Join[lst[[1;;6, 1]], {#[[1]]}], Join[lst[[1;;6, 2]], {#[[2]]}]}])&],Graphics[{Circle[{0,0},1],Dynamic[Arrow[{{0,0},lst[[7]]}]]},ImageSize->120,Axes->True],Appearance->None]},
-(*This portion shows the vector representation of the projected dimension*)
-{MathFont[Dynamic[SetPrecision[lst[[1]], 3]]], MathFont[Dynamic[SetPrecision[lst[[2]], 3]]],
-MathFont[Dynamic[SetPrecision[lst[[3]],3]]], MathFont[Dynamic[SetPrecision[lst[[4]], 3]]], MathFont[Dynamic[SetPrecision[lst[[5]], 3]]], MathFont[Dynamic[SetPrecision[lst[[6]], 3]]], MathFont[Dynamic[SetPrecision[lst[[7]],3]]]},
-(*This portion creates the 2D scatter*)
-{Dynamic[
-ListPlot[{data1 . lst, If[data2=={{0,0}},Nothing, data2 . lst]},
-(*The line above is where the projection matrix gets applied to the data*)
-PlotStyle->{Black, Red},
+{lst=If[TrueQ[projmat=="random"],RandomMatrix[data, 1],projmat], locatorLst={}, txtLst={},dataSets={}, colours={},pntSize=0.005,legend={},range=Max[Map[Norm, data[[All, 1;;-2]]]]},
+(*This portion creates the titles for the 2D sliders*)Do[With[{n = i},locatorLst=AppendTo[locatorLst,LocatorPane[Dynamic[lst[[n]],({lst[[All, 1]], lst[[All, 2]]}
+=Orthogonalize[{ReplacePart[lst, n->#][[All, 1]],ReplacePart[lst, n->#][[All, 2]] }])& ],Graphics[{Circle[{0,0},1],Dynamic[Arrow[{{0,0},lst[[n]]}]]},ImageSize->120,Axes->True],Appearance->None]]],{i, 1, Length[data[[1]]] - 1}];
+locatorLst=AppendTo[locatorLst,SpanFromAbove];
+
+
+
+dataSets=CreateDataSets[data];
+Do[colours = Append[colours, {colorFunc[dataSets[[i, 1, -1]]], PointSize[Dynamic[pntSize]]}];,
+{i, 1, Length[dataSets]}];
+
+Do[With[{n=i},txtLst=AppendTo[txtLst,Style[StringForm["\!\(\*SubscriptBox[\(x\), \(``\)]\)",i],FontFamily->"Times New Roman"]]],{i, 1, Length[data[[1]]] - 1}];
+
+Do[With[{n=i},legend=AppendTo[legend,Style[StringForm["Index ``",i],FontFamily->"Times New Roman"]]],{i, 1, Length[dataSets]}];
+
+Grid[{
+txtLst,
+locatorLst,
+{Text["Size of Points"],SpanFromLeft},
+{Slider[Dynamic[pntSize], {0,0.01}], SpanFromLeft},
+{Dynamic[ListPlot[Map[Function[x, x[[All, 1;;-2]] . lst], dataSets],
+PlotStyle->colours,
+PlotRange->{{-range, range}, {-range,range}},
+AspectRatio->1,
+PlotLegends->Placed[PointLegend[legend,LegendMarkerSize->15,LegendMarkers->{{"\[FilledCircle]",15}}],Left],
 AxesLabel->{"\!\(\*SubscriptBox[\(P\), \(1\)]\)", "\!\(\*SubscriptBox[\(P\), \(2\)]\)"},
 LabelStyle->FontFamily->"Times New Roman",
-ImageSize->680]], SpanFromLeft}},Background->Lighter[Gray,0.975],Frame->True]
+ImageSize->680]], SpanFromLeft},
+{"Proj. Matrix:" Dynamic[Text[lst//MatrixForm]]}},Background->Lighter[Gray,0.975],Frame->True]
 ]
 
 
@@ -144,7 +169,7 @@ tan: Same as cos.
 
 (* ::Input::Initialization:: *)
 VisualiseSliceDynamic[data_,projmat_,centrePoint_,height_,heightRange_,minDist_:0]:=
-DynamicModule[{lst=If[TrueQ[projmat=="random"],RandomMatrix[data, 0],projmat],centre =centrePoint ,h=height,arrowData, pntSize1=0.005, pntSize2=0.004},
+DynamicModule[{lst=If[TrueQ[projmat=="random"],RandomMatrix[data, 0],projmat],centre =centrePoint ,h=height,arrowData, pntSize1=0.005, pntSize2=0.004,range=Max[Map[Norm, data[[All, 1;;-2]]]]},
 arrowData=Reap[Sow[Circle[{0,0},1]];Do[With[{i=i},
 Sow[Dynamic[Arrow[{{0,0},lst[[i]]}]]];
 Sow[Dynamic[Text[StringForm["\!\(\*
@@ -168,15 +193,17 @@ v2=tempData;
 ListPlot[{If[Length[v1]==0,{0,0},v1 . lst],If[Length[v2]==0,{0,0},v2 . lst]},
 AspectRatio->1,
 PlotStyle->{{Black,Opacity->1,PointSize[pntSize1]},{Lighter[Blue],Opacity->0.5,PointSize[pntSize2]}},
+PlotRange->{{-range, range},{-range,range}},
 AxesLabel->{"\!\(\*
 StyleBox[\"P1\",\nFontSlant->\"Italic\"]\)", "\!\(\*
 StyleBox[\"P2\",\nFontSlant->\"Italic\"]\)"},
 LabelStyle->FontFamily->"Times New Roman",
-AspectRatio->Automatic,
+AspectRatio->1,
 ImageSize->500,
 PlotLegends->Placed[{"In Slice","Not in Slice"},Above]]
 ]
-],SpanFromAbove}},Frame->True]]
+],SpanFromAbove},
+{"Proj. Matrix:" Dynamic[Text[lst//MatrixForm]]}},Frame->True]]
 
 
 (* ::Input::Initialization:: *)
@@ -208,20 +235,23 @@ RandomMatrix[data_,col_] :=
 
 
 (* ::Input::Initialization:: *)
+Clear[SliceDynamic]
 SliceDynamic[data_,projmat_,centrePoint_,height_,heightRange_]:=
 DynamicModule[{lst=If[TrueQ[projmat=="random"],RandomMatrix[data, 1],projmat],
-centre =centrePoint ,h=height,dataSets,arrowData,pntSize=0.006},
+centre =centrePoint ,h=height,dataSets,arrowData,pntSize=0.006, range=Max[Map[Norm, data[[All, 1;;-2]]]], legend={}},
 arrowData=Reap[Sow[Circle[{0,0},1]];Do[With[{i=i},
 Sow[Dynamic[Arrow[{{0,0},lst[[i]]}]]];
 Sow[Dynamic[Text[StringForm["\!\(\*
 StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+lst[[i]]/20]]];],{i,1,Length[data[[1]]] - 1}]][[2, 1]];
 dataSets=CreateDataSets[data];
 
+Do[With[{n=i},legend=AppendTo[legend,Style[StringForm["Index ``",i],FontFamily->"Times New Roman"]]],{i, 1, Length[dataSets]}];
+
 Grid[{{"Centre Point"},
 {InputField[Dynamic[centre],FieldSize->15]},(*Grid formats the ouput of dynamic module*)
-{"Slice Height"},
+{"Slice Height:"Dynamic[h]},
 {Slider[Dynamic[h],heightRange]},
-{Dynamic[h]},(*The line above preserves orthonormality*)
+{"Point Size:" Dynamic[100 pntSize]},
 {Slider[Dynamic[pntSize],{0,0.01}]},
 {LocatorPane[Dynamic[lst,({lst[[All, 1]], lst[[All,2]]}=Orthogonalize[{#[[All, 1]], #[[All, 2]]}])&],
 Graphics[arrowData,Frame->True,ImageSize->165],Appearance->None],
@@ -245,11 +275,13 @@ StyleBox[\"P1\",\nFontSlant->\"Italic\"]\)", "\!\(\*
 StyleBox[\"P2\",\nFontSlant->\"Italic\"]\)"},
 PlotStyle->colours,
 LabelStyle->FontFamily->"Times New Roman",
- AspectRatio->1,PlotRange->{{Min[Transpose[Drop[data,{},{-1}] . lst][[1]]],Max[Transpose[Drop[data,{},{-1}] . lst][[1]]]},{Min[Transpose[Drop[data,{},{-1}] . lst][[2]]],Max[Transpose[Drop[data,{},{-1}] . lst][[2]]]}},
+PlotLegends->Placed[PointLegend[legend,LegendMarkerSize->15,LegendMarkers->{{"\[FilledCircle]",15}}],Above],
+ AspectRatio->1,PlotRange->{{-range, range},{-range, range}},
 ImageSize->500
 ]
 ]
-],SpanFromAbove}},Frame->True]]
+],SpanFromAbove},
+{"Proj. Matrix:" Dynamic[Text[lst//MatrixForm]]}},Frame->True]]
 
 
 (* ::Input::Initialization:: *)
@@ -311,78 +343,6 @@ the projection plane.
 genDist[xP, cP]
 xP: Ideally the xPrime function
 cP: Ideally the cPrime function
-";
-
-
-(* ::Input::Initialization:: *)
-VisualiseSlice[data_,projMat_,centerPt_,dist_,ptSize1_:0.005,ptSize2_:0.004,minDist_:0]:=
-Module[{tempData=data,lst=If[projMat=="random",RandomMatrix[data],projMat] ,v1={ConstantArray[0., Length[data[[1]]]]},v2={ConstantArray[0.,Length[ data[[1]]]]},arrowData},
-v1=Reap[Do[If[minDist<genDist[xPrime[data[[i]], lst], cPrime[centerPt,lst]]<dist, 
-Sow[data[[i]]];tempData[[i]]=Nothing],{i,1,Length[data]}]][[2]];
-v2=tempData;
-arrowData=Reap[Sow[Circle[{0,0},1]];
-Do[Sow[ Arrow[{{0,0},lst[[i]]}]];Sow[Style[Text[StringForm["\!\(\*
-StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+Normalize[lst[[i]]]/20],{FontFamily->"Times New Roman",Black}]],{i,1,Length[lst]}]][[2,1]];
-Grid[{{
-ListPlot[{If[Length[v1]==0,{0,0},v1[[1]] . lst],If[Length[v2]==0,{0,0}, v2 . lst]},
-AspectRatio->1,
-PlotStyle->{{Black,Opacity->1,PointSize[ptSize1]},{Lighter[Blue],Opacity->0.5,PointSize[ptSize2]}},
-AxesLabel->{"\!\(\*
-StyleBox[\"P1\",\nFontSlant->\"Italic\"]\)", "\!\(\*
-StyleBox[\"P2\",\nFontSlant->\"Italic\"]\)"},
-LabelStyle->FontFamily->"Times New Roman",
-AspectRatio->Automatic,
-ImageSize->Large,
-PlotLegends->Placed[{"In Slice","Not in Slice"},Above]],Graphics[arrowData,Frame->True,PlotLabel->"Direction of Projection"]
-}}]]
-
-
-(* ::Input::Initialization:: *)
-VisualiseSlice::usage=
-"A function which indicates which points exists within a certain slice and which don't.
-VisualiseSlice[data, projMat, centerPt, dist, ptSize1(=0.005), ptSize2(=0.004), minDist(=0)]
-data: A data matrix.
-projMat: A projection matrix which details the projection plane/slice.
-centrePt: A point which indicates the position of the slice.
-ptSize1: A number indicating the point size of the points within the slice.
-ptSize2: A number indicating the point size of the point which exist outside of the slice";
-
-
-(* ::Input::Initialization:: *)
-SlicePlot[data_, projMat_,centerPt_,dist_,colour_:Automatic,minDist_:0]:=
-Module[{dataSlice={}, lst=If[projMat=="random",RandomMatrix[data[[1]]],projMat],arrowData,legendData},
-Do[dataSlice=Append[dataSlice,Reap[Do[If[minDist<genDist[xPrime[data[[i, j]], lst], cPrime[centerPt, lst]]<dist, 
-Sow[data[[i, j]]]],{j,1,Length[data[[i]]]}]][[2,1]] ],{i, 1, Length[data]}];
-
-arrowData=Reap[Sow[Circle[{0,0},1]];
-Do[Sow[ Arrow[{{0,0},lst[[i]]}]];Sow[Style[Text[StringForm["\!\(\*
-StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+Normalize[lst[[i]]]/20],{FontFamily->"Times New Roman",Black}]],{i,1,Length[lst]}]][[2,1]];
-
-legendData=Reap[Do[Sow[Style[Text[StringForm["data``",i]],{FontFamily->"Times New Roman"}]],
-{i, 1, Length[data]}]][[2, 1]];
-
-Grid[{{
-ListPlot[MapThread[Dot, {dataSlice, ConstantArray[lst,Length[data]]}],
-AspectRatio->1,
-PlotStyle->colour,
-AxesLabel->{"\!\(\*
-StyleBox[\"P1\",\nFontSlant->\"Italic\"]\)", "\!\(\*
-StyleBox[\"P2\",\nFontSlant->\"Italic\"]\)"},
-LabelStyle->{FontFamily->"Times New Roman"},
-ImageSize->Large,
-PlotLegends->Placed[legendData,Above]],
-Graphics[arrowData,Frame->True,PlotLabel->"Direction of Projection"]
-}}]]
-
-
-(* ::Input::Initialization:: *)
-SlicePlot::usage=
-"A function which gets a certain slice from all the data matrices and plots it on the same axes.
-SlicePlot[data, projMat, centerPt, dist, colour(=Automatic), minDist(=0)]
-data: A list of data matrices.
-projMat: A projection matrix which describes the projection plane/slice.
-centrePt: A point which details the position of the slice.
-colour: A list where you can determine the colour of each data matrix.
 ";
 
 
