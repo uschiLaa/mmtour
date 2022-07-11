@@ -302,13 +302,21 @@ We start by first exploring the projections of the model prediction. Figure \ref
 
 XXXX currently in the notebook $A_1$ is called A5, and $A_2$ is called A6
 
-We continue the investigation by now slicing based on the projection $A_1$. For both models we look at a thin ($h=0.5$) slice through the center, $S_1^0$. As a first option we explore how manually changing the projection away from $A_1$ can help with understanding the boundary better. For our example we notice that $A_1$ does not contain any contribution from the second variable (`bd`), and in our illustration we will first rotate this variable into the view.
+We continue the investigation by now slicing orthogonally to  the projection $A_1$. For both models we look at a thin ($h=0.5$) slice through the center, $S_1^0 = (0,0,0,0)$. At  first we explore how changing the projection, and thus the slice) away from $A_1$ can help with understanding the boundary better. For our example, notice that $A_1$ does not contain any contribution from the second variable (`bd`), so we will first rotate this variable into the view. 
 
-We again start by looking at the RF model, the slice $S_1^0$ shows the block structure of the model, with the third group (green, Gentoo penguins) overlapping with both of the other groups (Fig. \ref{slice1}, top-left). This is similar for the LDA model (Fig. \ref{slice1}, top-right), but again the linearity results in different boundaries and thus differences in how the classes overlap.
+Figure \ref{slice1} shows snapshots of the exploration. The rop row is the initial projection ($A_1$ and $S_1^0$), and the bottom row is a later projection containing more of `bd` (call them $A_2$ and $S_2^0$). The columns correspond to the two models, with Rf on the left and LDA on the right.
 
-By rotating in the second variable we can find a view that shows three neatly separated blocks for the RF model, and we export the corresponding projection matrix $A_2$ to see the same views for the LDA model which also shows a neater separation of the classes along the boundary (see bottom row of Fig. \ref{slice1}).
+Both models have some overlap at the center, even for this thin slice ($S_1^0$). The second slice ($S_2^0$) mostly resolves this overlap and reveals the primary differences between the models. The boundary between Adelie (blue) and Chinstrap (yellow) is very similar for both models. The boundary between Chinstrap and Gentoo (green) is where they differ. 
 
-Finally we look at the data projection based on $A_2$ and find that the third group (green, Gentoo penguins) is further away from the other two groups (compared to $A_1$), see Fig. \ref{proj2}.
+The RF is almost straight in this view, as something we might expect from a tree model where splitting occurs on single variables only. However, it is straight in a combination of the second and third variable (`bd` and `fl`). By examining the scatterplot matrix, we can understand how this boundary was built: on each of `bd` and `fl` it is possible to cut on a value where most of the Gentoo penguins are different from the other two speciesfor any tree, and likely only one is needed. Thus the forest construction is providing a sample of trees that use one variable or the other variable to split, producing the blocky boundary on the combination of the two. 
+
+In contrast, the LDA boundary has an oblique split between the two, and roughly divides the space into three similarly sized areas. It is almost like a textbook illustration of how LDA works for two variables (2D) where by assuming the clusters have equal variance-covariance, it places a boundary half-way between the group means. 
+
+<!-- We again start by looking at the RF model, the slice $S_1^0$ shows the block structure of the model, with the third group (green, Gentoo penguins) overlapping with both of the other groups (Fig. \ref{slice1}, top-left). This is similar for the LDA model (Fig. \ref{slice1}, top-right), but again the linearity results in different boundaries and thus differences in how the classes overlap.
+
+By rotating in the second variable we can find a view that shows three neatly separated blocks for the RF model, and we export the corresponding projection matrix $A_2$ to see the same views for the LDA model which also shows a neater separation of the classes along the boundary (see bottom row of Fig. \ref{slice1}).-->
+
+Finally, to determine which model does the boundaries better, compare them with the $A_2$ projection of the data (Figure \ref{proj2}). Gentoo is more separated from the other two in this projection, and one can imagine that the trees in the forest has greedily grasped any one of many places to make a split to separate the group. It might be argued though the that RF boundary is cut too close to the Chinstrap species, and might lead to some unnecessary misclassification with new data. The LDA boundary is better placed for all species. 
 
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.45\textwidth]{figures/slice1_rf.png}
