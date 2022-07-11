@@ -543,12 +543,21 @@ to be generalised to arbitrary data if we want to keep it.
   \end{itemize}
 \end{itemize}
 
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{paper_files/figure-latex/penguins-scatmat-1} 
+
+}
+
+\caption{Scatterplot matrix of the (standardised) penguins data. The three species are reasonably different in size, with Gentoo distinguised from the other two on body depth relative to flipper length and body mass.}\label{fig:penguins-scatmat}
+\end{figure}
+
 \hypertarget{sec:examples}{%
 \section{Application}\label{sec:examples}}
 
-To illustrate the usefulness of the manual tour we use the 4D penguins
-data \citep{penguins}. We will show how classification boundaries can be
-explored and better understood using a manual tour, on projections and
+To illustrate the usefulness of the manual controls we use the 4D
+penguins data \citep{penguins}. We will show how classification
+boundaries can be explored and better understood on projections and
 slices through 4D space. Figure \ref{fig:penguins-scatmat} shows a
 scatterplot matrix of this data. There are four variables
 (\texttt{bl\ =\ bill\_length\_mm,\ bd\ =\ bill\_depth\_mm,\ fl\ =\ flipper\_length\_mm,\ bm\ =\ body\_mass\_g})
@@ -556,15 +565,14 @@ measuring the size of the penguins from three species (Adelie, Chinstrap
 and Gentoo). The scatterplot matrix shows that the three species appear
 to be likely separable, and that at least the Gentoo can be
 distinguished from the other two species when \texttt{bd} is paired with
-\texttt{fl} or \texttt{bm}. The steps for exploring boundaries are as
-follows:
+\texttt{fl} or \texttt{bm}. The steps for exploring boundaries in this
+example are as follows:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Build classification model, here we use a random forest and linear
-  discriminant analysis.
+  Build your classification model.
 \item
   Predict the class for a dense grid of values covering the data space.
 \item
@@ -579,15 +587,6 @@ follows:
   relative to a variable.
 \end{enumerate}
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\linewidth]{paper_files/figure-latex/penguins-scatmat-1} 
-
-}
-
-\caption{Scatterplot matrix of the (standardised) penguins data. The three species are reasonably different in size, with Gentoo distinguised from the other two on body depth relative to flipper length and body mass.}\label{fig:penguins-scatmat}
-\end{figure}
-
 \hypertarget{constructing-the-4d-prediction-regions}{%
 \subsection{Constructing the 4D prediction
 regions}\label{constructing-the-4d-prediction-regions}}
@@ -595,27 +594,28 @@ regions}\label{constructing-the-4d-prediction-regions}}
 We use the \texttt{classifly} package \citep{classifly} to generate
 predictions across the 4D cube spanned by the data, with two
 classification models: linear discriminant analysis (LDA) and random
-forest(RF).
+forest (RF).
 
 \hypertarget{exploring-projections-manually}{%
 \subsection{Exploring projections
 manually}\label{exploring-projections-manually}}
 
 We start by first exploring the projections of the model prediction.
-Through manual rotation of the view we can get a feeling for where in
-the space we primarily predict each of the three species, and we also
-get a sense of the difference between the two models. To illustrate this
-difference we have rotated the projection view from the RF model to
-identify a projection that shows the non-linear, block-type structure
-introduced by the model, see Fig. \ref{proj1}. We then export the
-corresponding matrix \(A_1\) to look at the same projection for the LDA
-model and the original data. Here we notice that while the overall
-picture is similar, the linearity of the LDA leads to a big difference
-in how two of the three species overlap across the projection (blue vs
-green, i.e.~Adelie vs Gentoo penguins). Interestingly that same
-projection leads to almost perfect separation of the three species when
-looking at the data points, the overlap between the models is driven by
-what is happening in the orthogonal space to the plane.
+Figure \ref{proj1} summarises the process. Through manual rotation of
+the view we can get a feeling for where in the space we primarily
+predict each of the three species, and we also get a sense of the
+difference between the two models. To illustrate this difference we have
+manually rotated the projection for the RF model (left plot) to identify
+a projection that shows the non-linear but block-type structure that is
+typical of this type of model. This particular projection (\(A_1\)) is
+exported so that the same projection can be used to show the LDA model
+(middle plot) and the actual data (right plot). What can be seen is the
+linearity of the LDA model, where the boundaries are linear and oblique
+to the variable axes. And, interestingly this particular projection of
+the original data shows very distinct clusters of the three species.
+That means, the obscuring of the boundaries between groups for both of
+the models is driven by what is happening in the orthogonal space to the
+plane of the selected projection.
 
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.32\textwidth]{figures/proj1_rf.png}
