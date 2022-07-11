@@ -1,0 +1,418 @@
+% interactcadsample.tex
+% v1.03 - April 2017
+
+\documentclass[]{interact}
+
+\usepackage{epstopdf}% To incorporate .eps illustrations using PDFLaTeX, etc.
+\usepackage{subfigure}% Support for small, `sub' figures and tables
+%\usepackage[nolists,tablesfirst]{endfloat}% To `separate' figures and tables from text if required
+
+\usepackage{natbib}% Citation support using natbib.sty
+\bibpunct[, ]{(}{)}{;}{a}{}{,}% Citation support using natbib.sty
+\renewcommand\bibfont{\fontsize{10}{12}\selectfont}% Bibliography support using natbib.sty
+
+\theoremstyle{plain}% Theorem-like structures provided by amsthm.sty
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newtheorem{notation}{Notation}
+
+
+% tightlist command for lists without linebreak
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\def\tightlist{}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{nicematrix}
+\NiceMatrixOptions{code-for-first-row = \color{red} ,code-for-last-row = \color{red} ,code-for-first-col = \color{blue} ,code-for-last-col = \color{blue}}
+
+
+\begin{document}
+
+
+\articletype{Short Technical Note}
+
+\title{Appendix: New and simplified manual controls for projection and
+slice tours}
+
+
+\author{\name{Alex Aumann$^{a}$, German Valencia$^{a}$, Ursula
+Laa$^{b}$, Dianne Cook$^{c}$}
+\affil{$^{a}$School of Physics and Astronomy, Monash
+University; $^{b}$Institute of Statistics, University of Natural
+Resources and Life Sciences, Vienna; $^{b}$Department of Econometrics
+and Business Statistics, Monash University}
+}
+
+\thanks{CONTACT Alex
+Aumann. Email: \href{mailto:aaum0002@student.monash.edu}{\nolinkurl{aaum0002@student.monash.edu}}, German
+Valencia. Email: \href{mailto:german.valencia@monash.edu}{\nolinkurl{german.valencia@monash.edu}}, Ursula
+Laa. Email: \href{mailto:ursula.laa@boku.ac.at}{\nolinkurl{ursula.laa@boku.ac.at}}, Dianne
+Cook. Email: \href{mailto:dicook@monash.edu}{\nolinkurl{dicook@monash.edu}}}
+
+\maketitle
+
+
+\begin{keywords}
+data visualisation; grand tour; statistical computing; statistical
+graphics; multivariate data; dynamic graphics
+\end{keywords}
+
+\hypertarget{refinements-to-enforce-exact-position}{%
+\section{Refinements to enforce exact
+position}\label{refinements-to-enforce-exact-position}}
+
+The problem with new simple method (Algorithm 1) is that the precise
+values for \(V_m\) cannot be specified because the orthonormalisation
+will change them.
+
+\hypertarget{adjustment-method-1}{%
+\subsection{Adjustment method 1}\label{adjustment-method-1}}
+
+A small modification to algorithm 1 will maintain the components of
+\(V_m\) precisely (Figure \ref{fig:othermethod}. It is as follows:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Provide \(A\), and \(m\).
+\item
+  Change values in row \(m\), giving \(A^*\).
+\item
+  Store row \(m\) separately, and zero the values of row \(m\) in
+  \(A^*\), giving \(A^{*0}\).
+\item
+  Orthonormalise \(A^{*0}\), using Gram-Schmidt.
+\item
+  Replace row \(m\) with the original values, giving \(A^{**}\).
+\item
+  For \(d=2\), adjust the values of \({\boldmath a}^{**}_{.2}\) using
+\end{enumerate}
+
+\[a^{**}_{j2}+\frac{a_{m1}a_{m2}}{p-1}, j=1, ..., p, j\neq m\].
+
+which ensures that
+
+\[\sum_{j=1, j\neq m}^p a^{**}_{j1}a^{**}_{j2} + a_{m1}a_{m2} = 0\].
+
+If \(d>2\) the process would be sequentially repeated in the same manner
+that Gram-Schmidt is applied sequentially to orthormalise the columns of
+a matrix. If \(d=1\) no orthonormalisation is needed, and the projection
+vector would simply need to be normalized after each adjustment.
+
+\begin{figure}
+\includegraphics[width=1\linewidth]{appendix_files/figure-latex/othermethod-1} \caption{Manual controls with algorithm 2. The precise location of the axis is maintained.}\label{fig:othermethod}
+\end{figure}
+
+\hypertarget{adjustment-method-2}{%
+\subsection{Adjustment method 2}\label{adjustment-method-2}}
+
+For \(d=2\) projections, the projection matrix is the sub-matrix of
+\(A\) formed by its first two columns. Whereas orthonormality of the
+basis for the p-dimensional space is given by
+\(e_i\cdot e_j=\delta_{ij},{i,j,=1,\cdots,}\), orthonormality of the
+projection matrix is expressed as
+\(P_i\cdot P_j=\delta_{ij}, {i,j=1,2}\). Movement of the cursor takes
+the two components \({x_{m1},x_{m2}}\) into a selected new value
+\({a,b}\). Although the motion is constrained by \(a^2+b^2\leq 1\), this
+is not sufficient to guarantee orthonormality of the new projection
+matrix. One possible algorithm to achieve this is
+
+\begin{enumerate}
+\item Cursor movement takes ${x_{m1},x_{m2}}\to {a,b}$
+\item The freedom to change the components $A_{i3}\cdots A_{ip}$ (the columns of $A$ not corresponding to the projection matrix) is used to select a new orthonormal basis as follows:
+\begin{enumerate}
+\item For row $m$ one chooses $A_{m3}=\sqrt{1-a^2-b^2},~A_{m,k>3}=0$
+\item For other rows, $A_{i\neq m,j\geq3}$ random selections in the range $(-1,1)$ are made.
+\item The Gram-Schmidt algorithm is then used to obtain an orthonormal basis taking $e_m$ as the first vector (which is already normalized), and then proceeding as usual $e_1\to e_1-(e_1\cdot e_m) e_m$, $e_1\to e_1/(e_1\cdot e_1)$, etc.
+\end{enumerate}
+\item this results in the orthonormal basis $A^*$ and a new projection matrix with $P_{m1}=a,~P_{m2}=b$.
+\end{enumerate}
+
+The random choice for the components of \(A\) not in the projection
+matrix allows the exploration of dimensions perpendicular to the
+projection plane.
+
+\begin{align}
+A=~~~& \begin{pNiceArray}{ccccc}[first-row,first-col]
+\CodeBefore
+       \columncolor{red!15}{1,2}
+              \rowcolor{blue!15}{4}
+     \Body
+       & \stackrel{P_1}{\downarrow} & \stackrel{P_2}{\downarrow} &  & &\\
+e_1\to & x_{11} & x_{12}  & x_{13} & \cdots & x_{1p} \\
+e_2 \to& x_{21}  & x_{22}  & \cdot  &\cdots & x_{2p} \\
+\vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\ 
+ e_m \to& x_{m1}  & x_{m2}  & \cdot  &\cdots & x_{mp} \\   
+\vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\
+e_p \to&x_{p1} & x_{p2} &\cdot &\cdots & x_{pp} 
+\end{pNiceArray},\quad (x_{m1},x_{m2})\to (a,b)
+\end{align}
+
+\hypertarget{adjustment-method-3}{%
+\subsection{Adjustment method 3}\label{adjustment-method-3}}
+
+For now just sketching the idea:
+
+\begin{itemize}
+\tightlist
+\item
+  first step is to click on the axis display to change the contribution
+  of one variable \(m\)
+\item
+  capture that position and replace the corresponding row in the
+  projection matrix
+\item
+  for 2D projection this gives components \(m_1\) along ``x'' direction
+  and \(m_2\) along \(y\) direction
+\item
+  next step: rotate basis such that direction of row m now corresponds
+  to the first basis vector, this means we apply 2x2 rotation matrix to
+  each row of the projection matrix, where the rotation angle is
+  \(tan(\theta) = m_2/m_1\) (that matrix can be written just in terms of
+  that ratio, \(x= m_2/m_1\), when \(m_1<0\) I think we just need to
+  translate \(\theta \rightarrow \theta + \pi\))
+\item
+  take the rotated basis, apply Gram-Schmidt, now the direction of \(m\)
+  will not change (but the length will change during normalization)
+\item
+  rotated back to the original xy basis to update the plots
+\end{itemize}
+
+XXX need to check calculation of angle when \(m_1 < 0\)
+
+\hypertarget{software-details}{%
+\section{Software details}\label{software-details}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Why is this a good sandbox}
+\item
+  \textbf{Explain the functionality available in the notebooks}
+\end{itemize}
+
+The following functions are implemented in the Mathematica package
+\texttt{mmtour.wl}:
+
+\begin{itemize}
+\item
+  \texttt{ProjectionPlot{[}data,\ projmat,\ xRange(=Automatic),\ yRange(=Automatic),\ \ colour(=Automatic){]}}
+  with arguments
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{data}: A list of data matrices (they must all have the same
+    dimensionality)
+  \item
+    `\texttt{projmat}: A projection matrix which describes the
+    projection plane. This is the initial projection and does not need
+    to be orthonormal (XXX is this right?).
+  \item
+    `\texttt{xRange}: A list which details the range of the horizontal
+    axis.
+  \item
+    `\texttt{yRange}: A list which details the range of the vertical
+    axis.
+  \item
+    `\texttt{colour}: A list of graphics directives to be applied to
+    each data matrix.
+  \end{itemize}
+\end{itemize}
+
+There are problems with the default values for x and y ranges and
+colour. It would be better to fix the ranges and colour based on the
+data as well as the origin of axes and the size of the points.
+
+\textbf{It would be good if the initial projection matrix (and maybe the
+center) had default values. Perhaps a random matrix with the correct
+dimensions read from the data? Fix 1}
+
+The format for the printed projection matrix can be improved also. Maybe
+fix the number of digits and the position of the label.
+
+\begin{itemize}
+\item
+  \texttt{SlicePlot{[}data,\ projmat,\ centrePoint,\ height,\ heightRange,\ ptSize1(=0.005),\ ptSize2(=0.004),\ minDist(=0){]}}
+  with arguments (used to be called SliceDynamic in Alex's first
+  version, the name SliceDynamic was taken by something else below)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{data}: A data matrix
+  \item
+    \texttt{projmat}: The inital projection matrix
+  \item
+    \texttt{centrepoint}: The initial position of the slice
+  \item
+    \texttt{height}: The initial height of the slice
+  \item
+    \texttt{heightRange}: The range of heights
+  \item
+    \texttt{ptSize1}: The size of the points that exist within the slice
+  \item
+    \texttt{ptSize2}: The size of the points that exist outside of the
+    slice
+  \end{itemize}
+\end{itemize}
+
+This function requires some auxiliary functions. It does not accept more
+than one data set.
+
+\textbf{It would be good if the initial projection matrix (and maybe the
+center) had default values. Perhaps a random matrix with the correct
+dimensions read from the data?}
+
+It may be good to fix the size of the points, the center of the axes and
+the scales of the axes rather than allow them to change as the
+projection and slicing changes
+
+\begin{itemize}
+\item
+  \texttt{SliceDynamic{[}data,\ projmat,\ centrePoint,\ height,\ heightRange,\ ptSize1\ :\ 0.005,\ ptSize2\ :\ 0.004{]}}
+  with arguments
+\item
+  \texttt{data}: A data matrix with an extra grouping or clustering
+  column (numerical)
+\item
+  \texttt{projmat}: The initial projection matrix
+\item
+  \texttt{centrepoint}: The initial position of the slice
+\item
+  \texttt{height}: The initial height of the slice
+\item
+  \texttt{heightRange}: The range of heights
+\item
+  \texttt{ptSize1}: The size of the points that exist within the slice
+\item
+  \texttt{ptSize2}: The size of the points that exist outside of the
+  slice
+\end{itemize}
+
+\textbf{Does this need to be a separate function from SlicePlot? Fix 2}
+
+\textbf{It would be good if the initial projection matrix (and maybe the
+center) had default values. Perhaps a random matrix with the correct
+dimensions read from the data? Fix 3}
+
+\textbf{It may be good to fix the size of the points, the center of the
+axes and the scales of the axes rather than allow them to change as the
+projection and slicing changes. Fix 4}
+
+\textbf{I have found it useful to input different data sets rather than
+have this function sort them automatically using the last column. One
+data set with a flag column at the end, is best! Is the code too
+complicated? Fix 5}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{Projected2DSliderPlot{[}{]}}
+\end{itemize}
+
+This function uses a different display for the projection that I find
+very useful. However as it stands it is specific to one data set. Needs
+to be generalised to arbitrary data if we want to keep it.
+
+\textbf{For Alex to do}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{We would need a screenshot (and video) for each of these.}
+\item
+  \textbf{Fix 1, 2, 3, 4, 5}
+\item
+  \textbf{Code consistent for applications to work - see
+  slice\_tour\_compare\_sets.nb. See below}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{We need to make sure the drawing range is fixed (no resizing
+    of the axis when changing projection or slicing). It could be nice
+    if there was a manual zoom in/zoom out to change scale
+    occasionally.}
+  \item
+    \textbf{Should also make sure the size of the points is fixed (maybe
+    this will be automatic if the drawing range is fixed?), bigger
+    points would be preferred, currently the size is sometimes really
+    tiny and it becomes difficult to see anything.}
+  \item
+    \textbf{Can we have some heuristic to decide the range for the slice
+    thickness slider? In the second graph there is a tiny part of the
+    slider where the changes are interesting, difficult to navigate
+    since this makes it super sensitive to any small movement, while
+    most of the options are not interesting. My suggestion would be to
+    keep (as I understand is the case now) the maximum thickness (all
+    points in) as the upper bound, but instead of zero use a thickness
+    below which slices tend to be empty as the lower bound.}
+  \item
+    \textbf{For the olives example I think the relation between x2 and
+    the blue region could be interesting.}
+  \item
+    \textbf{pdfsense data: can we use random samples instead of the
+    first 10k rows? Then we should still be able to see the bigger
+    picture (with picking the first ones we get some artificial
+    structure from how the data was sampled initially).}
+  \item
+    \textbf{I was playing around with this today. Looks like the axes
+    are fixed when changing slice thickness, but not when rotating?}
+  \item
+    \textbf{Anyways, some observations that might be useful, but all of
+    this seems difficult for including in a paper:}
+  \item
+    \textbf{In the first example we can show how the yellow group is
+    associated with the first variable (x1, I guess this is C9?) - when
+    slicing through the center it only appears when x1 has a bigger
+    component on the projection, it is associated with low values of x1.
+    Since they are not near the average value of x1 the points do not
+    get captured in a slice where x1 is not important in the projection.
+    We can move the center point to -1 in the first component to then
+    explore how the yellow group relates to the other three variables.
+    Much less clear, maybe some indication of smaller x2 and larger x3
+    for this.}
+  \item
+    \textbf{The second example is too busy for manual exploration I
+    would say (too many axes to move around separately).}
+  \item
+    \textbf{Third example could be similar to the first: blue region
+    requires small values of x2, can be understood from the exploration,
+    then move center point to -0.5 in x2 to explore further. Now
+    interpretation becomes tricky. Sometimes blue and yellow seem just
+    randomly everywhere, sometimes blue more contained in an ellipsoid
+    around the center (indicating some correlation between variables).
+    For example try zeroing out components 2 and 3 to see this slice in
+    x1 vs x4.}
+  \item
+    \textbf{For the last example x4 seems to be the one to work with. I
+    feel like this is again very similar, maybe better to instead
+    explore other examples (maybe something without slicing?)}
+  \end{itemize}
+\end{itemize}
+
+\bibliographystyle{tfcad}
+\bibliography{biblio.bib}
+
+
+
+
+
+\end{document}

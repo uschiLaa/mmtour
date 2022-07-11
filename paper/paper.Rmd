@@ -76,13 +76,15 @@ A manual tour allows the user to alter the coefficients of one (or more) variabl
 
 ## Existing methods
 
-The method for updating component values in @cook_manual_1997 (and utilised in @spyrison_spinifex_2020) are prescribed primarily for a 2D projection, to take advantage of (then) newly developed 3D trackball controls made available for computer gaming. The first step was to construct a 3D manipulation space from a 2D projection, as illustrated in Figure \ref{manipspace}. In this space the coefficient of the controlled variable ranges between -1 and 1. Movements of a cursor are recorded and converted into changes in the values of $V_m$ thus changing the displayed 2D projection. The algorithm also provided constraints to horizontal, vertical, radial or angular motions only. 
+The method for updating component values in @cook_manual_1997 (and utilised in @spyrison_spinifex_2020) are prescribed primarily for a 2D projection, to take advantage of (then) newly developed 3D trackball controls made available for computer gaming. The first step was to construct a 3D manipulation space from a 2D projection. In this space the coefficient of the controlled variable ranges between -1 and 1. Movements of a cursor are recorded and converted into changes in the values of $V_m$ thus changing the displayed 2D projection. The algorithm also provided constraints to horizontal, vertical, radial or angular motions only. The construction of the manipulation space overly complicates the manual controls, especially when considering a technique that will generally apply to arbitrary $d$.
 
+<!--
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.8\textwidth]{figures/manip_space.pdf}}
 \caption{Original contruction of the manual tour designed for 2D projections and created a 3D space from which to utilise track ball controls to change it's contribution. (Figure 3 from Cook and Buja (1997).)}
 \label{manipspace}
 \end{figure*}
+-->
 
 ## A new simpler and broadly applicable approach
 
@@ -101,7 +103,7 @@ The new approach emerged from experiments in mathematica. The components corresp
 This algorithm will produce the changes to a projection as illustrated in Figure \ref{fig:manualsequence} (top row). The controlled variable, $V_m$, corresponds to the black line, and sequential changes to row $m$ of $A$ can be seen to roughly follow a specified position (orange dot). Changes in the other components happen as a result of the orthonormalisation, but are uncontrolled. 
 
 
-```{r manualsequence, out.width="100%", width=12, height=4, fig.cap="Sequence of projections where contribution of one variable is controlled (black) is changed: (top) unconstrained orthonormalisation, (bottom) constrained as specified. The dot (orange) indicates the chosen values for the controlled variable. For the constrained orthonormalisation it can be seen to precisely match the axis, but not so for the unconstrained orthonormalisation."}
+```{r manualsequence, out.width="100%", width=12, height=4, fig.cap="Sequence of projections where contribution of one variable is controlled (black) is changed using unconstrained orthonormalisation. The dot (orange) indicates the chosen values for the controlled variable. It can be seen that the actual axis does not precisely match the chosen position, but it is close."}
 source("../code/plot_basis.R")
 source("../code/linear_alg.R")
 
@@ -138,160 +140,34 @@ for (i in 1:3) {
 
 # Iterate and save images
 # Constrained orthonormalisation
-Anew <- A
-plot_basis(A, vchange, vcol="black")
-for (i in 1:3) {
-  Anew[vchange,] <- A[vchange,]*(1-i*eps)
-  exact <- Anew[vchange,]
-  Anew <- orthonormalise_frozen(Anew, vchange)
-  plot_basis(Anew, vchange, vcol="black")
-  points(exact[1], exact[2], pch=16, col="orange")
-}
+#Anew <- A
+#plot_basis(A, vchange, vcol="black")
+#for (i in 1:3) {
+#  Anew[vchange,] <- A[vchange,]*(1-i*eps)
+#  exact <- Anew[vchange,]
+#  Anew <- orthonormalise_frozen(Anew, vchange)
+#  plot_basis(Anew, vchange, vcol="black")
+#  points(exact[1], exact[2], pch=16, col="orange")
+#}
 ```
 
 ## Refinements to enforce exact position
 
-The problem with new simple method (Algorithm 1) is that the precise values for $V_m$ cannot be specified because the orthonormalisation will change them. 
-
-### Adjustment method 1
-
-A small modification to algorithm 1 will maintain the components of $V_m$ precisely (Figure \ref{fig:manualsequence} (bottom row)). It is as follows:
-
-1. Provide $A$, and $m$.
-2. Change values in row $m$, giving $A^*$.
-3. Store row $m$ separately, and zero the values of row $m$ in $A^*$, giving $A^{*0}$. 
-4. Orthonormalise $A^{*0}$, using Gram-Schmidt.
-5. Replace row $m$ with the original values, giving $A^{**}$. 
-6. For $d=2$, adjust the values of ${\boldmath a}^{**}_{.2}$ using 
-
-$$a^{**}_{j2}+\frac{a_{m1}a_{m2}}{p-1}, j=1, ..., p, j\neq m$$.
-
-which ensures that 
-
-$$\sum_{j=1, j\neq m}^p a^{**}_{j1}a^{**}_{j2} + a_{m1}a_{m2} = 0$$.
-
-If $d>2$ the process would be sequentially repeated in the same manner that Gram-Schmidt is applied sequentially to orthormalise the columns of a matrix. If $d=1$ no orthonormalisation is needed, and the projection vector would simply need to be normalized after each adjustment. 
-
-<!-- Need to think about how the values for selected variable are made exact, that is constrained orthonormalisation.
-
-Need to think about checks, and error catching, maybe in implementation section. If selected variable has 0 coefficient, will that generate an orthonormalisation error?-->
-
-### Adjustment method 2
-
-For $d=2$ projections, the projection matrix is the sub-matrix of $A$ formed by its first two columns. Whereas orthonormality of the basis for the p-dimensional space is given by $e_i\cdot e_j=\delta_{ij},{i,j,=1,\cdots,}$, orthonormality of the projection matrix is expressed as $P_i\cdot P_j=\delta_{ij}, {i,j=1,2}$. Movement of the cursor takes the two components ${x_{m1},x_{m2}}$ into a selected new value ${a,b}$. Although the motion is constrained by $a^2+b^2\leq 1$, this is not sufficient to guarantee orthonormality of the new projection matrix. One possible algorithm to achieve this is
-\begin{enumerate}
-\item Cursor movement takes ${x_{m1},x_{m2}}\to {a,b}$
-\item The freedom to change the components $A_{i3}\cdots A_{ip}$ (the columns of $A$ not corresponding to the projection matrix) is used to select a new orthonormal basis as follows:
-\begin{enumerate}
-\item For row $m$ one chooses $A_{m3}=\sqrt{1-a^2-b^2},~A_{m,k>3}=0$
-\item For other rows, $A_{i\neq m,j\geq3}$ random selections in the range $(-1,1)$ are made.
-\item The Gram-Schmidt algorithm is then used to obtain an orthonormal basis taking $e_m$ as the first vector (which is already normalized), and then proceeding as usual $e_1\to e_1-(e_1\cdot e_m) e_m$, $e_1\to e_1/(e_1\cdot e_1)$, etc.
-\end{enumerate}
-\item this results in the orthonormal basis $A^*$ and a new projection matrix with $P_{m1}=a,~P_{m2}=b$.
-\end{enumerate}
-The random choice for the components of $A$ not in the projection matrix allows the exploration of dimensions perpendicular to the projection plane.
-
-\begin{align}
-A=~~~& \begin{pNiceArray}{ccccc}[first-row,first-col]
-\CodeBefore
-       \columncolor{red!15}{1,2}
-              \rowcolor{blue!15}{4}
-     \Body
-       & \stackrel{P_1}{\downarrow} & \stackrel{P_2}{\downarrow} &  & &\\
-e_1\to & x_{11} & x_{12}  & x_{13} & \cdots & x_{1p} \\
-e_2 \to& x_{21}  & x_{22}  & \cdot  &\cdots & x_{2p} \\
-\vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\ 
- e_m \to& x_{m1}  & x_{m2}  & \cdot  &\cdots & x_{mp} \\   
-\vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\
-e_p \to&x_{p1} & x_{p2} &\cdot &\cdots & x_{pp} 
-\end{pNiceArray},\quad (x_{m1},x_{m2})\to (a,b)
-\end{align}
+The problem with new simple method (Algorithm 1) is that the precise values for $V_m$ are not followed because the orthonormalisation will change them. There are numerous ways that this can be enforced, and details are provided in the Appendix.
 
 
+## Manual control for slice center
 
-### Adjustment method 3
+How does it work?
 
-For now just sketching the idea:
-
-- first step is to click on the axis display to change the contribution of one variable $m$
-- capture that position and replace the corresponding row in the projection matrix
-- for 2D projection this gives components $m_1$ along "x" direction and $m_2$ along $y$ direction
-- next step: rotate basis such that direction of row m now corresponds to the first basis vector, this means we apply 2x2 rotation matrix to each row of the projection matrix, where the rotation angle is $tan(\theta) = m_2/m_1$ (that matrix can be written just in terms of that ratio, $x= m_2/m_1$, when $m_1<0$ I think we just need to translate $\theta \rightarrow \theta + \pi$)
-- take the rotated basis, apply Gram-Schmidt, now the direction of $m$ will not change (but the length will change during normalization)
-- rotated back to the original xy basis to update the plots
-
-XXX need to check calculation of angle when $m_1 < 0$
-
-```{r othermethod, eval=FALSE, out.width="100%", width=12, height=4, fig.cap="Manual controls with algorithm 2. The precise location of the axis is maintained."}
-source("../code/plot_basis.R")
-source("../code/linear_alg.R")
-
-# Base plot set up
-plot.new()
-par(pty="s", xaxt="n", yaxt="n", bty="n",
-      omi=c(0,0,0,0), mar=c(0,0,0,0),
-    mfrow=c(1,4))
-
-# Create manual tour example
-p <- 4
-d <- 2
-set.seed(24)
-A <- matrix(runif(p*d, min=-1), ncol=d, byrow=TRUE)
-colnames(A) <- c("P1", "P2")
-rownames(A) <- paste0("V", 1:p)
-A <- tourr::orthonormalise(A)
-  
-# Now set a new position
-vchange <- 3
-eps <- 0.1
-plot_basis(A, vchange, vcol="black")
-
-# j is the component that should be kept fixed
-orthonormalize_rotated <- function(A, j){
-  m1 <- A[j, 1]
-  m2 <- A[j, 2]
-  c <- 1 / (sqrt(1 + (m2/m1)^2))
-  s <- (m2/m1) / (sqrt(1 + (m2/m1)^2))
-  rot <- matrix(c(c, -s, s, c), nrow = 2)
-  rot_inv <- matrix(c(c, s, -s, c), nrow = 2)
-  for(i in 1:nrow(A)){
-    A[i,] <- rot %*% A[i,]
-  }
-  A[,1] <- normalize_w_fixed(A[,1], j)
-  A <- tourr::orthonormalise(A)
-  for(i in 1:nrow(A)){
-    A[i,] <- rot_inv %*% A[i,]
-    }
-  A
-}
-
-# normalize a vector while keeping component j fixed
-normalize_w_fixed <- function(v, j){
-  c <- v[j]
-  k <- sqrt((1-c^2) / sum(v[-j]^2))
-  v[-j] <- k * v[-j]
-  v
-}
-
-# Iterate and save images
-# Unconstrained orthonormalisation
-Anew <- A
-for (i in 1:3) {
-  Anew[vchange,] <- A[vchange,]*(1-i*eps)
-  exact <- Anew[vchange,]
-  Anew <- orthonormalize_rotated(Anew, vchange)
-  plot_basis(Anew, vchange, vcol="black")
-  points(exact[1], exact[2], pch=16, col="orange")
-}
-
-```
-
+Diagram of interface? Scaling
 
 # Experimenting with new techniques using Mathematica {#sec:implementation}
 
 - **Why is this a good sandbox**
 - **Explain the functionality available in the notebooks**
 
+<!-- 
 The following functions are implemented in the Mathematica package `mmtour.wl`:
 
 - `ProjectionPlot[data, projmat, xRange(=Automatic), yRange(=Automatic), 
@@ -367,7 +243,7 @@ This function uses a different display for the projection that I find very usefu
     - **The second example is too busy for manual exploration I would say (too many axes to move around separately).**
     - **Third example could be similar to the first: blue region requires small values of x2, can be understood from the exploration, then move center point to -0.5 in x2 to explore further. Now interpretation becomes tricky. Sometimes blue and yellow seem just randomly everywhere, sometimes blue more contained in an ellipsoid around the center (indicating some correlation between variables). For example try zeroing out components 2 and 3 to see this slice in x1 vs x4.**
     - **For the last example x4 seems to be the one to work with. I feel like this is again very similar, maybe better to instead explore other examples (maybe something without slicing?)**
-
+-->
 
 ```{r penguins-scatmat, out.width="80%", width=10, height=10, fig.align='center', fig.cap="Scatterplot matrix of the (standardised) penguins data. The three species are reasonably different in size, with Gentoo distinguised from the other two on body depth relative to flipper length and body mass."}
 library(tidyverse)
