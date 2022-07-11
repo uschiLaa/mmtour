@@ -158,9 +158,18 @@ The problem with new simple method (Algorithm 1) is that the precise values for 
 
 ## Manual control for slice center
 
-How does it work?
+To better explore the space we combine the manual controls for the projection with manual controls for slicing. A slice is defined by a projection, a center point that is anchoring it in the high-dimensional space and the slice thickness $h$ [@slicetour]. In the case of a single orthogonal direction on the projection plane we can pick a sequence of center points in steps along that direction to move the slice and fully cover the data space. This no longer works in higher-dimensional spaces, and we can think of picking one direction and shifting the slice along the component orthogonal to the projection plane. In practice we define the center point explicitly and calculate the slice display as explained in @slicetour. The current implementation allows the user to individually enter the components of the vector defining the center point, and updates the display by jumping to the new slice.
 
-Diagram of interface? Scaling
+Potential adjustments for future work include a better visualization of the current center point, potentially with interactive graphics to move the slice similar to how the manual tour was implemented here. An alternative would be a step-wise shift of the slice towards the new center point to get a better understanding of the distribution along the selected direction.
+
+In addition it is also useful to interactively change the slice thickness, in particular when selecting the preferred thickness $h$ (also called the slice radius) for exploring the input data. This was implemented as a slicer, and to allow the user to efficiently explore the interesting range we can provide the slider range as an input. For guidance the estimates of the number of points inside the slice as a function of the original sample size $N$ and the number of dimensions $p$ from @sectionpursuit can be used: in case of a uniform distribution inside a sphere of radius $R$ a slice with thickness $h$ will contain $N_S$ points, with 
+\begin{equation}
+N_S = \frac{N}{2} \left(\frac{h}{R}\right)^{p-2} \left(p - (p-2)\left(\frac{h}{R}\right)^{2}\right).
+\label{eq:count}
+\end{equation}
+
+The current implementation contains a switch to change between the slice view and the projected view of the data, while keeping all other settings fixed.
+
 
 # Experimenting with new techniques using Mathematica {#sec:implementation}
 
