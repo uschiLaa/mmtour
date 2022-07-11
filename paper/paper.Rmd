@@ -409,7 +409,7 @@ We start by first exploring the projections of the model prediction. Figure \ref
 \centerline{\includegraphics[width=0.32\textwidth]{figures/proj1_rf.png}
 \includegraphics[width=0.32\textwidth]{figures/proj1_lda.png}
 \includegraphics[width=0.32\textwidth]{figures/proj1_data.png}}
-\caption{Projection identified using the manual tour, because it reveals an interesting structure in the predictions from the RF model (left). We can clearly see the block structure, while the LDA model (middle) produces linear boundaries instead. The three groups are separated in this projection of the data (right)}.
+\caption{Projection identified using the manual tour, because it reveals an interesting structure in the predictions from the RF model (left). We can clearly see a block structure, while the LDA model (middle) produces linear boundaries. The three groups are nicely separated in this projection of the data (right)}.
 \label{proj1}
 \end{figure*}
 
@@ -430,7 +430,7 @@ Finally we look at the data projection based on $A_2$ and find that the third gr
 \includegraphics[width=0.45\textwidth]{figures/slice1_lda.png}}
 \centerline{\includegraphics[width=0.45\textwidth]{figures/slice2_rf.png}
 \includegraphics[width=0.45\textwidth]{figures/slice2_lda.png}}
-\caption{Comparing slices based on $A_1$ (top row) and $A_2$ (bottom row), for the two models RF (left) and LDA (right). With the starting projection $A_1$ we see one group overlapping (green, Gentoo), while $A_2$ results in clear boundaries inside the slice. The block vs linear structure of the two models is clearly visible in both slices.}
+\caption{Comparing slices based on two projections $A_1$ (top row) and $A_2$ (bottom row), for the two models RF (left) and LDA (right). With $A_1$ we see two groups overlap (green - Gentoo with yellow - Chinstrap), while the rotation to $A_2$ results in clear boundaries inside the slice. The boundary between Adelie (blue) and Chinstrap (yellow) is similar for both models but very different between Chinstrap and Gentoo (green).}
 \label{slice1}
 \end{figure*}
 
