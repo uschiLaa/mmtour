@@ -279,7 +279,7 @@ ggscatmat(penguins_data, columns = 2:5, col="species") +
 
 # Application {#sec:examples}
 
-To illustrate the usefulness of the manual controls we use the 4D penguins data [@penguins]. We will show how classification boundaries can be explored and better understood on projections and slices through 4D space. Figure \ref{fig:penguins-scatmat} shows a scatterplot matrix of this data. There are four variables (`bl = bill_length_mm, bd = bill_depth_mm, fl = flipper_length_mm, bm = body_mass_g`) measuring the size of the penguins from three species (Adelie, Chinstrap and Gentoo). The scatterplot matrix shows that the three species appear to be likely separable, and that at least the Gentoo can be distinguished from the other two species when `bd` is paired with `fl` or `bm`. The steps for exploring boundaries in this example are as follows:
+To illustrate the usefulness of the manual controls we use the 4D penguins data [@penguins] and look at classification models following @sam11271. We will show how classification boundaries can be explored and better understood on projections and slices through 4D space. Figure \ref{fig:penguins-scatmat} shows a scatterplot matrix of this data. There are four variables (`bl = bill_length_mm, bd = bill_depth_mm, fl = flipper_length_mm, bm = body_mass_g`) measuring the size of the penguins from three species (Adelie, Chinstrap and Gentoo). The scatterplot matrix shows that the three species appear to be likely separable, and that at least the Gentoo can be distinguished from the other two species when `bd` is paired with `fl` or `bm`. The steps for exploring boundaries in this example are as follows:
 
 1. Build your classification model. 
 2. Predict the class for a dense grid of values covering the data space.
@@ -290,7 +290,7 @@ To illustrate the usefulness of the manual controls we use the 4D penguins data 
 
 ## Constructing the 4D prediction regions
 
-We use the `classifly` package [@classifly] to generate predictions across the 4D cube spanned by the data, with two classification models: linear discriminant analysis (LDA) and random forest (RF).
+We use the `classifly` package [@classifly] to generate predictions across the 4D cube spanned by the data, with two classification models: linear discriminant analysis (LDA) and random forest (RF). Both the data and the model points in the grid are centered and scaled (standard deviation $= 1$). 
 
 ## Exploring projections manually
 

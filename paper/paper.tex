@@ -289,10 +289,11 @@ Mathematica}\label{sec:implementation}}
 \section{Application}\label{sec:examples}}
 
 To illustrate the usefulness of the manual controls we use the 4D
-penguins data \citep{penguins}. We will show how classification
-boundaries can be explored and better understood on projections and
-slices through 4D space. Figure \ref{fig:penguins-scatmat} shows a
-scatterplot matrix of this data. There are four variables
+penguins data \citep{penguins} and look at classification models
+following \citet{sam11271}. We will show how classification boundaries
+can be explored and better understood on projections and slices through
+4D space. Figure \ref{fig:penguins-scatmat} shows a scatterplot matrix
+of this data. There are four variables
 (\texttt{bl\ =\ bill\_length\_mm,\ bd\ =\ bill\_depth\_mm,\ fl\ =\ flipper\_length\_mm,\ bm\ =\ body\_mass\_g})
 measuring the size of the penguins from three species (Adelie, Chinstrap
 and Gentoo). The scatterplot matrix shows that the three species appear
@@ -327,7 +328,8 @@ regions}\label{constructing-the-4d-prediction-regions}}
 We use the \texttt{classifly} package \citep{classifly} to generate
 predictions across the 4D cube spanned by the data, with two
 classification models: linear discriminant analysis (LDA) and random
-forest (RF).
+forest (RF). Both the data and the model points in the grid are centered
+and scaled (standard deviation \(= 1\)).
 
 \hypertarget{exploring-projections-manually}{%
 \subsection{Exploring projections
