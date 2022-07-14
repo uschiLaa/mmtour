@@ -385,9 +385,11 @@ Changing slice center
 
 Recap contribution
 
+Other applications
+
 Where else might it be useful to use mathematica
 
-
+Maybe extensions for slicing
 
 # Acknowledgements {-}
 
