@@ -266,18 +266,6 @@ The current implementation contains a switch to change between the slice
 view and the projected view of the data, while keeping all other
 settings fixed.
 
-\hypertarget{sec:implementation}{%
-\section{Experimenting with new techniques using
-Mathematica}\label{sec:implementation}}
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Why is this a good sandbox}
-\item
-  \textbf{Explain the functionality available in the notebooks}
-\end{itemize}
-
 \begin{figure}
 
 {\centering \includegraphics[width=0.8\linewidth]{paper_files/figure-latex/penguins-scatmat-1} 
@@ -488,15 +476,30 @@ of the models seen in Fig. \ref{proj1} to better understand how the
 boundaries change along the \texttt{bd} direction and where the
 differences in the projections come from.
 
-\hypertarget{extension-added-in-the-r-package-tourr}{%
-\section{\texorpdfstring{Extension added in the R package
-\texttt{tourr}}{Extension added in the R package tourr}}\label{extension-added-in-the-r-package-tourr}}
+\hypertarget{sec:implementation}{%
+\section{Software}\label{sec:implementation}}
+
+\hypertarget{mathematica-notebook}{%
+\subsection{Mathematica notebook}\label{mathematica-notebook}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Why is this a good sandbox}
+\item
+  \textbf{Explain the functionality available in the notebooks}
+\end{itemize}
+
+\hypertarget{extensions-to-the-r-package-tourr}{%
+\subsection{\texorpdfstring{Extensions to the R package
+\texttt{tourr}}{Extensions to the R package tourr}}\label{extensions-to-the-r-package-tourr}}
 
 Explain \texttt{radial\_tour}
 
-\hypertarget{what-would-be-desirable-for-implementations-in-r}{%
-\section{What would be desirable for implementations in
-R?}\label{what-would-be-desirable-for-implementations-in-r}}
+Changing slice center
+
+\hypertarget{desirable-interactivity}{%
+\subsection{Desirable interactivity}\label{desirable-interactivity}}
 
 \hypertarget{sec:discussion}{%
 \section{Discussion}\label{sec:discussion}}
@@ -507,7 +510,9 @@ R?}\label{what-would-be-desirable-for-implementations-in-r}}
 
 The authors gratefully acknowledge the support of the Australian
 Research Council. The paper was written in \texttt{rmarkdown}
-\citep{rmarkdown} using \texttt{knitr} \citep{knitr}.
+\citep{rmarkdown} using \texttt{knitr} \citep{knitr}. The scatterplot
+matrix of the penguins data was produced by the GGally \citep{GGally}
+package built on ggplot2 \citep{ggplot2} graphics.
 
 \hypertarget{supplementary-material}{%
 \section*{Supplementary material}\label{supplementary-material}}
