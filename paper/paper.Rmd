@@ -164,6 +164,8 @@ To better explore the space we combine the manual controls for the projection wi
 
 In the case of a single orthogonal direction on the projection plane we can pick a sequence of center points in steps along that direction to move the slice and fully cover the data space. This no longer works in higher-dimensional spaces, and we can think of picking one direction and shifting the slice along the component orthogonal to the projection plane. In practice we define the center point explicitly and calculate the slice display as explained in @slicetour. The current implementation allows the user to individually enter the components of the vector defining the center point, and updates the display by jumping to the new slice.
 
+XXX Equation for arbitrary center for slice; and move the "the implementation ..." into the software section once that is constructed; and "potential adjustments for future" into the section on desirable controls
+
 Potential adjustments for future work include a better visualization of the current center point, potentially with interactive graphics to move the slice similar to how the manual tour was implemented here. An alternative would be a step-wise shift of the slice towards the new center point to get a better understanding of the distribution along the selected direction.
 
 ### Changing the thickness
@@ -381,6 +383,10 @@ Changing slice center
 
 # Discussion {#sec:discussion}
 
+Recap contribution
+
+Where else might it be useful to use mathematica
+
 
 
 # Acknowledgements {-}
@@ -390,3 +396,7 @@ The authors gratefully acknowledge the support of the Australian Research Counci
 # Supplementary material {-}
 
 The source material and animated gifs for this paper are available at 
+
+Mathematica notebook
+
+Appendix
