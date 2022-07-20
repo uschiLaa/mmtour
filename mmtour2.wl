@@ -51,18 +51,15 @@ DynamicModule[
  or the user can input a matrix
 -> arrowData stores the column names (if there are none, then the columns are named x1, x2, ...),
  the position of the column names, the position of the heads of the arrows and the unit circle.
- This is used for the control module, and arrowData is updated when there are any changes made to
- the projection matrix "lst"
 -> pntSize controls the point size of the projected data
 -> legend stores the names for the legends
 -> dataSets store a list of matrices that are sorted based on the colour index 
 -> colours stores the colours that will be used for the plot based on the colour index
--> range preserves the plotting range for the projection/slice so that it doesn't change when the
-  projection/slice changes. However, it is assumed the data is centred about the origin*)
+-> range determines the "ideal" range for the plot. However, it is assumed the data is centred about the origin*)
 {tempData = If[StringQ[data[[1, 1]]], data[[2;;-1]], data],
- lst=If[TrueQ[projmat=="random"], RandomMatrix[If[StringQ[data[[1, 1]]], data[[2;;-1]], data], 1],projmat], 
- arrowData, pntSize=0.01, legend=legendNames,
-dataSets={}, colours={}, range=Max[Map[Norm, If[StringQ[data[[1, 1]]], data[[2;;-1, 1;;-2]], data[[All, 1;;-2]]]]]
+lst = If[TrueQ[projmat=="random"], RandomMatrix[If[StringQ[data[[1, 1]]], data[[2;;-1]], data], 1], projmat], 
+arrowData, pntSize=0.01, legend = legendNames, dataSets = {}, colours = {},
+range = Max[Map[Norm, If[StringQ[data[[1, 1]]], data[[2;;-1, 1;;-2]], data[[All, 1;;-2]]]]], showMat = False, zoom = 0
 },
 
 (*This creates the neccesary data for arrowData. It can be seen that the command Arrow and Text are encased
@@ -90,10 +87,16 @@ StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+lst[[i]]/20]]];],{i,1,
 Mathematica assigns a colour to a data set rather than to each point within the data set.
 So, it's more efficient to create data sets in mathematica *)
 dataSets=CreateDataSets[tempData];
-
 (*This creates names for the legends if neccesary*)
-If[TrueQ[legend=={}],Do[With[{n=i},
-AppendTo[legend,Style[StringForm["Index ``",i],FontFamily->"Times New Roman"]]],{i, 1, Length[dataSets]}]
+
+If[TrueQ[legend=={}],
+Do[With[{n=i}, 
+AppendTo[legend, 
+If[StringQ[data[[1, -1]]],
+Style[StringForm[StringJoin[ToString[data[[1, -1]]_], ToString[i]]], FontFamily->"Times New Roman"],
+Style[StringForm["Index ``",i], FontFamily->"Times New Roman"]]
+]],
+{i, 1, Length[dataSets]}]
 ];
 
 (*Creates a matrix where each row is associated with a data set. So, each data set can be
@@ -103,12 +106,12 @@ Do[With[{n = i}, AppendTo[colours, {colorFunc[dataSets[[n, 1, -1]]], PointSize[D
 
 
 (*Grid formats the ouput of dynamic module, this is what the user can interact with*)
-Grid[{{
+Grid[{
 (*Slider allows the user to change the size of the points in the plot by updating
  the contents of pntSize*)
-Slider[Dynamic[pntSize],{0,0.02}]},
-{Text["Point Size:" Dynamic[pntSize 50]]},
-{(*The line below preserves orthonormality of the projection matrix by extracting the the current values of
+ {Text["Point Size:" Dynamic[pntSize 50]]},
+{Slider[Dynamic[pntSize],{0,0.02}]},
+(*The line below preserves orthonormality of the projection matrix by extracting the the current values of
 the columns that were just changed by the user, then applying the gram-schmidt algorithm on the columns and
 then updating the columns of the local variable lst. The values of the recently orthonormalised matrix are then
 used/displayed.
@@ -118,7 +121,12 @@ and Dynamic allows for lst to be updated and for a rule to be applied (Dynamic[l
 This rule uses the user input and transforms it appropriately, this is done by using a hashtag, brackets and 
 an ampersand as seen below.
 *)
-LocatorPane[Dynamic[lst,({lst[[All, 1]], lst[[All,2]]}=Orthogonalize[{#[[All, 1]], #[[All, 2]]}])&],
+{"Zoom Scale:"Dynamic[zoom]},
+{Slider[Dynamic[zoom], {0,0.999}]}, 
+{"Show Proj. Matrix:" Dynamic[showMat]},
+{Checkbox[Dynamic[showMat]]},
+
+{LocatorPane[Dynamic[lst,({lst[[All, 1]], lst[[All,2]]}=Orthogonalize[{#[[All, 1]], #[[All, 2]]}])&],
 (*This part of the code creates the main control module of the dynamic. The command Graphics displays 
 graphics primitives that are stored within arrowData. Graphics doesn't need to be encased within Dynamic
 as it is wthin LocatorPane, this command will update the display of the main control module appropriately*)
@@ -138,19 +146,19 @@ dataSets],
 (*Below are commands which change how the data is displayed/looks*)
 PlotStyle->colours,
 AxesOrigin->{0,0},
-PlotRange->{{-range,range},{-range,range}},
+PlotRange->{{-range (1 - zoom),range (1 - zoom)},{-range (1 - zoom) ,range (1 - zoom)}},
 AspectRatio->1,
 (*Creates the legend for the data*)
 PlotLegends->Placed[PointLegend[legend,LegendMarkerSize->15,LegendMarkers->{{"\[FilledCircle]",15}}],Above],
 LabelStyle->FontFamily->"Times New Roman",
 (*Ensures that performance is optmised when displaying the projection/slice.
-Graphical glitches do happen if you are working with continuous surfaces*)
+Graphical "glitches" do happen if you are working with continuous lines/surfaces*)
 PerformanceGoal->"Speed",
 AxesLabel->{"\!\(\*SubscriptBox[\(P\), \(1\)]\)", "\!\(\*SubscriptBox[\(P\), \(2\)]\)"},
 ImageSize->650
 ]]},
 (*Displays the current projection matrix associated with the data*)
-{"Proj. Matrix:" Dynamic[Text[lst//MatrixForm]]}
+{Dynamic[If[showMat, "Proj. Matrix:" Dynamic[Text[lst//MatrixForm]], "Proj. Matrix: Off"]]}
 },Background->Lighter[Gray,0.975],Frame->True]]
 
 
@@ -167,23 +175,39 @@ colorFunc: A list of colours that are in ascending order or the inbuilt ColorDat
 
 
 (* ::Input::Initialization:: *)
-(*Need to add legend names*)
-Projected2DSliderPlot[data_,projmat_, colorFunc_:ColorData[97]]:=
+Clear[Projected2DSliderPlot]
+Projected2DSliderPlot[data_,projmat_,legendNames_:{}, colorFunc_:ColorData[97]]:=
 (*This function is similar to ProjectionPlot except the main cotrol Module is different. Each row of the projection matrix has its own unit circle. This sort of implementation may be easier in another language*)
 DynamicModule[
-{tempData =If[StringQ[data[[1, 1]]], data[[2;;-1]], data], lst=If[TrueQ[projmat=="random"],RandomMatrix[If[StringQ[data[[1, 1]]], data[[2;;-1]], data], 1],projmat], locatorLst={}, txtLst={},dataSets={}, colours={},pntSize=0.005,legend={},range=Max[Map[Norm,If[StringQ[data[[1, 1]]], data[[2;;-1, 2;;-1]], data[[All, 2;;-1]]]]]},
+{
+tempData =If[StringQ[data[[1, 1]]], data[[2;;-1]], data], lst=If[TrueQ[projmat=="random"],RandomMatrix[If[StringQ[data[[1, 1]]], data[[2;;-1]], data], 1],projmat], locatorLst={}, txtLst={},dataSets={}, colours={},pntSize=0.005,legend=legendNames,range=Max[Map[Norm,If[StringQ[data[[1, 1]]], data[[2;;-1, 1;;-2]], data[[All, 1;;-2]]]]],
+zoom=0,showMat = False
+},
 
 
-If[StringQ[data[[1, 1]]], txtLst=data[[1, 1;;-2]], Do[With[{n = i}, AppendTo[txtLst,Style[ StringForm["x ``", n], FontFamily->"Times New Roman"]]
-],{i, 1, Length[data[[1]]]-1}]];
+If[
+StringQ[data[[1, 1]]],
+txtLst=data[[1, 1;;-2]], 
+Do[With[{n = i}, AppendTo[txtLst,Style[ StringForm["x ``", n], FontFamily->"Times New Roman"]]],{i, 1, Length[data[[1]]]-1}]
+];
 
 (*This portion creates the locator panes for the Dyanmic. It can be seen that a local variable "n" is being 
 used as each instance of each row needs to be used. If a local variable isn't used then lst[[i]] will be
 used. Each row of the projection matrix has there own locator pane, and the projection matrix is being orthonormalised by " Orthogonalize[{ReplacePart[lst, n->#][[All, 1]],ReplacePart[lst, n->#][[All, 2]]}]".
 This command allows for row "n" to be replaced by the user input, and then the matrix is orthonormalised.
 lst is then updated.*)
-Do[With[{n = i},AppendTo[locatorLst,LocatorPane[Dynamic[lst[[n]],({lst[[All, 1]], lst[[All, 2]]}
-=Orthogonalize[{ReplacePart[lst, n->#][[All, 1]],ReplacePart[lst, n->#][[All, 2]] }])& ],Graphics[{Circle[{0,0},1],Dynamic[Arrow[{{0,0},lst[[n]]}]]},ImageSize->120,Axes->True],Appearance->None]]],{i, 1, Length[data[[1]]] - 1}];
+
+
+Do[
+With[{n = i},AppendTo[locatorLst,LocatorPane[Dynamic[lst[[n]],
+({lst[[All, 1]], lst[[All, 2]]}=
+Orthogonalize[{ReplacePart[lst, n->#][[All, 1]],ReplacePart[lst, n->#][[All, 2]] }])& ],
+Graphics[{Circle[{0,0},1],Dynamic[Arrow[{{0,0},lst[[n]]}]]},ImageSize->120,Axes->True],
+Appearance->None]]
+],
+{i, 1, Length[data[[1]]] - 1}
+];
+
 locatorLst=AppendTo[locatorLst,SpanFromAbove];
 
 
@@ -193,13 +217,19 @@ dataSets=CreateDataSets[tempData];
 Do[colours = Append[colours, {colorFunc[dataSets[[i, 1, -1]]], PointSize[Dynamic[pntSize]]}];,
 {i, 1, Length[dataSets]}];
 
-Do[With[{n=i},legend=AppendTo[legend,Style[StringForm["Index ``",i],FontFamily->"Times New Roman"]]],{i, 1, Length[dataSets]}];
+If[TrueQ[legend=={}],Do[With[{n=i},
+AppendTo[legend,
+If[StringQ[data[[1, -1]]],
+Style[StringForm[StringJoin[ToString[data[[1, -1]]_], ToString[i]]], FontFamily->"Times New Roman"],
+Style[StringForm["Index ``",i], FontFamily->"Times New Roman"]]
+]],{i, 1, Length[dataSets]}]
+];
 
 Grid[{
 txtLst,
 locatorLst,
-{Text["Size of Points"],SpanFromLeft},
-{Slider[Dynamic[pntSize], {0,0.01}], SpanFromLeft},
+{Text["Size of Points" Dynamic[pntSize 100]],SpanFromLeft,Text["Zoom Scale:"Dynamic[zoom]],SpanFromLeft, Grid[{{"Show Proj. Matrix:" Dynamic[showMat]}},ItemSize->{15, Automatic}]},
+{Slider[Dynamic[pntSize], {0,0.01}], SpanFromLeft,Slider[Dynamic[zoom],{0,0.999}], SpanFromLeft, Checkbox[Dynamic[showMat]]},
 {Dynamic[ListPlot[Map[Function[x,
 If[
 MissingQ[x],
@@ -208,13 +238,13 @@ MissingQ[x],
 x[[All, 1;;-2]]] . lst], 
 dataSets],
 PlotStyle->colours,
-PlotRange->{{-range, range}, {-range,range}},
+PlotRange->{{-range(1-zoom), range(1-zoom)}, {-range(1-zoom),range(1-zoom)}},
 AspectRatio->1,
-PlotLegends->Placed[PointLegend[legend,LegendMarkerSize->15,LegendMarkers->{{"\[FilledCircle]",15}}],Left],
+PlotLegends->Placed[PointLegend[legend,LegendMarkerSize->15,LegendMarkers->{{"\[FilledCircle]",15}}],Above],
 AxesLabel->{"\!\(\*SubscriptBox[\(P\), \(1\)]\)", "\!\(\*SubscriptBox[\(P\), \(2\)]\)"},
 LabelStyle->FontFamily->"Times New Roman",
 ImageSize->680]], SpanFromLeft},
-{"Proj. Matrix:" Dynamic[Text[lst//MatrixForm]]}},Background->Lighter[Gray,0.975],Frame->True]
+{Dynamic[If[showMat, "Proj. Matrix:" Dynamic[Text[lst//MatrixForm]], "Proj. Matrix: Off"]], SpanFromLeft}},Background->Lighter[Gray,0.975],Frame->True]
 ]
 
 
@@ -237,34 +267,37 @@ VisualiseSliceDynamic[data_,projmat_,height_,heightRange_,minDist_:0]:=
 and what points are outside the slice in another colour.*)
 (*Dynamic Module is similar to Dynamic Module in projectionPlot*)
 DynamicModule[{
-lst=If[TrueQ[projmat=="random"],RandomMatrix[data, 0],projmat],centre =ConstantArray[0, Length[data[[1]]]] ,h=height,arrowData, pntSize1=0.005, pntSize2=0.004,range=Max[Map[Norm,If[StringQ[data[[1, 1]]], data[[2;;-1, 2;;-1]], data[[All, 2;;-1]]]]]},
+lst=If[TrueQ[projmat=="random"],RandomMatrix[data, 0],projmat],centre =ConstantArray[0, Length[data[[1]]]] ,h=height,arrowData, pntSize1=0.005, pntSize2=0.004,range=Max[Map[Norm,If[StringQ[data[[1, 1]]], data[[2;;-1, 2;;-1]], data[[All, 2;;-1]]]]],
+showMat=False, zoom = 0},
 arrowData=Reap[Sow[Circle[{0,0},1]];Do[With[{i=i},
 Sow[Dynamic[Arrow[{{0,0},lst[[i]]}]]];
 Sow[Dynamic[Text[StringForm["\!\(\*
 StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+lst[[i]]/20]]];],{i,1,Length[data[[1]]]}]][[2, 1]];
 
 (*Grid formats the ouput of dynamic module*)
-Grid[{{"Centre Point"},
-(*Allows the user to input a centre point of a slice, and then updates the slice and centre point by
-pressing enter*)
-{InputField[Dynamic[centre],FieldSize->15]},
-{"Slice Height"},
-(*Allows the user to change the height of the slice with a slider*)
-{Slider[Dynamic[h],heightRange]},
-{Dynamic[h]},(*The line above preserves orthonormality*)
-{"Size of Points in Slice"},
-(*Allows the sure to change the point size of the points that are in the slice/outside the slice*)
-{Slider[Dynamic[pntSize1],{0, 0.01}]},
-{"Size of Points Outside of Slice"},
-{Slider[Dynamic[pntSize2],{0, 0.01}]},
+Grid[{{Column[{"Centre Point", 
+InputField[Dynamic[centre],FieldSize->14.5],
+"Slice Height:"Dynamic[h],
+Slider[Dynamic[h],heightRange],
+"Zoom Scale:"Dynamic[zoom],
+Slider[Dynamic[zoom],{-0.2, 0.999}],
+"Size of Points in Slice",
+Slider[Dynamic[pntSize1],{0, 0.01}],
+"Size of Points Outside of Slice",
+Slider[Dynamic[pntSize2],{0, 0.01}],
+LocatorPane[Dynamic[lst,({lst[[All, 1]], lst[[All,2]]}=Orthogonalize[{#[[All, 1]], #[[All, 2]]}])&],
+Graphics[arrowData,Frame->True,ImageSize->165, PlotRange->{{-1, 1},{-1, 1}}],Appearance->None],
+Grid[{{}},ItemSize->{15, 2}],
+"Proj. Matrix:"Dynamic[showMat],
+Checkbox[Dynamic[showMat]],
+Dynamic[If[showMat,Grid[{{InputField[Dynamic[InputForm[SetPrecision[lst,5]]]]}}, ItemSize->{15, 12.5},Alignment->Top],
+Grid[{{}}, ItemSize->{15, 12.5}]]]}, Center, 0.7],
 (*The usage of LocatorPane is the same in ProjectionPlot*)
-{LocatorPane[Dynamic[lst,({lst[[All, 1]], lst[[All,2]]}=Orthogonalize[{#[[All, 1]], #[[All, 2]]}])&],
-Graphics[arrowData,Frame->True,ImageSize->165],Appearance->None],
 
 (*(If this part of the code isn't using module, then a recursion error occurs for some reason.
 I need to determine why)*)
 (*This creates the slice to be plotted. Module creates local variables *)
-Dynamic[Module[{tempData=data, v1={},v2},
+Grid[{{}}],Dynamic[Module[{tempData=data, v1={},v2},
 
 (*The line below determines which points exist within the slice and
 appends them to a lst called v1. The slice is being determined by
@@ -281,7 +314,7 @@ v2=tempData;
 ListPlot[{If[Length[v1]==0,{Missing[]},v1 . lst],If[Length[v2]==0,{Missing[]},v2 . lst]},
 AspectRatio->1,
 PlotStyle->{{Black,Opacity->1,PointSize[pntSize1]},{Lighter[Blue],Opacity->0.5,PointSize[pntSize2]}},
-PlotRange->{{-range, range},{-range,range}},
+PlotRange->{{-range(1-zoom), range(1-zoom)},{-range(1-zoom),range(1-zoom)}},
 AxesLabel->{"\!\(\*
 StyleBox[\"P1\",\nFontSlant->\"Italic\"]\)", "\!\(\*
 StyleBox[\"P2\",\nFontSlant->\"Italic\"]\)"},
@@ -290,17 +323,27 @@ AspectRatio->1,
 ImageSize->500,
 PlotLegends->Placed[{"In Slice","Not in Slice"},Above]]
 ]
-],SpanFromAbove},
-{"Proj. Matrix:" Dynamic[Text[lst//MatrixForm]]}},Frame->True]]
+],SpanFromAbove}},Frame->True]]
+
+
+VisualiseSliceDynamic::usage=
+"A function where you can plot a slice and manually change the specifications of the slice such as the projection matrix, slice height and the slice positions.
+SliceDynamic[data, projmat, height, heightRange, legendNames, colorFunc]
+data: A data matrix
+projmat: The inital projection matrix
+height: The initial height of the slice
+heightRange: The range of heights
+legendNames: A list of names for each group in ascending order.
+colorFunc: A list of colours that are in ascending order or the inbuilt ColorData Function, ColorData[n] 
+";
 
 
 (* ::Input::Initialization:: *)
 CreateDataSets[data_]:=
 (*This function creates Data sets based on the last column of data*)
 Module[{sortedData ={},lst={}, dataSets={}, val},
-(*Sorting based on the last collumn of data (Mathematica attempts to use the most efficent sorting algorithm)*)
-sortedData = Sort[data, #1[[-1]]<#2[[-1]]&];
-val=sortedData[[1,-1]];
+(*Sorting based on the last collumn of data
+(Mathematica attempts to use the most efficent sorting algorithm)*)sortedData = Sort[data, #1[[-1]]<#2[[-1]]&];val=sortedData[[1,-1]];
 val;
 (*creating the data sets*)
 For[i = 1,i<=Length[data],i++,
@@ -320,68 +363,98 @@ RandomMatrix[data_,col_] :=
 (*This function creates a random matrix based on the dimension of data.
 If the last column of data represents groups, then a 1 is used for col. Otherwise, 0 is used.*)
     Module[{len = Length[data[[1]]] - col, mat = {}},
-        Do[mat = AppendTo[mat, {RandomReal[{-1, 1}],RandomReal[{-1, 1}]}], len];
-        mat = Transpose[Orthogonalize[Transpose[mat]]];
-        Return[mat]
+        Do[AppendTo[mat, {RandomReal[{-1, 1}],RandomReal[{-1, 1}]}], len];
+        Orthonormalise[mat]
     ]
-    (*Probably can compile this function*)
+
+
+Orthonormalise=Compile[{{data,_Real, 2}},
+  Return[Transpose[Orthogonalize[Transpose[data]]]],
+  CompilationTarget->"C"];
+
+
+RangeHelper=Compile[{{data, _Real, 2}}, 
+(*Finds appropriate range if there are no column labels*)
+Max[Map[Norm, data[[All, 1;;-2]]]],
+CompilationTarget->"C"];
 
 
 (* ::Input::Initialization:: *)
 Clear[SliceDynamic]
-SliceDynamic[data_,projmat_,height_,heightRange_, legendNames_:{}, colorFunc_:ColorData[97]]:=
+SliceDynamic[data_,projMat_,height_,heightRange_, legendQ_:1,flagQ_:1, colorFunc_:ColorData[97]]:=
 DynamicModule[{
-tempData =If[StringQ[data[[1, 1]]], data[[2;;-1]], data], lst=If[TrueQ[projmat=="random"],RandomMatrix[If[StringQ[data[[1, 1]]], data[[2;;-1]], data], 1],projmat],
-centre =ConstantArray[0,Length[data[[1]]]- 1] ,h=height,dataSets,arrowData,pntSize=0.006, range=Max[Map[Norm, If[StringQ[data[[1, 1]]], data[[2;;-1, 1;;-2]], data[[All, 1;;-2]]]]], legend=legendNames, colours={}, boolVal = False
+tempData =If[StringQ[data[[1, 1]]],
+ data[[2;;-1]],
+ data],
+lst=If[TrueQ[projMat=="random"],
+RandomMatrix[data, legendQ + flagQ],
+projMat],
+centre =ConstantArray[0,Length[data[[1]]]-( legendQ + flagQ)] ,
+range=If[StringQ[data[[1, 1]]],
+ RangeHelper[data[[2;;-1,1;;-(1+ legendQ + flagQ)]]], 
+ RangeHelper[data[[All, 1;;-(1+ legendQ + flagQ)]]]], 
+legend={}, colours={},zoom=0,h=height,dataSets,arrowData={Circle[{0,0},1]},
+pntSize=0.0115,boolVal = False,showMat=False
 },
 
 If[StringQ[data[[1, 1]]], 
-arrowData=Reap[Sow[Circle[{0,0},1]];
 Do[With[{i=i},
-Sow[Dynamic[Arrow[{{0,0},lst[[i]]}]]];
-Sow[Dynamic[Text[StringForm[data[[1, i]]], lst[[i]]+lst[[i]]/20]]];],{i,1,Length[tempData[[1]]]-1}]][[2, 1]],
+AppendTo[arrowData,Dynamic[Arrow[{{0,0},lst[[i]]}]]];AppendTo[arrowData, Dynamic[Text[StringForm[data[[1, i]]], lst[[i]]+lst[[i]]/20]]];
+],
+{i,1,Length[data[[1]]]-(legendQ + flagQ)}],
 
-arrowData=Reap[Sow[Circle[{0,0},1]];
 Do[With[{i=i},
-Sow[Dynamic[Arrow[{{0,0},lst[[i]]}]]];
-Sow[Dynamic[Text[StringForm["\!\(\*StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i],
-lst[[i]]+lst[[i]]/20]]];],
-{i,1,Length[tempData[[1]]]-1}]][[2, 1]]
-
+AppendTo[arrowData,Dynamic[Arrow[{{0,0},lst[[i]]}]]];AppendTo[arrowData, Dynamic[Text[StringForm["\!\(\*StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], lst[[i]]+lst[[i]]/20]]];
+],
+{i,1,Length[data[[1]]]-(legendQ + flagQ)}]
 ];
 
-dataSets=CreateDataSets[tempData];
-
-If[TrueQ[legend=={}],Do[With[{n=i},
-AppendTo[legend,Style[StringForm["Index ``",i],FontFamily->"Times New Roman"]]],{i, 1, Length[dataSets]}]
+If[TrueQ[flagQ==1],
+dataSets=CreateDataSets[tempData],
+dataSets = {tempData}
 ];
 
-Do[With[{n=i}, AppendTo[colours, 
+If[TrueQ[legendQ==1],
+Do[With[{n=i},
+AppendTo[legend,
+Style[StringForm[dataSets[[i, 1, -(legendQ + flagQ)]]], FontFamily->"Times New Roman"]]],{i, 1, Length[dataSets]}],
+Do[With[{n = i},
+AppendTo[legend,
+Style[StringForm["Index ``",i], FontFamily->"Times New Roman"]]],
+{i, 1, Length[dataSets]}
+]
+];
+
+Do[With[{n=i},
+ AppendTo[colours, 
 {If[ListQ[colorFunc],
-colorFunc[[dataSets[[i, 1, -1]]]], 
-colorFunc[dataSets[[i, 1, -1]]]],
+colorFunc[[If[TrueQ[flagQ==1],dataSets[[i, 1, -1]],1]]], 
+colorFunc[If[TrueQ[flagQ==1],dataSets[[i, 1, -1]],1]]],
 PointSize[Dynamic[pntSize]]}]],
 {i, 1, Length[dataSets]}];
 
-
-
-Grid[{{"Centre Point"},
-{InputField[Dynamic[centre],FieldSize->15]},
-
-{"Slice Height:"Dynamic[h]},
-{Slider[Dynamic[h],heightRange]},
-{"Point Size:" Dynamic[100 pntSize]},
-{Slider[Dynamic[pntSize],{0,0.02}]},
-{"Projection:" Dynamic[boolVal]},
+Grid[{
+{Column[{"Centre Point",
+InputField[Dynamic[centre],FieldSize->15],
+"Slice Height:"Dynamic[h], 
+ Slider[Dynamic[h],heightRange],
+"Zoom Scale:"Dynamic[zoom],
+Slider[Dynamic[zoom],{-0.2,0.999}],
+"Point Size:" Dynamic[50 pntSize],
+Slider[Dynamic[pntSize],{0,0.02}],
+"Projection:" Dynamic[boolVal],
+Checkbox[Dynamic[boolVal]], LocatorPane[Dynamic[lst,({lst[[All, 1]], lst[[All,2]]}=Orthogonalize[{#[[All, 1]], #[[All, 2]]}])&],Graphics[arrowData,Frame->True,ImageSize->165, PlotRange->{{-1, 1},{-1, 1}}],
+{{-1, -1},{1, 1},{0.001, 0.001}},Appearance->None],
+Grid[{{}},ItemSize->{15, 1}],
+"Proj. Matrix:"Dynamic[showMat],
+Checkbox[Dynamic[showMat]],
+Dynamic[If[showMat,Grid[{{InputField[Dynamic[lst], FieldSize->15]}},ItemSize->{15, 13.5},Alignment->Top],
+Grid[{{}}, ItemSize->{15, 13.5}]]]}, Center, 0.85],
 (*This determines whether a projection or a slice will be displayed in the output*)
-{Checkbox[Dynamic[boolVal]]},
-{LocatorPane[Dynamic[lst,({lst[[All, 1]], lst[[All,2]]}=Orthogonalize[{#[[All, 1]], #[[All, 2]]}])&],
-Graphics[arrowData,Frame->True,ImageSize->165],Appearance->None],
 
 Dynamic[Module[{sliceSet ={}, slice={}},
-
-Do[Do[If[genDist[xPrime[dataSets[[i,j, 1;;- 2]], lst], cPrime[centre, lst]]<h,
-slice = Append[slice, dataSets[[i,j,1;;-2]]];
+Do[Do[If[genDist[xPrime[dataSets[[i,j, 1;;- (1 +  legendQ + flagQ)]], lst], cPrime[centre, lst]]<h,
+AppendTo[slice, dataSets[[i,j,1;;-(1 + legendQ + flagQ)]]];
 ],{j, 1, Length[dataSets[[i]]]}];
 
 (*I'm ensuring that I won't have a list of empty lists. Multiply a single empty list, {}, with projmat is fine.*)
@@ -393,47 +466,49 @@ AppendTo[sliceSet, Missing[]]
 slice ={},
 {i, 1, Length[dataSets]}];
 
-
-ListPlot[
-(*The if statement which determines whether a slice or a projection will be displayed*)
-If[boolVal,Map[Function[x,
-If[
 (*The commmand Missing[] allows for empty sets to be plotted, 
 but still have a legend that represents that currently empty set.
-This especially important to slicing*)
-MissingQ[x],
+This may be important for slicing*)
+ListPlot[
+(*The if statement which determines whether a slice or a projection will be displayed*)
+If[boolVal,
+Map[Function[x,
+If[MissingQ[x],
 {Missing[]}, 
-x[[All, 1;;-2]]] . lst], 
+x[[All, 1;;-(1 +  legendQ + flagQ)]]] . lst], 
 dataSets],
- Map[Function[x,
+Map[Function[x,
 If[
 MissingQ[x], 
 {Missing[]}, 
-x . lst]], sliceSet]
+x . lst]], 
+sliceSet]
 ],
 AxesLabel->{"\!\(\*
 StyleBox[\"P1\",\nFontSlant->\"Italic\"]\)", "\!\(\*
 StyleBox[\"P2\",\nFontSlant->\"Italic\"]\)"},
 PlotStyle->colours,
 LabelStyle->FontFamily->"Times New Roman",
-PlotLegends->Placed[PointLegend[legend,LegendMarkerSize->15,LegendMarkers->{{"\[FilledCircle]",15}}],Above],
- AspectRatio->1,PlotRange->{{-range, range},{-range, range}},
-ImageSize->500
+PlotLegends->Placed[PointLegend[legend,LegendMarkerSize->15,LegendMarkers->{{"\[FilledCircle]",15}}],Above],AspectRatio->1,
+PlotRange->{{-range(1-zoom), range(1-zoom)},{-range(1-zoom), range(1-zoom)}},
+ImageSize->610]]
+]}},
+Frame->True]
 ]
-]]
-,SpanFromAbove},
-{"Proj. Matrix:" Dynamic[Text[lst//MatrixForm]]}},Frame->True]]
 
 
 (* ::Input::Initialization:: *)
-VisualiseSliceDynamic::usage=
-"A function where you can plot a slice and manually change the specifications of the slice such as the projection matrix, slice height and the slice positions.
-SliceDynamic[data, projmat, height, heightRange, legendNames, colorFunc]
-data: A data matrix
-projmat: The inital projection matrix
-height: The initial height of the slice
-heightRange: The range of heights
-legendNames: A list of names for each group in ascending order.
+SliceDynamic::Usage="A function where you can plot a slice or projection and manually change the specifications of
+the slice, such as the projection matrix, slice height and the slice positions.
+SliceDynamic[data, projMat, height, heightRange, legendQ(=1),flagQ(=1), colorFunc(=ColorData[97])]
+data: A data matrix of the form where the second last column has legend names and the last column has the group
+index.
+projMat: The inital projection matrix. The keyword 'random' can be used to generated a random matrix.
+height: The initial height of the slice.
+heightRange: The range of heights.
+legendQ: 1 indicates that the second last column contains legend names, 0 indicates that there are no legend names.
+flagQ: 1 indicates that the last column contains the group indices,
+	0 indicates that there are no group indices.
 colorFunc: A list of colours that are in ascending order or the inbuilt ColorData Function, ColorData[n] 
 ";
 
