@@ -393,7 +393,7 @@ Maybe extensions for slicing
 
 # Acknowledgements {-}
 
-The authors gratefully acknowledge the support of the Australian Research Council. The paper was written in `rmarkdown` [@rmarkdown] using `knitr` [@knitr]. The scatterplot matrix of the penguins data was produced by the GGally [@GGally] package built on ggplot2 [@ggplot2] graphics.
+The authors gratefully acknowledge the support of the Australian Research Council and the ResearchFirst undergraduate research program at Monash University. The paper was written in `rmarkdown` [@rmarkdown] using `knitr` [@knitr]. The scatterplot matrix of the penguins data was produced by the GGally [@GGally] package built on ggplot2 [@ggplot2] graphics. We thank the Institute of Statistics, BOKU, for their hospitality while part of this work was conducted.
 
 # Supplementary material {-}
 
