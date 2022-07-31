@@ -27,8 +27,8 @@ affiliation:
       Department of Econometrics and Business Statistics, Monash University
 bibliography: biblio.bib
 geometry: margin=2.5cm
-abstract: |
-  Something here
+abstract: | 
+  We implement a new version of a manual tour that takes advantage of existing features in Mathematica to construct functions that interact with the position of the cursor. We demonstrate the usefulness of this new tool with an example exploring region boundaries in classification problems.
 keywords: |
   data visualisation; grand tour; statistical computing; statistical graphics; multivariate data; dynamic graphics
 header-includes: |
@@ -294,6 +294,12 @@ Finally it is interesting to compare the slice views to the projection of the mo
 
 - **Why is this a good sandbox**
 - **Explain the functionality available in the notebooks**
+
+Mathematica provides much utility and versatility, such as inbuilt data visualisation, data manipulation and analysis, dynamic functionality, and symbolic and numeric computation. Most of this inbuilt functionality is quite user-friendly and can be found in the Mathematica documentation; typically, numerous examples are provided within the documentation, and some possible issues are outlined there. Also, it is relatively simple  to create dynamic objects via the inbuilt commands Manipulate or DynamicModule. Control objects, such as sliders, locator panes, and input fields, can then be used on dynamic variables, and when there is a change in the dynamic variable the dynamic objects which contain that dynamic variable will be updated. This is the essential ingredient for this implementation of the manual tour. However, it can be hard to alter the behaviour of the control objects such as setting the 1D slider on a different metric(?)  (Slider increments add 10 points into the slice rather than increasing the slice height by 0.1 for example) Also, Mathematica can be difficult to debug depending on the size of the project as there are no line numbers and there isn’t a way to backtrack evaluations to see how the state of local variables changes throughout the evaluation. (PyCharm has this functionality) \textcolor{red}{needs rewording here}
+
+
+The examples presented in the penguins’ notebooks all utilise our primary new function, SliceDynamic. This function typically accepts data in the form of a matrix where the second last column details the name of the group and the last column details the group index, although this can be changed. Additionally, the initial slice height and the slice range need to be specified as function arguments. The user is then presented with an interactive(?) in which the control objects appear on the left and the slice appears on the right. The user can change the slice via the locator pane, which changes the projection matrix;  a slider, which changes the slice height; and the input field, which changes the slice center. The user can also change the appearance of the plot by zooming into the center or changing the point size with sliders provided. Also, the current projection can be displayed instead of the slice and the current projection matrix can be displayed via checkboxes. The Slice Tour* notebooks display some other functions such as ProjectionPlot, Projected2DSliderPlot, and VisualiseSliceDyanmic. ProjectionPlot is very similar to SliceDynamic, except it only displays projections and VisualiseSliceDynamic allows you to discern which points exist in the slice and which don’t. However, ProjectedLocatorPlot** displays the interactive slightly different. Several locator panes are displayed above the plot and each one corresponds to a row in the projection matrix but behaves the same as ProjectionPlot. (this may be easier to implement in another language (?) )
+
 
 <!-- 
 The following functions are implemented in the Mathematica package `mmtour.wl`:
