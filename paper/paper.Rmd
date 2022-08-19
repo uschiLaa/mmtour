@@ -3,26 +3,26 @@ title: |
   New and simplified manual controls for projection and slice tours, with application to exploring classification boundaries in high dimensions
 type: Short Technical Note
 author:
-  - name: Alex Aumann
-    affil: a
-    email: aaum0002@student.monash.edu
-  - name: German Valencia
-    affil: a
-    email: german.valencia@monash.edu
   - name: Ursula Laa
-    affil: b
+    affil: a
     email: ursula.laa@boku.ac.at
+  - name: Alex Aumann
+    affil: b
+    email: aaum0002@student.monash.edu
   - name: Dianne Cook
     affil: c
     email: dicook@monash.edu
+  - name: German Valencia
+    affil: b
+    email: german.valencia@monash.edu
 affiliation:
   - num: a
     address: |
-      School of Physics and Astronomy, Monash University
-  - num: b
-    address: |
       Institute of Statistics, University of Natural Resources and Life Sciences, Vienna
   - num: b
+    address: |
+      School of Physics and Astronomy, Monash University
+  - num: c
     address: |
       Department of Econometrics and Business Statistics, Monash University
 bibliography: biblio.bib
@@ -67,6 +67,8 @@ One such direction of work develops the ideas from PRIM-9, to provide manual con
 
 <!-- Purpose -->
 Manual controls are especially useful for assessing sensitivity of structure to particular elements of the projection. There are many places where it is useful. In exploratory data analysis, where one sees clusters in a projection, can some variables be removed from the projection without affecting the clustering. For interpreting models, one can reduce or increase a variable's contribution to examine the variable importance. Having the user interact with a projection is extremely valuable for understanding high-dimensional data. However, these algorithms have two problems: (1) the pre-processing of creating a manipulation space overly complicates the algorithm, (2) extending to higher dimensional control is difficult. 
+
+{\textcolor{blue}Another very useful feature is that the user can keep the projection fixed while slicing across the orthogonal space and changing the centre point used for slicing. This can serve to illustrate how the orthogonal space affects correlations in a slice and how they may change or disappear in a projection.}
 
 This paper explains a simpler approach, which is more direct, and extensible for generating user interaction, and is organized as follows. The next section describes the new algorithm for manual control, for both projections and slices. The use of these methods are illustrated to compare and contrast boundaries constructed by different classifiers. The software section describes a mathematica notebook that is used for the application, and describes the interactive environment that would be desirable within R as new technology becomes available. The paper is accompanied by an appendix with more details and adjustments to the manual controls, and two mathematica notebooks, one focused on the application, and the other that could be used generically for new data.
 
@@ -295,10 +297,10 @@ Finally it is interesting to compare the slice views to the projection of the mo
 - **Why is this a good sandbox**
 - **Explain the functionality available in the notebooks**
 
-Mathematica provides much utility and versatility, such as inbuilt data visualisation, data manipulation and analysis, dynamic functionality, and symbolic and numeric computation. Most of this inbuilt functionality is quite user-friendly and can be found in the Mathematica documentation; typically, numerous examples are provided within the documentation, and some possible issues are outlined there. Also, it is relatively simple  to create dynamic objects via the inbuilt commands Manipulate or DynamicModule. Control objects, such as sliders, locator panes, and input fields, can then be used on dynamic variables, and when there is a change in the dynamic variable the dynamic objects which contain that dynamic variable will be updated. This is the essential ingredient for this implementation of the manual tour. However, it can be hard to alter the behaviour of the control objects such as setting the 1D slider on a different metric(?)  (Slider increments add 10 points into the slice rather than increasing the slice height by 0.1 for example) Also, Mathematica can be difficult to debug depending on the size of the project as there are no line numbers and there isn’t a way to backtrack evaluations to see how the state of local variables changes throughout the evaluation. (PyCharm has this functionality) \textcolor{red}{needs rewording here}
+Mathematica provides much utility and versatility, such as inbuilt data visualisation, data manipulation and analysis, dynamic functionality, and symbolic and numeric computation. Most of this inbuilt functionality is quite user-friendly and can be found in the Mathematica documentation; typically, numerous examples are provided within the documentation, and some possible issues are outlined there. Also, it is relatively simple  to create dynamic objects via the inbuilt commands Manipulate or DynamicModule. Control objects, such as sliders, locator panes, and input fields, can then be used on dynamic variables, and when there is a change in the dynamic variable the dynamic objects which contain that dynamic variable will be updated. This is the essential ingredient for this implementation of the manual tour. However, it can be hard to alter the behaviour of the control objects such as setting the 1D slider on a different scale  (Slider increments add 10 points into the slice rather than increasing the slice height by 0.1 for example).
+{\textcolor{red}Alex, is this still true with the controls you are using now?}
 
-
-The examples presented in the penguins’ notebooks all utilise our primary new function, SliceDynamic. This function typically accepts data in the form of a matrix where the second last column details the name of the group and the last column details the group index, although this can be changed. Additionally, the initial slice height and the slice range need to be specified as function arguments. The user is then presented with an interactive(?) in which the control objects appear on the left and the slice appears on the right. The user can change the slice via the locator pane, which changes the projection matrix;  a slider, which changes the slice height; and the input field, which changes the slice center. The user can also change the appearance of the plot by zooming into the center or changing the point size with sliders provided. Also, the current projection can be displayed instead of the slice and the current projection matrix can be displayed via checkboxes. The Slice Tour* notebooks display some other functions such as ProjectionPlot, Projected2DSliderPlot, and VisualiseSliceDyanmic. ProjectionPlot is very similar to SliceDynamic, except it only displays projections and VisualiseSliceDynamic allows you to discern which points exist in the slice and which don’t. However, ProjectedLocatorPlot** displays the interactive slightly different. Several locator panes are displayed above the plot and each one corresponds to a row in the projection matrix but behaves the same as ProjectionPlot. (this may be easier to implement in another language (?) )
+The examples presented in the penguins’ notebooks all utilise our primary new function, SliceDynamic. This function typically accepts grouped data in the form of a matrix where the second last column details the name of the group and the last column details the group index. After specifying the initial slice height and the slice range, the user is then presented with an interactive display in which the control objects appear on the left and the slice visulisation appears on the right. The user can change the orientation of the slice via the locator pane, which changes the projection matrix;  a slider controls the slice height; and there is an input field, which changes the slice centre. The user can also change the appearance of the plot by zooming into the center or changing the point size with sliders provided. The current projection can be displayed to contrast it with the slice by ticking a box. The explicit projection matrix can be displayed via another checkbox. The Slice Tour* notebooks include the additional functions: ProjectionPlot, Projected2DSliderPlot, and VisualiseSliceDyanmic. ProjectionPlot is very similar to SliceDynamic, except it only displays projections and VisualiseSliceDynamic allows you to discern which points exist inside the slice and outside it. However, ProjectedLocatorPlot displays the interactive slightly differently. Several locator panes are displayed above the plot and each one corresponds to a row in the projection matrix but behaves the same as ProjectionPlot. {\textcolor{blue}(this may be easier to implement in another language (?) )}
 
 
 <!-- 

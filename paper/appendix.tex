@@ -50,19 +50,19 @@
 slice tours}
 
 
-\author{\name{Alex Aumann$^{a}$, German Valencia$^{a}$, Ursula
-Laa$^{b}$, Dianne Cook$^{c}$}
-\affil{$^{a}$School of Physics and Astronomy, Monash
-University; $^{b}$Institute of Statistics, University of Natural
-Resources and Life Sciences, Vienna; $^{b}$Department of Econometrics
-and Business Statistics, Monash University}
+\author{\name{Ursula Laa$^{a}$, Alex Aumann$^{b}$, Dianne
+Cook$^{c}$, German Valencia$^{b}$}
+\affil{$^{a}$Institute of Statistics, University of Natural Resources
+and Life Sciences, Vienna; $^{b}$School of Physics and Astronomy, Monash
+University; $^{c}$Department of Econometrics and Business Statistics,
+Monash University}
 }
 
-\thanks{CONTACT Alex
-Aumann. Email: \href{mailto:aaum0002@student.monash.edu}{\nolinkurl{aaum0002@student.monash.edu}}, German
-Valencia. Email: \href{mailto:german.valencia@monash.edu}{\nolinkurl{german.valencia@monash.edu}}, Ursula
-Laa. Email: \href{mailto:ursula.laa@boku.ac.at}{\nolinkurl{ursula.laa@boku.ac.at}}, Dianne
-Cook. Email: \href{mailto:dicook@monash.edu}{\nolinkurl{dicook@monash.edu}}}
+\thanks{CONTACT Ursula
+Laa. Email: \href{mailto:ursula.laa@boku.ac.at}{\nolinkurl{ursula.laa@boku.ac.at}}, Alex
+Aumann. Email: \href{mailto:aaum0002@student.monash.edu}{\nolinkurl{aaum0002@student.monash.edu}}, Dianne
+Cook. Email: \href{mailto:dicook@monash.edu}{\nolinkurl{dicook@monash.edu}}, German
+Valencia. Email: \href{mailto:german.valencia@monash.edu}{\nolinkurl{german.valencia@monash.edu}}}
 
 \maketitle
 
@@ -144,9 +144,11 @@ matrix. One possible algorithm to achieve this is
 \item this results in the orthonormal basis $A^*$ and a new projection matrix with $P_{m1}=a,~P_{m2}=b$.
 \end{enumerate}
 
-The random choice for the components of \(A\) not in the projection
-matrix allows the exploration of dimensions perpendicular to the
-projection plane.
+The random completion of \(A\) outside the projection matrix provides an
+exploration of dimensions orthogonal to the projection plane. However,
+it renders projections in a way that is not continuouns and may be
+distracting. This can be alleviated by replacing the random completion
+with a rule restricting the size of the jumps.
 
 \begin{align}
 A=~~~& \begin{pNiceArray}{ccccc}[first-row,first-col]
@@ -197,6 +199,9 @@ applying Gram-Schmidt. The following steps are needed:
 
 Diagram needed?
 
+\{\textcolor{blue} Do we need three methods? is this one implemented
+somewhere?\}
+
 \hypertarget{software-details}{%
 \section{Software details}\label{software-details}}
 
@@ -208,206 +213,124 @@ Diagram needed?
   \textbf{Explain the functionality available in the notebooks}
 \end{itemize}
 
-The following functions are implemented in the Mathematica package
-\texttt{mmtour.wl}:
+Here we describe the functions implemented in the Mathematica package
+\texttt{mmtour.wl}. The main function is
 
 \begin{itemize}
 \item
-  \texttt{ProjectionPlot{[}data,\ projmat,\ xRange(=Automatic),\ yRange(=Automatic),\ \ colour(=Automatic){]}}
-  with arguments
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \texttt{data}: A list of data matrices (they must all have the same
-    dimensionality)
-  \item
-    `\texttt{projmat}: A projection matrix which describes the
-    projection plane. This is the initial projection and does not need
-    to be orthonormal (XXX is this right?).
-  \item
-    `\texttt{xRange}: A list which details the range of the horizontal
-    axis.
-  \item
-    `\texttt{yRange}: A list which details the range of the vertical
-    axis.
-  \item
-    `\texttt{colour}: A list of graphics directives to be applied to
-    each data matrix.
-  \end{itemize}
-\end{itemize}
-
-There are problems with the default values for x and y ranges and
-colour. It would be better to fix the ranges and colour based on the
-data as well as the origin of axes and the size of the points.
-
-\textbf{It would be good if the initial projection matrix (and maybe the
-center) had default values. Perhaps a random matrix with the correct
-dimensions read from the data? Fix 1}
-
-The format for the printed projection matrix can be improved also. Maybe
-fix the number of digits and the position of the label.
-
-\begin{itemize}
-\item
-  \texttt{SlicePlot{[}data,\ projmat,\ centrePoint,\ height,\ heightRange,\ ptSize1(=0.005),\ ptSize2(=0.004),\ minDist(=0){]}}
-  with arguments (used to be called SliceDynamic in Alex's first
-  version, the name SliceDynamic was taken by something else below)
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \texttt{data}: A data matrix
-  \item
-    \texttt{projmat}: The inital projection matrix
-  \item
-    \texttt{centrepoint}: The initial position of the slice
-  \item
-    \texttt{height}: The initial height of the slice
-  \item
-    \texttt{heightRange}: The range of heights
-  \item
-    \texttt{ptSize1}: The size of the points that exist within the slice
-  \item
-    \texttt{ptSize2}: The size of the points that exist outside of the
-    slice
-  \end{itemize}
-\end{itemize}
-
-This function requires some auxiliary functions. It does not accept more
-than one data set.
-
-\textbf{It would be good if the initial projection matrix (and maybe the
-center) had default values. Perhaps a random matrix with the correct
-dimensions read from the data?}
-
-It may be good to fix the size of the points, the center of the axes and
-the scales of the axes rather than allow them to change as the
-projection and slicing changes
-
-\begin{itemize}
-\item
-  \texttt{SliceDynamic{[}data,\ projmat,\ centrePoint,\ height,\ heightRange,\ ptSize1\ :\ 0.005,\ ptSize2\ :\ 0.004{]}}
+  \texttt{SliceDynamic{[}data,\ projmat,\ height,\ heightRange,\ legendQ(=1),\ flagQ(=1),\ colorFunc(=ColorData{[}97{]}){]}}
   with arguments
 \item
-  \texttt{data}: A data matrix with an extra grouping or clustering
-  column (numerical)
+  \texttt{data}: A data matrix with an extra grouping that has a label
+  (string) and a flag (numerical)
 \item
-  \texttt{projmat}: The initial projection matrix
+  \texttt{projmat}: The initial projection matrix. It is possible to
+  start with a random projection with the input ``random'' (including
+  the quotes) in this entry field.
 \item
-  \texttt{centrepoint}: The initial position of the slice
+  \texttt{height}: The initial height of the slice.
 \item
-  \texttt{height}: The initial height of the slice
+  \texttt{heightRange}: The range of slice heights to be explored.
 \item
-  \texttt{heightRange}: The range of heights
+  \texttt{legendQ}: A flag signaling whether the data matrix includes a
+  column with group labels (1) or not (0).
 \item
-  \texttt{ptSize1}: The size of the points that exist within the slice
+  \texttt{flagQ}: A flag signaling whether the data matrix includes a
+  numerical flag for the groups.
 \item
-  \texttt{ptSize2}: The size of the points that exist outside of the
-  slice
+  \texttt{colorFunc}: specifies the colour mapping for the different
+  groups.
 \end{itemize}
 
-\textbf{Does this need to be a separate function from SlicePlot? Fix 2}
+The function renders a manual tour with controls that allow the user to
+navigate through different projections. For a given projection, a slider
+permits the user to change the slide width within its range and a
+separate box switches the view to a projection. The user can also change
+the centre point of slices; the size of the points rendered and the
+scale of the plot through sliders. An additional box displays the
+coordinates of the projection matrix explicitly.
 
-\textbf{It would be good if the initial projection matrix (and maybe the
-center) had default values. Perhaps a random matrix with the correct
-dimensions read from the data? Fix 3}
+This function can be used for ungrouped data setting legendQ and flagQ
+to 0.
 
-\textbf{It may be good to fix the size of the points, the center of the
-axes and the scales of the axes rather than allow them to change as the
-projection and slicing changes. Fix 4}
+To remove a group from the visual display, the user can choose specific
+colours for the entry colorFunc. For example, \{Red,White,Green\} would
+display groups 1 (red) and 3 (green) while making 2 invisible.
 
-\textbf{I have found it useful to input different data sets rather than
-have this function sort them automatically using the last column. One
-data set with a flag column at the end, is best! Is the code too
-complicated? Fix 5}
+Other functions are:
 
 \begin{itemize}
-\tightlist
 \item
-  \texttt{Projected2DSliderPlot{[}{]}}
+  \texttt{ProjectionPlot{[}data,\ projmat,\ legendNames(=\{\}),\ colorFunc(=ColorData{[}97{]}){]}}
+  with arguments
+\item
+  \texttt{data}: A data matrix with one or more groups labeled by a flag
+  (numerical)
+\item
+  \texttt{projmat}: The initial projection matrix. It is possible to
+  start with a random projection with the input ``random'' (including
+  the quotes) in this entry field.
+\item
+  \texttt{legendNames}: an optional list of labels for the groups.
+\item
+  \texttt{colorFunc}: specifies the colour mapping for the different
+  groups.
 \end{itemize}
 
-This function uses a different display for the projection that I find
-very useful. However as it stands it is specific to one data set. Needs
-to be generalised to arbitrary data if we want to keep it.
+This function is similar to SliceDynamic but can only display
+projections. Using it instead of SliceDynamic simplifies the display and
+is more efficient. The data file should not contain labels for groups,
+if these are desired they are passed through the optional argument
+legendNames as \{``group 1'', ``group 2'',\ldots\}, for example.
 
-\textbf{For Alex to do}
+The display allows the user to navigate through different projections,
+choose the point size and zoom the factor, and explicitly display the
+coordinates of the projection.
 
 \begin{itemize}
-\tightlist
 \item
-  \textbf{We would need a screenshot (and video) for each of these.}
+  \texttt{ProjectedLocatorPlot{[}data,\ projmat,\ legendNames(=\{\}),\ colorFunc(=ColorData{[}97{]}){]}}
+  with arguments
 \item
-  \textbf{Fix 1, 2, 3, 4, 5}
+  \texttt{data}: A data matrix with one or more groups labeled by a flag
+  (numerical)
 \item
-  \textbf{Code consistent for applications to work - see
-  slice\_tour\_compare\_sets.nb. See below}
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \textbf{We need to make sure the drawing range is fixed (no resizing
-    of the axis when changing projection or slicing). It could be nice
-    if there was a manual zoom in/zoom out to change scale
-    occasionally.}
-  \item
-    \textbf{Should also make sure the size of the points is fixed (maybe
-    this will be automatic if the drawing range is fixed?), bigger
-    points would be preferred, currently the size is sometimes really
-    tiny and it becomes difficult to see anything.}
-  \item
-    \textbf{Can we have some heuristic to decide the range for the slice
-    thickness slider? In the second graph there is a tiny part of the
-    slider where the changes are interesting, difficult to navigate
-    since this makes it super sensitive to any small movement, while
-    most of the options are not interesting. My suggestion would be to
-    keep (as I understand is the case now) the maximum thickness (all
-    points in) as the upper bound, but instead of zero use a thickness
-    below which slices tend to be empty as the lower bound.}
-  \item
-    \textbf{For the olives example I think the relation between x2 and
-    the blue region could be interesting.}
-  \item
-    \textbf{pdfsense data: can we use random samples instead of the
-    first 10k rows? Then we should still be able to see the bigger
-    picture (with picking the first ones we get some artificial
-    structure from how the data was sampled initially).}
-  \item
-    \textbf{I was playing around with this today. Looks like the axes
-    are fixed when changing slice thickness, but not when rotating?}
-  \item
-    \textbf{Anyways, some observations that might be useful, but all of
-    this seems difficult for including in a paper:}
-  \item
-    \textbf{In the first example we can show how the yellow group is
-    associated with the first variable (x1, I guess this is C9?) - when
-    slicing through the center it only appears when x1 has a bigger
-    component on the projection, it is associated with low values of x1.
-    Since they are not near the average value of x1 the points do not
-    get captured in a slice where x1 is not important in the projection.
-    We can move the center point to -1 in the first component to then
-    explore how the yellow group relates to the other three variables.
-    Much less clear, maybe some indication of smaller x2 and larger x3
-    for this.}
-  \item
-    \textbf{The second example is too busy for manual exploration I
-    would say (too many axes to move around separately).}
-  \item
-    \textbf{Third example could be similar to the first: blue region
-    requires small values of x2, can be understood from the exploration,
-    then move center point to -0.5 in x2 to explore further. Now
-    interpretation becomes tricky. Sometimes blue and yellow seem just
-    randomly everywhere, sometimes blue more contained in an ellipsoid
-    around the center (indicating some correlation between variables).
-    For example try zeroing out components 2 and 3 to see this slice in
-    x1 vs x4.}
-  \item
-    \textbf{For the last example x4 seems to be the one to work with. I
-    feel like this is again very similar, maybe better to instead
-    explore other examples (maybe something without slicing?)}
-  \end{itemize}
+  \texttt{projmat}: The initial projection matrix. It is possible to
+  start with a random projection with the input ``random'' (including
+  the quotes) in this entry field.
+\item
+  \texttt{legendNames}: an optional list of labels for the groups.
+\item
+  \texttt{colorFunc}: specifies the colour mapping for the different
+  groups.
 \end{itemize}
+
+This function is very similar to ProjectionPlot but uses a different
+display for navigation of projections in which each coordinate is
+represented on a separate dial.
+
+\begin{itemize}
+\item
+  \texttt{VisualiseSliceDynamic{[}data,\ projmat,\ height,\ heightRange{]}}
+  with arguments
+\item
+  \texttt{data}: A data matrix containg only one set.In this case the
+  data matrix should not contain column labels.
+\item
+  \texttt{projmat}: The initial projection matrix. It is possible to
+  start with a random projection with the input ``random'' (including
+  the quotes) in this entry field.
+\item
+  \texttt{height}: The initial height of the slice.
+\item
+  \texttt{heightRange}: The range of slice heights to be explored.
+\end{itemize}
+
+This function differs from SliceDynamic in that it looks at only one
+data set but displays both the points inside and outside the slice. The
+display panel allows the user to specify the size of both sets of points
+(inside and outside) along with the slice height, centre point and zoom
+level.
 
 \bibliographystyle{tfcad}
 \bibliography{biblio.bib}

@@ -51,24 +51,28 @@ tours, with application to exploring classification boundaries in high
 dimensions}
 
 
-\author{\name{Alex Aumann$^{a}$, German Valencia$^{a}$, Ursula
-Laa$^{b}$, Dianne Cook$^{c}$}
-\affil{$^{a}$School of Physics and Astronomy, Monash
-University; $^{b}$Institute of Statistics, University of Natural
-Resources and Life Sciences, Vienna; $^{b}$Department of Econometrics
-and Business Statistics, Monash University}
+\author{\name{Ursula Laa$^{a}$, Alex Aumann$^{b}$, Dianne
+Cook$^{c}$, German Valencia$^{b}$}
+\affil{$^{a}$Institute of Statistics, University of Natural Resources
+and Life Sciences, Vienna; $^{b}$School of Physics and Astronomy, Monash
+University; $^{c}$Department of Econometrics and Business Statistics,
+Monash University}
 }
 
-\thanks{CONTACT Alex
-Aumann. Email: \href{mailto:aaum0002@student.monash.edu}{\nolinkurl{aaum0002@student.monash.edu}}, German
-Valencia. Email: \href{mailto:german.valencia@monash.edu}{\nolinkurl{german.valencia@monash.edu}}, Ursula
-Laa. Email: \href{mailto:ursula.laa@boku.ac.at}{\nolinkurl{ursula.laa@boku.ac.at}}, Dianne
-Cook. Email: \href{mailto:dicook@monash.edu}{\nolinkurl{dicook@monash.edu}}}
+\thanks{CONTACT Ursula
+Laa. Email: \href{mailto:ursula.laa@boku.ac.at}{\nolinkurl{ursula.laa@boku.ac.at}}, Alex
+Aumann. Email: \href{mailto:aaum0002@student.monash.edu}{\nolinkurl{aaum0002@student.monash.edu}}, Dianne
+Cook. Email: \href{mailto:dicook@monash.edu}{\nolinkurl{dicook@monash.edu}}, German
+Valencia. Email: \href{mailto:german.valencia@monash.edu}{\nolinkurl{german.valencia@monash.edu}}}
 
 \maketitle
 
 \begin{abstract}
-Something here
+We implement a new version of a manual tour that takes advantage of
+existing features in Mathematica to construct functions that interact
+with the position of the cursor. We demonstrate the usefulness of this
+new tool with an example exploring region boundaries in classification
+problems.
 \end{abstract}
 
 \begin{keywords}
@@ -117,6 +121,12 @@ extremely valuable for understanding high-dimensional data. However,
 these algorithms have two problems: (1) the pre-processing of creating a
 manipulation space overly complicates the algorithm, (2) extending to
 higher dimensional control is difficult.
+
+\{\textcolor{blue}Another very useful feature is that the user can keep
+the projection fixed while slicing across the orthogonal space and
+changing the centre point used for slicing. This can serve to illustrate
+how the orthogonal space affects correlations in a slice and how they
+may change or disappear in a projection.\}
 
 This paper explains a simpler approach, which is more direct, and
 extensible for generating user interaction, and is organized as follows.
@@ -495,6 +505,49 @@ differences in the projections come from.
   \textbf{Explain the functionality available in the notebooks}
 \end{itemize}
 
+Mathematica provides much utility and versatility, such as inbuilt data
+visualisation, data manipulation and analysis, dynamic functionality,
+and symbolic and numeric computation. Most of this inbuilt functionality
+is quite user-friendly and can be found in the Mathematica
+documentation; typically, numerous examples are provided within the
+documentation, and some possible issues are outlined there. Also, it is
+relatively simple to create dynamic objects via the inbuilt commands
+Manipulate or DynamicModule. Control objects, such as sliders, locator
+panes, and input fields, can then be used on dynamic variables, and when
+there is a change in the dynamic variable the dynamic objects which
+contain that dynamic variable will be updated. This is the essential
+ingredient for this implementation of the manual tour. However, it can
+be hard to alter the behaviour of the control objects such as setting
+the 1D slider on a different scale (Slider increments add 10 points into
+the slice rather than increasing the slice height by 0.1 for example).
+\{\textcolor{red}Alex, is this still true with the controls you are
+using now?\}
+
+The examples presented in the penguins' notebooks all utilise our
+primary new function, SliceDynamic. This function typically accepts
+grouped data in the form of a matrix where the second last column
+details the name of the group and the last column details the group
+index. After specifying the initial slice height and the slice range,
+the user is then presented with an interactive display in which the
+control objects appear on the left and the slice visulisation appears on
+the right. The user can change the orientation of the slice via the
+locator pane, which changes the projection matrix; a slider controls the
+slice height; and there is an input field, which changes the slice
+centre. The user can also change the appearance of the plot by zooming
+into the center or changing the point size with sliders provided. The
+current projection can be displayed to contrast it with the slice by
+ticking a box. The explicit projection matrix can be displayed via
+another checkbox. The Slice Tour* notebooks include the additional
+functions: ProjectionPlot, Projected2DSliderPlot, and
+VisualiseSliceDyanmic. ProjectionPlot is very similar to SliceDynamic,
+except it only displays projections and VisualiseSliceDynamic allows you
+to discern which points exist inside the slice and outside it. However,
+ProjectedLocatorPlot displays the interactive slightly differently.
+Several locator panes are displayed above the plot and each one
+corresponds to a row in the projection matrix but behaves the same as
+ProjectionPlot. \{\textcolor{blue}(this may be easier to implement in
+another language (?) )\}
+
 \hypertarget{extensions-to-the-r-package-tourr}{%
 \subsection{\texorpdfstring{Extensions to the R package
 \texttt{tourr}}{Extensions to the R package tourr}}\label{extensions-to-the-r-package-tourr}}
@@ -522,10 +575,13 @@ Maybe extensions for slicing
 \addcontentsline{toc}{section}{Acknowledgements}
 
 The authors gratefully acknowledge the support of the Australian
-Research Council. The paper was written in \texttt{rmarkdown}
+Research Council and the ResearchFirst undergraduate research program at
+Monash University. The paper was written in \texttt{rmarkdown}
 \citep{rmarkdown} using \texttt{knitr} \citep{knitr}. The scatterplot
 matrix of the penguins data was produced by the GGally \citep{GGally}
-package built on ggplot2 \citep{ggplot2} graphics.
+package built on ggplot2 \citep{ggplot2} graphics. We thank the
+Institute of Statistics, BOKU, for their hospitality while part of this
+work was conducted.
 
 \hypertarget{supplementary-material}{%
 \section*{Supplementary material}\label{supplementary-material}}
