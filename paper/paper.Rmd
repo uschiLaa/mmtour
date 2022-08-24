@@ -28,7 +28,7 @@ affiliation:
 bibliography: biblio.bib
 geometry: margin=2.5cm
 abstract: | 
-  We implement a new version of a manual tour that takes advantage of existing features in Mathematica to construct functions that interact with the position of the cursor. We demonstrate the usefulness of this new tool with an example exploring region boundaries in classification problems.
+  This paper describes new user controls for examining high-dimensional data using low-dimensional linear projections and slices. A user can interactively change the coefficients of a variable in a low-dimensional projection, which is useful for exploring the sensitivity of structure to particular variables. The user can also interactively shift the slice center, which is useful for exploring how structure changes in local subspaces. These controls are implemented in Mathematica to take advantage of it's mathematics functions, and interactivity tools that allow construction of functions that interact with the position of the cursor. We demonstrate the usefulness of this new tool with an example exploring region boundaries in classification problems.
 keywords: |
   data visualisation; grand tour; statistical computing; statistical graphics; multivariate data; dynamic graphics
 header-includes: |
