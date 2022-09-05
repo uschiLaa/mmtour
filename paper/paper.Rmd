@@ -60,25 +60,25 @@ library(plotrix)
 # Introduction
 
 <!-- Background -->
-From a statistical perspective it is rare to have data that are strictly 3D, and so unlike in most computer graphics applications, the more useful methods for data analysis show projections from an arbitrary dimensional space. These are dynamic data visualizations methods and are collected under the term *tours*. Tours involve views of high-dimensional ($p$) data with low-dimensional ($d$) projections. In his original paper on the grand tour, @As85 provided several algorithms for tour paths that could theoretically show the viewer the data *from all sides*. Prior to Asimov's work, there were numerous preparatory developments including @tukey's PRIM-9. PRIM-9 had user-controlled rotations on coordinate axes, allowing one to manually tour through low-dimensional projections. (A video illustrating the capabilities is available through video library of @ASA22.) Steering through all possible projections is impossible, unlike Asimov's tours which allows one to quickly see many, many different projections. After Asimov there have been many, many tour developments, which are summarized in @lee2021. 
+From a statistical perspective 3D is a rare data dimension, so unlike in most 3D rotation computer graphics applications, the more useful methods for data analysis need to work for arbitrary dimension. A good approah is to show projections from an arbitrary dimensional space to create dynamic data visualizations called *tours*. Tours involve views of high-dimensional ($p$) data with low-dimensional ($d$) projections. In his original paper on the grand tour, @As85 provided several algorithms for tour paths that could theoretically show the viewer the data *from all sides*. Prior to Asimov's work, there were numerous preparatory developments including @tukey's PRIM-9. PRIM-9 had user-controlled rotations on coordinate axes, allowing one to manually tour through low-dimensional projections. (A video illustrating the capabilities is available through video library of @ASA22.) Steering through all possible projections is impossible, unlike Asimov's tours which allows one to quickly see many, many different projections. After Asimov there have been many, many tour developments, which are summarized in @lee2021. 
 
 <!-- Manual tours -->
-One such direction of work develops the ideas from PRIM-9, to provide manual control of a tour. @cook_manual_1997 describe controls for 1D (or 2D) projections, respectively in a 2D (or 3D) manipulation space, allowing the user to select any variable axis, and rotate it into, or out of, or around the projection through horizontal, vertical, oblique, radial or angular changes in value. @spyrison_spinifex_2020 refined this algorithm and implements them to generate animation sequences. 
+One such direction of work develops the ideas from PRIM-9, to provide manual control of a tour. @cook_manual_1997 describe controls for 1D (or 2D) projections, respectively in a 2D (or 3D) manipulation space, allowing the user to select any variable axis, and rotate it into, or out of, or around the projection through horizontal, vertical, oblique, radial or angular changes in value. @spyrison_spinifex_2020 refined this algorithm and implemented it to generate radial tour animation sequences. 
 
 <!-- Purpose -->
 Manual controls are especially useful for assessing sensitivity of structure to particular elements of the projection. There are many places where it is useful. In exploratory data analysis, where one sees clusters in a projection, can some variables be removed from the projection without affecting the clustering. For interpreting models, one can reduce or increase a variable's contribution to examine the variable importance. Having the user interact with a projection is extremely valuable for understanding high-dimensional data. However, these algorithms have two problems: (1) the pre-processing of creating a manipulation space overly complicates the algorithm, (2) extending to higher dimensional control is difficult. 
 
-{\textcolor{blue}Another very useful feature is that the user can keep the projection fixed while slicing across the orthogonal space and changing the centre point used for slicing. This can serve to illustrate how the orthogonal space affects correlations in a slice and how they may change or disappear in a projection.}
+Another potentially useful manual control, is to allow the user to control the position of the center of a slice. The slice tour was introduced in @slicetour. It operates by converting the projection plane into a slice, by removing or de-emphasizing points that are further than a fixed orthogonal distance from the plane. The projection plane is usually thought of as passing through the center of the data. Manual control would allow the user to change the value of center point, by shifting it along a coordinate axis, while keeping the orientation of the projection plane fixed. The purpose would be to explore how or if the shape of the data, in the space orthogonal to the projection, changes as one gets away from the center. 
 
-This paper explains a simpler approach, which is more direct, and extensible for generating user interaction, and is organized as follows. The next section describes the new algorithm for manual control, for both projections and slices. The use of these methods are illustrated to compare and contrast boundaries constructed by different classifiers. The software section describes a mathematica notebook that is used for the application, and describes the interactive environment that would be desirable within R as new technology becomes available. The paper is accompanied by an appendix with more details and adjustments to the manual controls, and two mathematica notebooks, one focused on the application, and the other that could be used generically for new data.
+This paper explains the new manual controls for projection and slice tours. The next section describes the new algorithm for manual control, for both projections and slices. The use of these methods are illustrated to compare and contrast boundaries constructed by different classifiers. The software section describes a mathematica notebook that is used for the application, and describes the interactive environment that would be desirable within R as new technology becomes available. The paper is accompanied by an appendix with more details and adjustments to the manual controls, and two mathematica notebooks, one focused on the application, and the other that could be used generically for new data.
 
 # How to construct a manual tour {#sec:method}
 
-A manual tour allows the user to alter the coefficients of one (or more) variables contributing to a $d-D$ projection. The initial ingredients are an orthonormal basis ($A_{p\times d}$) defining the projection of the data, and a variable id ($m \in \{1, ..., p\}$) specifying which coefficient will be changed. A method to update the values of the component of the controlled variable $V_m$ is then needed. 
+A manual tour allows the user to alter the coefficients of one (or more) variables contributing to a $d-D$ projection. The initial ingredients are an orthonormal basis ($A_{p\times d}$) defining the projection of the data, and a variable id ($m \in \{1, ..., p\}$) specifying which coefficient will be changed. A method to update the values of the component ($m^{th}$ row of $A_{p\times d}$) of the controlled variable $V_m$ is then needed. 
 
 ## Existing methods
 
-The method for updating component values in @cook_manual_1997 (and utilised in @spyrison_spinifex_2020) are prescribed primarily for a 2D projection, to take advantage of (then) newly developed 3D trackball controls made available for computer gaming. The first step was to construct a 3D manipulation space from a 2D projection. In this space the coefficient of the controlled variable ranges between -1 and 1. Movements of a cursor are recorded and converted into changes in the values of $V_m$ thus changing the displayed 2D projection. The algorithm also provided constraints to horizontal, vertical, radial or angular motions only. The construction of the manipulation space overly complicates the manual controls, especially when considering a technique that will generally apply to arbitrary $d$.
+The method for updating component values in @cook_manual_1997 (and utilised in @spyrison_spinifex_2020) are prescribed primarily for a 2D projection, to take advantage of (then) newly developed 3D trackball controls made available for computer gaming. The first step was to construct a 3D manipulation space from a 2D projection. In this space, the coefficient of the controlled variable ranges between -1 and 1. Movements of a cursor are recorded and converted into changes in the values of $V_m$ thus changing the displayed 2D projection. The algorithm also provided constraints to horizontal, vertical, radial or angular motions only. The construction of the manipulation space overly complicates the manual controls, especially when considering possible techniques that will apply to arbitrary $d$.
 
 <!--
 \begin{figure*}[ht]
@@ -90,19 +90,26 @@ The method for updating component values in @cook_manual_1997 (and utilised in @
 
 ## A new simpler and broadly applicable approach
 
-The new approach emerged from experiments in mathematica. The components corresponding to $V_m$ are directly controlled by cursor movement, which updates row $m$ of $A$. The updated matrix is then orthonormalised. 
+The new approach emerged from experiments on the tour using the linear algebra capabilities, and relatively new interactive graphics interface, available in @Mathematica. The components corresponding to $V_m$ are directly controlled by cursor movement, which updates row $m$ of $A$. The updated matrix is then orthonormalised. 
 
 ### Algorithm 
 
 1. Provide $A$, and $m$. (Note that $m$ could also be automatically chosen as the component that is closest to the cursor position.)
-2. Change values in row $m$, giving $A^*$. A large change in these values would correspond to making a large jump from the current projection. Small changes would correspond to tracking a cursor, making small jumps from the current projection.
-3. Orthonormalise $A^*$, using Gram-Schmidt. For $d=2$, and $A^* = \left[ {\boldmath a}_{.1}~{\boldmath a}_{.2}\right]$, the steps are:
+2. Change values in row $m$, for example, if $d=2$ gives 
+$$
+A^* = [ \boldsymbol{a}^*_1~\boldsymbol{a}^*_2 ] = \left[ \begin{array}{cc} a_{11} & a_{12}\\
+                              \vdots & \vdots \\
+                              a^*_{m1} & a^*_{m2}\\
+                              \vdots & \vdots \\
+                              a_{p1} & a_{p2} 
+        \end{array}\right].
+$$ 
+\noindent A large change in these values would correspond to making a large jump from the current projection. Small changes would correspond to tracking a cursor, making small jumps from the current projection.
+3. Orthonormalise $A^*$, using Gram-Schmidt. 
+    i. Normalise $\boldsymbol{a}^*_1$ and $\boldsymbol{a}^*_2$.
+    ii. $\boldsymbol{a}^*_2 = \boldsymbol{a}^*_2 - <\boldsymbol{a}^*_1\cdot\boldsymbol{a}^*_2>\boldsymbol{a}^*_1$.
 
-    i. Normalise ${\boldmath a}_{.1}$, and ${\boldmath a}_{.2}$.
-    ii. ${\boldmath a}^*_{.2} = {\boldmath a}_{.2} - {\boldmath a}_{.1}^T{\boldmath a}_{.2}{\boldmath a}_{.1}$.
-    iii. Normalise ${\boldmath a}^*_{.2}$.
-
-This algorithm will produce the changes to a projection as illustrated in Figure \ref{fig:manualsequence} (top row). The controlled variable, $V_m$, corresponds to the black line, and sequential changes to row $m$ of $A$ can be seen to roughly follow a specified position (orange dot). Changes in the other components happen as a result of the orthonormalisation, but are uncontrolled. 
+This algorithm will produce the changes to a projection as illustrated in Figure \ref{fig:manualsequence}. The controlled variable, $V_m$, corresponds to the black line, and sequential changes to row $m$ of $A$ can be seen to roughly follow a specified position (orange dot). Changes in the other components happen as a result of the orthonormalisation, but are uncontrolled. 
 
 
 ```{r manualsequence, out.width="100%", width=12, height=4, fig.cap="Sequence of projections where contribution of one variable is controlled (black) is changed using unconstrained orthonormalisation. The dot (orange) indicates the chosen values for the controlled variable. It can be seen that the actual axis does not precisely match the chosen position, but it is close."}
@@ -155,7 +162,7 @@ for (i in 1:3) {
 
 ## Refinements to enforce exact position
 
-The problem with new simple method is that it is not faithful to the precise values for $V_m$ because the orthonormalisation will change them. There are numerous ways that this can be enforced, and details are provided in the Appendix.
+The problem with new simple method is that it is not faithful to the precise values for $V_m$ because the orthonormalisation will change them. There are numerous ways that this can be enforced, and details are in the Appendix.
 
 
 ## Manual control for slices
