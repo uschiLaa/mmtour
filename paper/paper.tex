@@ -248,56 +248,52 @@ in the Appendix.
 \subsection{Manual control for slices}\label{manual-control-for-slices}}
 
 To better explore the space we combine the manual controls for the
-projection with manual controls for slicing. A slice is defined by a
-projection, a center point that is anchoring it in the high-dimensional
-space and the slice thickness \(h\) \citep{slicetour}.
+projection with manual controls for slicing. A slice is a section of the
+data that is defined by a projection, a center point that is anchoring
+it in the high-dimensional space and the slice thickness \(h\)
+\citep{slicetour}. A data point is inside the slice if its orthogonal
+distance from the projection plane (passing through the center point) is
+below the thickness \(h\). This orthogonal distance is computed in terms
+of the component that is normal on the projection plane. For
+\(\mathbf{x}_i\) a \(p\) dimensional data point and \(\mathbf{c}\) the
+center point (in the same \(p\) dimensional space) we compute the
+orthogonal distance as \begin{equation}
+v_i^2 = ||\mathbf{x}_i' - \mathbf{c}'||^2 = \mathbf{x}_i'^2 + \mathbf{c}'^2 - 2 \mathbf{x}_i'\cdot\mathbf{c}' ,
+\label{eq:slice}
+\end{equation} with
+\(\mathbf{c}' = \mathbf{c} - (\mathbf{c}\cdot \mathbf{a}_1) \mathbf{a}_1 - (\mathbf{c}\cdot \mathbf{a}_2 )\mathbf{a}_2\),
+\(\mathbf{x}_i' = \mathbf{x}_i - (\mathbf{x}_i\cdot \mathbf{a}_1) \mathbf{a}_1 - (\mathbf{x}_i\cdot \mathbf{a}_2) \mathbf{a}_2\)
+and \(\mathbf{a}_k, k=1,2 (=d)\) denoting the columns of the projection
+matrix, \(\mathbf{A}=(\mathbf{a}_1, \mathbf{a}_2)\).
 
 \hypertarget{shifting-the-center}{%
 \subsubsection{Shifting the center}\label{shifting-the-center}}
 
 In the case of a single orthogonal direction on the projection plane we
-can pick a sequence of center points in steps along that direction to
-move the slice and fully cover the data space. This no longer works in
-higher-dimensional spaces, and we can think of picking one direction and
-shifting the slice along the component orthogonal to the projection
-plane. In practice we define the center point explicitly and calculate
-the slice display as explained in \citet{slicetour}. The current
-implementation allows the user to individually enter the components of
-the vector defining the center point, and updates the display by jumping
-to the new slice.
-
-XXX Equation for arbitrary center for slice; and move the ``the
-implementation \ldots{}'' into the software section once that is
-constructed; and ``potential adjustments for future'' into the section
-on desirable controls
-
-Potential adjustments for future work include a better visualization of
-the current center point, potentially with interactive graphics to move
-the slice similar to how the manual tour was implemented here. An
-alternative would be a step-wise shift of the slice towards the new
-center point to get a better understanding of the distribution along the
-selected direction.
+can pick a sequence of center points \(\mathbf{c}\) in steps along that
+direction to move the slice and fully cover the data space. This no
+longer works in higher-dimensional spaces, and we can think of picking
+one direction and shifting the slice along the component orthogonal to
+the projection plane. In practice we define the center point
+\(\mathbf{c}\) explicitly in terms of all \(p\) components and calculate
+the slice display following Eq. \ref{eq:slice}.
 
 \hypertarget{changing-the-thickness}{%
 \subsubsection{Changing the thickness}\label{changing-the-thickness}}
 
 In addition it is also useful to interactively change the slice
-thickness, in particular when selecting the preferred thickness \(h\)
-(also called the slice radius) for exploring the input data. This was
-implemented as a slicer, and to allow the user to efficiently explore
-the interesting range we can provide the slider range as an input. For
-guidance the estimates of the number of points inside the slice as a
-function of the original sample size \(N\) and the number of dimensions
-\(p\) from \citet{sectionpursuit} can be used: in case of a uniform
-distribution inside a sphere of radius \(R\) a slice with thickness
-\(h\) will contain \(N_S\) points, with \begin{equation}
+thickness \(h\) (also called the slice radius), in particular to find
+the preferred value for exploring the input data. This was implemented
+as a slider, and to allow the user to efficiently explore the
+interesting range we provide the slider range as an input. For guidance
+the estimates of the number of points inside the slice as a function of
+the original sample size \(N\) and the number of dimensions \(p\) from
+\citet{sectionpursuit} can be used: in case of a uniform distribution
+inside a sphere of radius \(R\) a slice with thickness \(h\) will
+contain \(N_S\) points, with \begin{equation}
 N_S = \frac{N}{2} \left(\frac{h}{R}\right)^{p-2} \left(p - (p-2)\left(\frac{h}{R}\right)^{2}\right).
 \label{eq:count}
 \end{equation}
-
-The current implementation contains a switch to change between the slice
-view and the projected view of the data, while keeping all other
-settings fixed.
 
 \begin{figure}
 
@@ -512,6 +508,16 @@ differences in the projections come from.
 \hypertarget{sec:implementation}{%
 \section{Software}\label{sec:implementation}}
 
+XXX copied from the slicing part to be weaved in below:
+
+The current implementation allows the user to individually enter the
+components of the vector defining the center point, and updates the
+display by jumping to the new slice.
+
+The current implementation contains a switch to change between the slice
+view and the projected view of the data, while keeping all other
+settings fixed.
+
 \hypertarget{mathematica-notebook}{%
 \subsection{Mathematica notebook}\label{mathematica-notebook}}
 
@@ -580,6 +586,13 @@ Changing slice center
 
 \hypertarget{desirable-interactivity}{%
 \subsection{Desirable interactivity}\label{desirable-interactivity}}
+
+Potential adjustments for future work include a better visualization of
+the current center point, potentially with interactive graphics to move
+the slice similar to how the manual tour was implemented here. An
+alternative would be a step-wise shift of the slice towards the new
+center point to get a better understanding of the distribution along the
+selected direction.
 
 \hypertarget{sec:discussion}{%
 \section{Discussion}\label{sec:discussion}}
