@@ -390,7 +390,7 @@ This function uses a different display for the projection that I find very usefu
 
 ## Extensions to the R package `tourr`
 
-Explain `radial_tour`
+The @tourr package provides numerous types of tours. An additional function has been constructed that will generate a sequence of projections that will decrease the coordinates for $V_m$ to $\boldsymbol{0}$ and back to the original values. It is applicable for any projection dimension, $d$.
 
 Changing slice center
 
