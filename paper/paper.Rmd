@@ -335,9 +335,11 @@ We start by first exploring the projections of the model prediction. Figure \ref
 \centerline{\includegraphics[width=0.32\textwidth]{figures/proj1_rf.png}
 \includegraphics[width=0.32\textwidth]{figures/proj1_lda.png}
 \includegraphics[width=0.32\textwidth]{figures/proj1_data.png}}
-\caption{Projection identified using the manual tour, because it reveals an interesting structure in the predictions from the RF model (left). We can clearly see a block structure, while the LDA model (middle) produces linear boundaries. The three groups are nicely separated in this projection of the data (right)}.
+\caption{Projection identified using the manual tour, because it reveals an interesting structure in the predictions from the RF model (left). We can clearly see a block structure, while the LDA model (middle) produces linear boundaries. The three groups are nicely separated in this projection of the data (right).}
 \label{proj1}
 \end{figure*}
+
+This example can be reproduced with the code in penguins_exploring_manually.nb and a run through is shown in the video at (post to vimeo, same name as the nb).
 
 ## Slicing through the center
 
@@ -374,7 +376,7 @@ By rotating in the second variable we can find a view that shows three neatly se
 
 Finally, to determine which model does the boundaries better, compare them with the $A_2$ projection of the data (Figure \ref{proj2}). Gentoo is more separated from the other two in this projection, and one can imagine that the trees in the forest has greedily grasped any one of many places to make a split to separate the group. It might be argued though the that RF boundary is cut too close to the Chinstrap species, and might lead to some unnecessary misclassification with new data. The LDA boundary is better placed for all species. 
 
-
+This example can be reproduced with the code in penguins_slicing_through_center.nb and a run through is shown in the video at (post to vimeo, same name as the nb).
 
 ## Shifting the slice center
 
@@ -403,7 +405,7 @@ A more interesting comparison is found for $S_1^{-}$, thus the slice localized t
 
 Finally it is interesting to compare the slice views to the projection of the models seen in Fig. \ref{proj1} to better understand how the boundaries change along the `bd` direction and where the differences in the projections come from.
 
-
+This example can be reproduced with the code in penguins_shifting_slice_center.nb and a run through is shown in the video at (post to vimeo, same name as the nb but one for positive and one for negative shift).
 
 # Discussion {#sec:discussion}
 

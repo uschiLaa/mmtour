@@ -304,207 +304,6 @@ N_S = \frac{N}{2} \left(\frac{h}{R}\right)^{p-2} \left(p - (p-2)\left(\frac{h}{R
 \caption{Scatterplot matrix of the (standardised) penguins data. The three species are reasonably different in size, with Gentoo distinguised from the other two on body depth relative to flipper length and body mass.}\label{fig:penguins-scatmat}
 \end{figure}
 
-\hypertarget{sec:examples}{%
-\section{Application}\label{sec:examples}}
-
-To illustrate the usefulness of the manual controls we use the 4D
-penguins data \citep{penguins} and look at classification models
-following \citet{sam11271}. We will show how classification boundaries
-can be explored and better understood on projections and slices through
-4D space. Figure \ref{fig:penguins-scatmat} shows a scatterplot matrix
-of this data. There are four variables
-(\texttt{bl\ =\ bill\_length\_mm,\ bd\ =\ bill\_depth\_mm,\ fl\ =\ flipper\_length\_mm,\ bm\ =\ body\_mass\_g})
-measuring the size of the penguins from three species (Adelie, Chinstrap
-and Gentoo). The scatterplot matrix shows that the three species appear
-to be likely separable, and that at least the Gentoo can be
-distinguished from the other two species when \texttt{bd} is paired with
-\texttt{fl} or \texttt{bm}. The steps for exploring boundaries in this
-example are as follows:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Build your classification model.
-\item
-  Predict the class for a dense grid of values covering the data space.
-\item
-  Examine projections, using a manual tour so that the contribution of
-  any variable is controlled.
-\item
-  Slice through the center, to explore where the boundaries will likely
-  meet.
-\item
-  Move the slice by changing the center in the direction of a single
-  variable to explore the extent of a boundary for a single group
-  relative to a variable.
-\end{enumerate}
-
-\hypertarget{constructing-the-4d-prediction-regions}{%
-\subsection{Constructing the 4D prediction
-regions}\label{constructing-the-4d-prediction-regions}}
-
-We use the \texttt{classifly} package \citep{classifly} to generate
-predictions across the 4D cube spanned by the data, with two
-classification models: linear discriminant analysis (LDA) and random
-forest (RF). Both the data and the model points in the grid are centered
-and scaled (standard deviation \(= 1\)).
-
-\hypertarget{exploring-projections-manually}{%
-\subsection{Exploring projections
-manually}\label{exploring-projections-manually}}
-
-We start by first exploring the projections of the model prediction.
-Figure \ref{proj1} summarises the process. Through manual rotation of
-the view we can get a feeling for where in the space we primarily
-predict each of the three species, and we also get a sense of the
-difference between the two models. To illustrate this difference we have
-manually rotated the projection for the RF model (left plot) to identify
-a projection that shows the non-linear but block-type structure that is
-typical of this type of model. This particular projection (\(A_1\)) is
-exported so that the same projection can be used to show the LDA model
-(middle plot) and the actual data (right plot). What can be seen is the
-linearity of the LDA model, where the boundaries are linear and oblique
-to the variable axes. And, interestingly this particular projection of
-the original data shows very distinct clusters of the three species.
-That means, the obscuring of the boundaries between groups for both of
-the models is driven by what is happening in the orthogonal space to the
-plane of the selected projection.
-
-\begin{figure*}[ht]
-\centerline{\includegraphics[width=0.32\textwidth]{figures/proj1_rf.png}
-\includegraphics[width=0.32\textwidth]{figures/proj1_lda.png}
-\includegraphics[width=0.32\textwidth]{figures/proj1_data.png}}
-\caption{Projection identified using the manual tour, because it reveals an interesting structure in the predictions from the RF model (left). We can clearly see a block structure, while the LDA model (middle) produces linear boundaries. The three groups are nicely separated in this projection of the data (right)}.
-\label{proj1}
-\end{figure*}
-
-\hypertarget{slicing-through-the-center}{%
-\subsection{Slicing through the
-center}\label{slicing-through-the-center}}
-
-XXXX currently in the notebook \(A_1\) is called A5, and \(A_2\) is
-called A6
-
-We continue the investigation by now slicing orthogonally to the
-projection \(A_1\). For both models we look at a thin (\(h=0.5\)) slice
-through the center, \(S_1^0 = (0,0,0,0)\). At first we explore how
-changing the projection, and thus the slice) away from \(A_1\) can help
-with understanding the boundary better. For our example, notice that
-\(A_1\) does not contain any contribution from the second variable
-(\texttt{bd}), so we will first rotate this variable into the view.
-
-Figure \ref{slice1} shows snapshots of the exploration. The rop row is
-the initial projection (\(A_1\) and \(S_1^0\)), and the bottom row is a
-later projection containing more of \texttt{bd} (call them \(A_2\) and
-\(S_2^0\)). The columns correspond to the two models, with Rf on the
-left and LDA on the right.
-
-Both models have some overlap at the center, even for this thin slice
-(\(S_1^0\)). The second slice (\(S_2^0\)) mostly resolves this overlap
-and reveals the primary differences between the models. The boundary
-between Adelie (blue) and Chinstrap (yellow) is very similar for both
-models. The boundary between Chinstrap and Gentoo (green) is where they
-differ.
-
-The RF is almost straight in this view, as something we might expect
-from a tree model where splitting occurs on single variables only.
-However, it is straight in a combination of the second and third
-variable (\texttt{bd} and \texttt{fl}). By examining the scatterplot
-matrix, we can understand how this boundary was built: on each of
-\texttt{bd} and \texttt{fl} it is possible to cut on a value where most
-of the Gentoo penguins are different from the other two speciesfor any
-tree, and likely only one is needed. Thus the forest construction is
-providing a sample of trees that use one variable or the other variable
-to split, producing the blocky boundary on the combination of the two.
-
-In contrast, the LDA boundary has an oblique split between the two, and
-roughly divides the space into three similarly sized areas. It is almost
-like a textbook illustration of how LDA works for two variables (2D)
-where by assuming the clusters have equal variance-covariance, it places
-a boundary half-way between the group means.
-
-\begin{figure*}[ht]
-\centerline{\includegraphics[width=0.45\textwidth]{figures/slice1_rf.png}
-\includegraphics[width=0.45\textwidth]{figures/slice1_lda.png}}
-\centerline{\includegraphics[width=0.45\textwidth]{figures/slice2_rf.png}
-\includegraphics[width=0.45\textwidth]{figures/slice2_lda.png}}
-\caption{Comparing slices based on two projections $A_1$ (top row) and $A_2$ (bottom row), for the two models RF (left) and LDA (right). With $A_1$ we see two groups overlap (green - Gentoo with yellow - Chinstrap), while the rotation to $A_2$ results in clear boundaries inside the slice. The boundary between Adelie (blue) and Chinstrap (yellow) is similar for both models but very different between Chinstrap and Gentoo (green).}
-\label{slice1}
-\end{figure*}
-
-\begin{figure*}[ht]
-\centerline{\includegraphics[width=0.45\textwidth]{figures/proj2_data.png}}
-\caption{Projection of the data based on $A_2$. Compared to projecting onto $A_1$ we see that the green observations (Gentoo) are more separated from the other two species.}
-\label{proj2}
-\end{figure*}
-
-Finally, to determine which model does the boundaries better, compare
-them with the \(A_2\) projection of the data (Figure \ref{proj2}).
-Gentoo is more separated from the other two in this projection, and one
-can imagine that the trees in the forest has greedily grasped any one of
-many places to make a split to separate the group. It might be argued
-though the that RF boundary is cut too close to the Chinstrap species,
-and might lead to some unnecessary misclassification with new data. The
-LDA boundary is better placed for all species.
-
-\hypertarget{shifting-the-slice-center}{%
-\subsection{Shifting the slice center}\label{shifting-the-slice-center}}
-
-We have seen that starting from \(A_1\) using the manual controls to
-change the contribution of the second variable we could find a clear
-separation boundary indicating the relation between this variable (bill
-depth) and the Gentoo penguin species. Instead of rotating to a
-different projection, we might also change the view by moving the slice
-along one axis in the 4D space. Here we will continue our exploration of
-the dependence on \texttt{bd} and move the slice defined by \(A_1\),
-\(S_1^c\) to either large positive or negative values
-(\(c_{bd} = \pm 1.5\) after centering and scaling). We will label these
-slices as \(S_1^{\pm}\). Here we will also look at slices of the
-observed data points, using a thicker slice (\(h=1.5\)) to capture
-enough points in a given view.
-
-We start by a comparison of the two models and the data distribution in
-\(S_1^{+}\), thus the slice is localized towards high values of bill
-depth in Figure \ref{slice1p}. We can see that all three slices (the two
-models and the data) contain almost no points from the third class
-(green, Gentoo), and that the decision boundary between the two models
-is very similar.
-
-\begin{figure*}[ht]
-\centerline{\includegraphics[width=0.32\textwidth]{figures/slice1_p_rf.png}
-\includegraphics[width=0.32\textwidth]{figures/slice1_p_lda.png}
-\includegraphics[width=0.32\textwidth]{figures/slice1_p_data.png}}
-\caption{Shifting the slice center in the positive direction of bill depth produces regions that have no Gentoo (green). The two models have similar boundaries except that the RF is more of a step function.}
-\label{slice1p}
-\end{figure*}
-
-\begin{figure*}[ht]
-\centerline{\includegraphics[width=0.32\textwidth]{figures/slice1_m_rf.png}
-\includegraphics[width=0.32\textwidth]{figures/slice1_m_lda.png}
-\includegraphics[width=0.32\textwidth]{figures/slice1_m_data.png}}
-\caption{Shifting the slice center in the negative direction of bill depth produces regions that are mostly Gentoo (green). The two models have very different boundaries: the nonlinear potential of RF can be seen here where still some subspaces would predict to be Adelie and Chinstrap.}
-\label{slice1m}
-\end{figure*}
-
-A more interesting comparison is found for \(S_1^{-}\), thus the slice
-localized towards low values of bill depth, shown in Figure
-\ref{slice1m}. The RF model (left) predicts all three species within
-this slice, with an interesting boundary for the third class (green,
-Gentoo). On the other hand the LDA model (middle) predominantly predicts
-the third class within the slice, this appears to be enforced through
-the linear structure of the model. Looking finally at the thick slice
-through the data we see that there are primarily observations from this
-class within the slice we can conclude that the two models have filled
-in the ``empty'' space (where we do not have any training observations)
-in very different ways and according to what we might expect given the
-model structure.
-
-Finally it is interesting to compare the slice views to the projection
-of the models seen in Fig. \ref{proj1} to better understand how the
-boundaries change along the \texttt{bd} direction and where the
-differences in the projections come from.
-
 \hypertarget{sec:implementation}{%
 \section{Software}\label{sec:implementation}}
 
@@ -593,6 +392,220 @@ the slice similar to how the manual tour was implemented here. An
 alternative would be a step-wise shift of the slice towards the new
 center point to get a better understanding of the distribution along the
 selected direction.
+
+\hypertarget{sec:examples}{%
+\section{Application}\label{sec:examples}}
+
+To illustrate the usefulness of the manual controls we use the 4D
+penguins data \citep{penguins} and look at classification models
+following \citet{sam11271}. We will show how classification boundaries
+can be explored and better understood on projections and slices through
+4D space. Figure \ref{fig:penguins-scatmat} shows a scatterplot matrix
+of this data. There are four variables
+(\texttt{bl\ =\ bill\_length\_mm,\ bd\ =\ bill\_depth\_mm,\ fl\ =\ flipper\_length\_mm,\ bm\ =\ body\_mass\_g})
+measuring the size of the penguins from three species (Adelie, Chinstrap
+and Gentoo). The scatterplot matrix shows that the three species appear
+to be likely separable, and that at least the Gentoo can be
+distinguished from the other two species when \texttt{bd} is paired with
+\texttt{fl} or \texttt{bm}. The steps for exploring boundaries in this
+example are as follows:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Build your classification model.
+\item
+  Predict the class for a dense grid of values covering the data space.
+\item
+  Examine projections, using a manual tour so that the contribution of
+  any variable is controlled.
+\item
+  Slice through the center, to explore where the boundaries will likely
+  meet.
+\item
+  Move the slice by changing the center in the direction of a single
+  variable to explore the extent of a boundary for a single group
+  relative to a variable.
+\end{enumerate}
+
+\hypertarget{constructing-the-4d-prediction-regions}{%
+\subsection{Constructing the 4D prediction
+regions}\label{constructing-the-4d-prediction-regions}}
+
+We use the \texttt{classifly} package \citep{classifly} to generate
+predictions across the 4D cube spanned by the data, with two
+classification models: linear discriminant analysis (LDA) and random
+forest (RF). Both the data and the model points in the grid are centered
+and scaled (standard deviation \(= 1\)).
+
+\hypertarget{exploring-projections-manually}{%
+\subsection{Exploring projections
+manually}\label{exploring-projections-manually}}
+
+We start by first exploring the projections of the model prediction.
+Figure \ref{proj1} summarises the process. Through manual rotation of
+the view we can get a feeling for where in the space we primarily
+predict each of the three species, and we also get a sense of the
+difference between the two models. To illustrate this difference we have
+manually rotated the projection for the RF model (left plot) to identify
+a projection that shows the non-linear but block-type structure that is
+typical of this type of model. This particular projection (\(A_1\)) is
+exported so that the same projection can be used to show the LDA model
+(middle plot) and the actual data (right plot). What can be seen is the
+linearity of the LDA model, where the boundaries are linear and oblique
+to the variable axes. And, interestingly this particular projection of
+the original data shows very distinct clusters of the three species.
+That means, the obscuring of the boundaries between groups for both of
+the models is driven by what is happening in the orthogonal space to the
+plane of the selected projection.
+
+\begin{figure*}[ht]
+\centerline{\includegraphics[width=0.32\textwidth]{figures/proj1_rf.png}
+\includegraphics[width=0.32\textwidth]{figures/proj1_lda.png}
+\includegraphics[width=0.32\textwidth]{figures/proj1_data.png}}
+\caption{Projection identified using the manual tour, because it reveals an interesting structure in the predictions from the RF model (left). We can clearly see a block structure, while the LDA model (middle) produces linear boundaries. The three groups are nicely separated in this projection of the data (right).}
+\label{proj1}
+\end{figure*}
+
+This example can be reproduced with the code in
+penguins\_exploring\_manually.nb and a run through is shown in the video
+at (post to vimeo, same name as the nb).
+
+\hypertarget{slicing-through-the-center}{%
+\subsection{Slicing through the
+center}\label{slicing-through-the-center}}
+
+XXXX currently in the notebook \(A_1\) is called A5, and \(A_2\) is
+called A6
+
+We continue the investigation by now slicing orthogonally to the
+projection \(A_1\). For both models we look at a thin (\(h=0.5\)) slice
+through the center, \(S_1^0 = (0,0,0,0)\). At first we explore how
+changing the projection, and thus the slice) away from \(A_1\) can help
+with understanding the boundary better. For our example, notice that
+\(A_1\) does not contain any contribution from the second variable
+(\texttt{bd}), so we will first rotate this variable into the view.
+
+Figure \ref{slice1} shows snapshots of the exploration. The rop row is
+the initial projection (\(A_1\) and \(S_1^0\)), and the bottom row is a
+later projection containing more of \texttt{bd} (call them \(A_2\) and
+\(S_2^0\)). The columns correspond to the two models, with Rf on the
+left and LDA on the right.
+
+Both models have some overlap at the center, even for this thin slice
+(\(S_1^0\)). The second slice (\(S_2^0\)) mostly resolves this overlap
+and reveals the primary differences between the models. The boundary
+between Adelie (blue) and Chinstrap (yellow) is very similar for both
+models. The boundary between Chinstrap and Gentoo (green) is where they
+differ.
+
+The RF is almost straight in this view, as something we might expect
+from a tree model where splitting occurs on single variables only.
+However, it is straight in a combination of the second and third
+variable (\texttt{bd} and \texttt{fl}). By examining the scatterplot
+matrix, we can understand how this boundary was built: on each of
+\texttt{bd} and \texttt{fl} it is possible to cut on a value where most
+of the Gentoo penguins are different from the other two speciesfor any
+tree, and likely only one is needed. Thus the forest construction is
+providing a sample of trees that use one variable or the other variable
+to split, producing the blocky boundary on the combination of the two.
+
+In contrast, the LDA boundary has an oblique split between the two, and
+roughly divides the space into three similarly sized areas. It is almost
+like a textbook illustration of how LDA works for two variables (2D)
+where by assuming the clusters have equal variance-covariance, it places
+a boundary half-way between the group means.
+
+\begin{figure*}[ht]
+\centerline{\includegraphics[width=0.45\textwidth]{figures/slice1_rf.png}
+\includegraphics[width=0.45\textwidth]{figures/slice1_lda.png}}
+\centerline{\includegraphics[width=0.45\textwidth]{figures/slice2_rf.png}
+\includegraphics[width=0.45\textwidth]{figures/slice2_lda.png}}
+\caption{Comparing slices based on two projections $A_1$ (top row) and $A_2$ (bottom row), for the two models RF (left) and LDA (right). With $A_1$ we see two groups overlap (green - Gentoo with yellow - Chinstrap), while the rotation to $A_2$ results in clear boundaries inside the slice. The boundary between Adelie (blue) and Chinstrap (yellow) is similar for both models but very different between Chinstrap and Gentoo (green).}
+\label{slice1}
+\end{figure*}
+
+\begin{figure*}[ht]
+\centerline{\includegraphics[width=0.45\textwidth]{figures/proj2_data.png}}
+\caption{Projection of the data based on $A_2$. Compared to projecting onto $A_1$ we see that the green observations (Gentoo) are more separated from the other two species.}
+\label{proj2}
+\end{figure*}
+
+Finally, to determine which model does the boundaries better, compare
+them with the \(A_2\) projection of the data (Figure \ref{proj2}).
+Gentoo is more separated from the other two in this projection, and one
+can imagine that the trees in the forest has greedily grasped any one of
+many places to make a split to separate the group. It might be argued
+though the that RF boundary is cut too close to the Chinstrap species,
+and might lead to some unnecessary misclassification with new data. The
+LDA boundary is better placed for all species.
+
+This example can be reproduced with the code in
+penguins\_slicing\_through\_center.nb and a run through is shown in the
+video at (post to vimeo, same name as the nb).
+
+\hypertarget{shifting-the-slice-center}{%
+\subsection{Shifting the slice center}\label{shifting-the-slice-center}}
+
+We have seen that starting from \(A_1\) using the manual controls to
+change the contribution of the second variable we could find a clear
+separation boundary indicating the relation between this variable (bill
+depth) and the Gentoo penguin species. Instead of rotating to a
+different projection, we might also change the view by moving the slice
+along one axis in the 4D space. Here we will continue our exploration of
+the dependence on \texttt{bd} and move the slice defined by \(A_1\),
+\(S_1^c\) to either large positive or negative values
+(\(c_{bd} = \pm 1.5\) after centering and scaling). We will label these
+slices as \(S_1^{\pm}\). Here we will also look at slices of the
+observed data points, using a thicker slice (\(h=1.5\)) to capture
+enough points in a given view.
+
+We start by a comparison of the two models and the data distribution in
+\(S_1^{+}\), thus the slice is localized towards high values of bill
+depth in Figure \ref{slice1p}. We can see that all three slices (the two
+models and the data) contain almost no points from the third class
+(green, Gentoo), and that the decision boundary between the two models
+is very similar.
+
+\begin{figure*}[ht]
+\centerline{\includegraphics[width=0.32\textwidth]{figures/slice1_p_rf.png}
+\includegraphics[width=0.32\textwidth]{figures/slice1_p_lda.png}
+\includegraphics[width=0.32\textwidth]{figures/slice1_p_data.png}}
+\caption{Shifting the slice center in the positive direction of bill depth produces regions that have no Gentoo (green). The two models have similar boundaries except that the RF is more of a step function.}
+\label{slice1p}
+\end{figure*}
+
+\begin{figure*}[ht]
+\centerline{\includegraphics[width=0.32\textwidth]{figures/slice1_m_rf.png}
+\includegraphics[width=0.32\textwidth]{figures/slice1_m_lda.png}
+\includegraphics[width=0.32\textwidth]{figures/slice1_m_data.png}}
+\caption{Shifting the slice center in the negative direction of bill depth produces regions that are mostly Gentoo (green). The two models have very different boundaries: the nonlinear potential of RF can be seen here where still some subspaces would predict to be Adelie and Chinstrap.}
+\label{slice1m}
+\end{figure*}
+
+A more interesting comparison is found for \(S_1^{-}\), thus the slice
+localized towards low values of bill depth, shown in Figure
+\ref{slice1m}. The RF model (left) predicts all three species within
+this slice, with an interesting boundary for the third class (green,
+Gentoo). On the other hand the LDA model (middle) predominantly predicts
+the third class within the slice, this appears to be enforced through
+the linear structure of the model. Looking finally at the thick slice
+through the data we see that there are primarily observations from this
+class within the slice we can conclude that the two models have filled
+in the ``empty'' space (where we do not have any training observations)
+in very different ways and according to what we might expect given the
+model structure.
+
+Finally it is interesting to compare the slice views to the projection
+of the models seen in Fig. \ref{proj1} to better understand how the
+boundaries change along the \texttt{bd} direction and where the
+differences in the projections come from.
+
+This example can be reproduced with the code in
+penguins\_shifting\_slice\_center.nb and a run through is shown in the
+video at (post to vimeo, same name as the nb but one for positive and
+one for negative shift).
 
 \hypertarget{sec:discussion}{%
 \section{Discussion}\label{sec:discussion}}
