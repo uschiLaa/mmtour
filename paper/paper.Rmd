@@ -394,7 +394,7 @@ This function uses a different display for the projection that I find very usefu
 
 ## Extensions to the R package `tourr`
 
-The @tourr package provides numerous types of tours. An additional function has been constructed that will generate a sequence of projections that will decrease the coordinates for $V_m$ to $\boldsymbol{0}$ and back to the original values. It is applicable for any projection dimension, $d$.
+The R package tourr [@tourr] provides numerous types of tours. An additional function, `radial_tour()` has been constructed that will generate a sequence of projections that will decrease the coordinates for $V_m$ to $\boldsymbol{0}$ and back to the original values. It is applicable for any projection dimension, $d$.
 
 Changing slice center
 
@@ -405,13 +405,17 @@ Potential adjustments for future work include a better visualization of the curr
 
 # Discussion {#sec:discussion}
 
-Recap contribution
+This short note has described new technology for manually interacting with tours. The manual control of projection coefficients is most useful for assessing variable importance to perceived structure, but can be generally used for steering a viewer through high-dimensional space. Changing the center of a slice manually enables exploring the space orthogonal to a projection, specifically in the direction of a single variable. This is a new tool, and as shown in the example, when used with the slice tour can very useful for understanding boundaries of classifiers. This is also likely a useful method for examining low-dimensional non-linear manifolds, and also functions of multiple parameters.
+
+Mathematica provided a useful sandbox to experiment with the ideas presented in this paper. Most of the data, though, is first constructed using R, especially the classification boundaries. If new technology for interactive graphics becomes available in R it would be useful to create a tighter coupling of models and visualization to allow exploring and comparing fits. 
+
+<!-- Recap contribution
 
 Other applications
 
 Where else might it be useful to use mathematica
 
-Maybe extensions for slicing
+Maybe extensions for slicing-->
 
 # Acknowledgements {-}
 
