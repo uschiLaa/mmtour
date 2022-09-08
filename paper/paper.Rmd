@@ -60,7 +60,7 @@ library(plotrix)
 # Introduction
 
 <!-- Background -->
-From a statistical perspective 3D is a rare data dimension, so unlike in most 3D rotation computer graphics applications, the more useful methods for data analysis need to work for arbitrary dimension. A good approah is to show projections from an arbitrary dimensional space to create dynamic data visualizations called *tours*. Tours involve views of high-dimensional ($p$) data with low-dimensional ($d$) projections. In his original paper on the grand tour, @As85 provided several algorithms for tour paths that could theoretically show the viewer the data *from all sides*. Prior to Asimov's work, there were numerous preparatory developments including @tukey's PRIM-9. PRIM-9 had user-controlled rotations on coordinate axes, allowing one to manually tour through low-dimensional projections. (A video illustrating the capabilities is available through video library of @ASA22.) Steering through all possible projections is impossible, unlike Asimov's tours which allows one to quickly see many, many different projections. After Asimov there have been many, many tour developments, which are summarized in @lee2021. 
+From a statistical perspective 3D is a rare data dimension, so unlike in most 3D rotation computer graphics applications, the more useful methods for data analysis need to work for arbitrary dimension. A good approch is to show projections from an arbitrary dimensional space to create dynamic data visualizations called *tours*. Tours involve views of high-dimensional ($p$) data with low-dimensional ($d$) projections. In his original paper on the grand tour, @As85 provided several algorithms for tour paths that could theoretically show the viewer the data *from all sides*. Prior to Asimov's work, there were numerous preparatory developments including @tukey's PRIM-9. PRIM-9 had user-controlled rotations on coordinate axes, allowing one to manually tour through low-dimensional projections. (A video illustrating the capabilities is available through video library of @ASA22.) Steering through all possible projections is impossible, unlike Asimov's tours which allows one to quickly see many, many different projections. After Asimov there have been many, many tour developments, which are summarized in @lee2021. 
 
 <!-- Manual tours -->
 One such direction of work develops the ideas from PRIM-9, to provide manual control of a tour. @cook_manual_1997 describe controls for 1D (or 2D) projections, respectively in a 2D (or 3D) manipulation space, allowing the user to select any variable axis, and rotate it into, or out of, or around the projection through horizontal, vertical, oblique, radial or angular changes in value. @spyrison_spinifex_2020 refined this algorithm and implemented it to generate radial tour animation sequences. 
@@ -74,7 +74,7 @@ This paper explains the new manual controls for projection and slice tours. The 
 
 # How to construct a manual tour {#sec:method}
 
-A manual tour allows the user to alter the coefficients of one (or more) variables contributing to a $d-D$ projection. The initial ingredients are an orthonormal basis ($A_{p\times d}$) defining the projection of the data, and a variable id ($m \in \{1, ..., p\}$) specifying which coefficient will be changed. A method to update the values of the component ($m^{th}$ row of $A_{p\times d}$) of the controlled variable $V_m$ is then needed. 
+A manual tour allows the user to alter the coefficients of one (or more) variables contributing to a $d$ dimensional projection. The initial ingredients are an orthonormal basis ($A_{p\times d}$) defining the projection of the data, and a variable id ($m \in \{1, ..., p\}$) specifying which coefficient will be changed. A method to update the values of the component ($m^{th}$ row of $A_{p\times d}$) of the controlled variable $V_m$ is then needed. 
 
 ## Existing methods
 
@@ -107,7 +107,11 @@ $$
 \noindent A large change in these values would correspond to making a large jump from the current projection. Small changes would correspond to tracking a cursor, making small jumps from the current projection.
 3. Orthonormalise $A^*$, using Gram-Schmidt. 
     i. Normalise $\boldsymbol{a}^*_1$ and $\boldsymbol{a}^*_2$.
-    ii. $\boldsymbol{a}^*_2 = \boldsymbol{a}^*_2 - <\boldsymbol{a}^*_1\cdot\boldsymbol{a}^*_2>\boldsymbol{a}^*_1$.
+    ii. $\boldsymbol{a}^*_2 = \boldsymbol{a}^*_2 - (\boldsymbol{a}^*_1\cdot\boldsymbol{a}^*_2)\boldsymbol{a}^*_1$.
+    
+<!--
+Note: I removed the angular bracets since cdot denotes scalar product already (also used like this below for the slice definitions)
+-->    
 
 This algorithm will produce the changes to a projection as illustrated in Figure \ref{fig:manualsequence}. The controlled variable, $V_m$, corresponds to the black line, and sequential changes to row $m$ of $A$ can be seen to roughly follow a specified position (orange dot). Changes in the other components happen as a result of the orthonormalisation, but are uncontrolled. 
 
@@ -163,7 +167,7 @@ for (i in 1:3) {
 ## Refinements to enforce exact position
 
 The problem with new simple method is that it is not faithful to the precise values for $V_m$ because the orthonormalisation will change them. There are numerous ways that this can be enforced, and details are in the Appendix.
-
+\textcolor{red}{While they all enforce the same position for the selected variable, they differ in how the remaining variables are adjusted during orthonormalisation.}
 
 ## Manual control for slices
 
@@ -176,32 +180,18 @@ with $\mathbf{c}' = \mathbf{c} - (\mathbf{c}\cdot \mathbf{a}_1) \mathbf{a}_1 - (
 
 ### Shifting the center
 
-In the case of a single orthogonal direction on the projection plane we can pick a sequence of center points $\mathbf{c}$ in steps along that direction to move the slice and fully cover the data space. This no longer works in higher-dimensional spaces, and we can think of picking one direction and shifting the slice along the component orthogonal to the projection plane. In practice we define the center point $\mathbf{c}$ explicitly in terms of all $p$ components and calculate the slice display following Eq. \ref{eq:slice}.
+A natural starting point is to place $\mathbf{c}$ in the center of the data distribution, but shifting it away from the mean can provide additional insights. In the case of a single orthogonal direction on the projection plane we can pick a sequence of center points $\mathbf{c}$ in steps along that direction to move the slice and fully cover the data space. This no longer works in higher-dimensional spaces, and we can think of picking one direction and shifting the slice along the component orthogonal to the projection plane.
 
 ### Changing the thickness
 
-In addition it is also useful to interactively change the slice thickness $h$ (also called the slice radius), in particular to find the preferred value for exploring the input data. This was implemented as a slider, and to allow the user to efficiently explore the interesting range we provide the slider range as an input. For guidance the estimates of the number of points inside the slice as a function of the original sample size $N$ and the number of dimensions $p$ from @sectionpursuit can be used: in case of a uniform distribution inside a sphere of radius $R$ a slice with thickness $h$ will contain $N_S$ points, with 
+In addition it is also useful to interactively change the slice thickness $h$ (also called the slice radius), in particular to find the preferred value for exploring the input data. For guidance the estimates of the number of points inside the slice as a function of the original sample size $N$ and the number of dimensions $p$ from @sectionpursuit can be used: in case of a uniform distribution inside a sphere of radius $R$ a slice with thickness $h$ will contain $N_S$ points, with 
 \begin{equation}
-N_S = \frac{N}{2} \left(\frac{h}{R}\right)^{p-2} \left(p - (p-2)\left(\frac{h}{R}\right)^{2}\right).
+N_S(h, p, R, N) = \frac{N}{2} \left(\frac{h}{R}\right)^{p-2} \left(p - (p-2)\left(\frac{h}{R}\right)^{2}\right).
 \label{eq:count}
 \end{equation}
 
 
-```{r penguins-scatmat, out.width="80%", width=10, height=10, fig.align='center', fig.cap="Scatterplot matrix of the (standardised) penguins data. The three species are reasonably different in size, with Gentoo distinguised from the other two on body depth relative to flipper length and body mass."}
-library(tidyverse)
-library(palmerpenguins)
-library(GGally)
-penguins_data <- penguins[, c(1,3, 4, 5, 6)] %>%
-  drop_na() %>%
-  mutate(across(where(is.numeric), function(x) (x-mean(x))/sd(x))) %>%
-  rename("bl"="bill_length_mm",
-         "bd"="bill_depth_mm",
-         "fl"="flipper_length_mm",
-         "bm"="body_mass_g")
-ggscatmat(penguins_data, columns = 2:5, col="species") +
-  scale_colour_manual("", values=c("Adelie" = "#5E82B6", "Chinstrap" = "#E19C24", "Gentoo" = "#8FB132")) +
-  theme(legend.position = "bottom")
-```
+
 
 # Software {#sec:implementation}
 
@@ -211,15 +201,19 @@ The current implementation allows the user to individually enter the components 
 
 The current implementation contains a switch to change between the slice view and the projected view of the data, while keeping all other settings fixed.
 
+In practice we define the center point $\mathbf{c}$ explicitly in terms of all $p$ components and calculate the slice display following Eq. \ref{eq:slice}.
+
+This was implemented as a slider, and to allow the user to efficiently explore the interesting range we provide the slider range as an input.
+
 ## Mathematica notebook
 
 - **Why is this a good sandbox**
 - **Explain the functionality available in the notebooks**
 
-Mathematica provides much utility and versatility, such as inbuilt data visualisation, data manipulation and analysis, dynamic functionality, and symbolic and numeric computation. Most of this inbuilt functionality is quite user-friendly and can be found in the Mathematica documentation; typically, numerous examples are provided within the documentation, and some possible issues are outlined there. Also, it is relatively simple  to create dynamic objects via the inbuilt commands Manipulate or DynamicModule. Control objects, such as sliders, locator panes, and input fields, can then be used on dynamic variables, and when there is a change in the dynamic variable the dynamic objects which contain that dynamic variable will be updated. This is the essential ingredient for this implementation of the manual tour. However, it can be hard to alter the behaviour of the control objects such as setting the 1D slider on a different scale  (Slider increments add 10 points into the slice rather than increasing the slice height by 0.1 for example).
+Mathematica provides much utility and versatility, such as inbuilt data visualisation, data manipulation and analysis, dynamic functionality, and symbolic and numeric computation. Most of this inbuilt functionality is quite user-friendly and can be found in the Mathematica documentation; typically, numerous examples are provided within the documentation, and some possible issues are outlined there. Also, it is relatively simple  to create dynamic objects via the inbuilt commands `Manipulate` or `DynamicModule`. Control objects, such as sliders, locator panes, and input fields, can then be used on dynamic variables, and when there is a change in the dynamic variable the dynamic objects which contain that dynamic variable will be updated. This is the essential ingredient for this implementation of the manual tour. However, it can be hard to alter the behaviour of the control objects such as setting the 1D slider on a different scale  (Slider increments add 10 points into the slice rather than increasing the slice height by 0.1 for example).
 {\textcolor{red}Alex, is this still true with the controls you are using now?}
 
-The examples presented in the penguins’ notebooks all utilise our primary new function, SliceDynamic. This function typically accepts grouped data in the form of a matrix where the second last column details the name of the group and the last column details the group index. After specifying the initial slice height and the slice range, the user is then presented with an interactive display in which the control objects appear on the left and the slice visulisation appears on the right. The user can change the orientation of the slice via the locator pane, which changes the projection matrix;  a slider controls the slice height; and there is an input field, which changes the slice centre. The user can also change the appearance of the plot by zooming into the center or changing the point size with sliders provided. The current projection can be displayed to contrast it with the slice by ticking a box. The explicit projection matrix can be displayed via another checkbox. The Slice Tour* notebooks include the additional functions: ProjectionPlot, Projected2DSliderPlot, and VisualiseSliceDyanmic. ProjectionPlot is very similar to SliceDynamic, except it only displays projections and VisualiseSliceDynamic allows you to discern which points exist inside the slice and outside it. However, ProjectedLocatorPlot displays the interactive slightly differently. Several locator panes are displayed above the plot and each one corresponds to a row in the projection matrix but behaves the same as ProjectionPlot. {\textcolor{blue}(this may be easier to implement in another language (?) )}
+The examples presented in the penguins’ notebooks all utilise our primary new function, `SliceDynamic`. This function typically accepts grouped data in the form of a matrix where the second last column details the name of the group and the last column details the group index. After specifying the initial slice height and the slice range, the user is then presented with an interactive display in which the control objects appear on the left and the slice visulisation appears on the right. The user can change the orientation of the slice via the locator pane, which changes the projection matrix;  a slider controls the slice height; and there is an input field, which changes the slice centre. The user can also change the appearance of the plot by zooming into the center or changing the point size with sliders provided. The current projection can be displayed to contrast it with the slice by ticking a box. The explicit projection matrix can be displayed via another checkbox. The Slice Tour* notebooks include the additional functions: ProjectionPlot, Projected2DSliderPlot, and VisualiseSliceDyanmic. ProjectionPlot is very similar to SliceDynamic, except it only displays projections and VisualiseSliceDynamic allows you to discern which points exist inside the slice and outside it. However, ProjectedLocatorPlot displays the interactive slightly differently. Several locator panes are displayed above the plot and each one corresponds to a row in the projection matrix but behaves the same as ProjectionPlot. {\textcolor{blue}(this may be easier to implement in another language (?) )}
 
 
 <!-- 
@@ -314,6 +308,22 @@ Potential adjustments for future work include a better visualization of the curr
 
 # Application {#sec:examples}
 
+```{r penguins-scatmat, out.width="80%", width=10, height=10, fig.align='center', fig.cap="Scatterplot matrix of the (standardised) penguins data. The three species are reasonably different in size, with Gentoo distinguised from the other two on body depth relative to flipper length and body mass."}
+library(tidyverse)
+library(palmerpenguins)
+library(GGally)
+penguins_data <- penguins[, c(1,3, 4, 5, 6)] %>%
+  drop_na() %>%
+  mutate(across(where(is.numeric), function(x) (x-mean(x))/sd(x))) %>%
+  rename("bl"="bill_length_mm",
+         "bd"="bill_depth_mm",
+         "fl"="flipper_length_mm",
+         "bm"="body_mass_g")
+ggscatmat(penguins_data, columns = 2:5, col="species") +
+  scale_colour_manual("", values=c("Adelie" = "#5E82B6", "Chinstrap" = "#E19C24", "Gentoo" = "#8FB132")) +
+  theme(legend.position = "bottom")
+```
+
 To illustrate the usefulness of the manual controls we use the 4D penguins data [@penguins] and look at classification models following @sam11271. We will show how classification boundaries can be explored and better understood on projections and slices through 4D space. Figure \ref{fig:penguins-scatmat} shows a scatterplot matrix of this data. There are four variables (`bl = bill_length_mm, bd = bill_depth_mm, fl = flipper_length_mm, bm = body_mass_g`) measuring the size of the penguins from three species (Adelie, Chinstrap and Gentoo). The scatterplot matrix shows that the three species appear to be likely separable, and that at least the Gentoo can be distinguished from the other two species when `bd` is paired with `fl` or `bm`. The steps for exploring boundaries in this example are as follows:
 
 1. Build your classification model. 
@@ -329,7 +339,7 @@ We use the `classifly` package [@classifly] to generate predictions across the 4
 
 ## Exploring projections manually
 
-We start by first exploring the projections of the model prediction. Figure \ref{proj1} summarises the process. Through manual rotation of the view we can get a feeling for where in the space we primarily predict each of the three species, and we also get a sense of the difference between the two models. To illustrate this difference we have manually rotated the projection for the RF model (left plot) to identify a projection that shows the non-linear but block-type structure that is typical of this type of model. This particular projection ($A_1$) is exported so that the same projection can be used to show the LDA model (middle plot) and the actual data (right plot). What can be seen is the linearity of the LDA model, where the boundaries are linear and oblique to the variable axes. And, interestingly this particular projection of the original data shows very distinct clusters of the three species. That means, the obscuring of the boundaries between groups for both of the models is driven by what is happening in the orthogonal space to the plane of the selected projection.
+We start by first exploring the projections of the model prediction. Figure \ref{proj1} summarises the process. Through manual rotation of the view we can get a feeling for where in the space we primarily predict each of the three species, and we also get a sense of the difference between the two models. To illustrate this difference we have manually rotated the projection for the RF model (left plot) to identify a view that shows the non-linear but block-type structure that is typical of this type of model. This particular projection ($A_1$) is exported so that the same projection can be used to show the LDA model (middle plot) and the actual data (right plot). What can be seen is the linearity of the LDA model, where the boundaries are linear and oblique to the variable axes. And, interestingly this particular projection of the original data shows very distinct clusters of the three species. That means, the obscuring of the boundaries between groups for both of the models is driven by what is happening in the orthogonal space to the plane of the selected projection.
 
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.32\textwidth]{figures/proj1_rf.png}
@@ -344,13 +354,13 @@ This example can be reproduced with the code in penguins_exploring_manually.nb a
 ## Slicing through the center
 
 
-We continue the investigation by now slicing orthogonally to  the projection $A_1$. For both models we look at a thin ($h=0.5$) slice through the center, $S_1^0 = (0,0,0,0)$. At  first we explore how changing the projection, and thus the slice) away from $A_1$ can help with understanding the boundary better. For our example, notice that $A_1$ does not contain any contribution from the second variable (`bd`), so we will first rotate this variable into the view. 
+We continue the investigation by now slicing orthogonally to  the projection $A_1$. For both models we look at a thin ($h=0.5$) slice through the center, $\mathbf{c}^0 = (0,0,0,0)$. At  first we explore how changing the projection away from $A_1$ can help with understanding the boundary better. For our example, notice that $A_1$ does not contain any contribution from the second variable (`bd`), so we will first rotate this variable into the view. 
 
-Figure \ref{slice1} shows snapshots of the exploration. The rop row is the initial projection ($A_1$ and $S_1^0$), and the bottom row is a later projection containing more of `bd` (call them $A_2$ and $S_2^0$). The columns correspond to the two models, with Rf on the left and LDA on the right.
+Figure \ref{slice1} shows snapshots of the exploration. The top row is the initial projection ($A_1$ and $\mathbf{c}^0$), and the bottom row is a later projection containing more of `bd` (new projection $A_2$ while keeping the center fixed at $\mathbf{c}^0$). The columns correspond to the two models, with RF on the left and LDA on the right.
 
-Both models have some overlap at the center, even for this thin slice ($S_1^0$). The second slice ($S_2^0$) mostly resolves this overlap and reveals the primary differences between the models. The boundary between Adelie (blue) and Chinstrap (yellow) is very similar for both models. The boundary between Chinstrap and Gentoo (green) is where they differ. 
+Both models have some overlap at the center for the thin slice based on $A_1$ (despite the small value for $h$). The second slice (based on $A_2$) mostly resolves this overlap and reveals the primary differences between the models. The boundary between Adelie (blue) and Chinstrap (yellow) is very similar for both models. The boundary between Chinstrap and Gentoo (green) is where they differ. 
 
-The RF is almost straight in this view, as something we might expect from a tree model where splitting occurs on single variables only. However, it is straight in a combination of the second and third variable (`bd` and `fl`). By examining the scatterplot matrix, we can understand how this boundary was built: on each of `bd` and `fl` it is possible to cut on a value where most of the Gentoo penguins are different from the other two speciesfor any tree, and likely only one is needed. Thus the forest construction is providing a sample of trees that use one variable or the other variable to split, producing the blocky boundary on the combination of the two. 
+The RF is almost straight in this view, as something we might expect from a tree model where splitting occurs on single variables only. However, it is straight in a combination of the second and third variable (`bd` and `fl`). By examining the scatterplot matrix, we can understand how this boundary was built: on each of `bd` and `fl` it is possible to cut on a value where most of the Gentoo penguins are different from the other two species for any tree, and likely only one is needed. Thus the forest construction is providing a sample of trees that use one variable or the other variable to split, producing the blocky boundary on the combination of the two. 
 
 In contrast, the LDA boundary has an oblique split between the two, and roughly divides the space into three similarly sized areas. It is almost like a textbook illustration of how LDA works for two variables (2D) where by assuming the clusters have equal variance-covariance, it places a boundary half-way between the group means. 
 
@@ -379,9 +389,9 @@ This example can be reproduced with the code in penguins_slicing_through_center.
 
 ## Shifting the slice center
 
-We have seen that starting from $A_1$ using the manual controls to change the contribution of the second variable we could find a clear separation boundary indicating the relation between this variable (bill depth) and the Gentoo penguin species. Instead of rotating to a different projection, we might also change the view by moving the slice along one axis in the 4D space. Here we will continue our exploration of the dependence on `bd` and move the slice defined by $A_1$, $S_1^c$ to either large positive or negative values ($c_{bd} = \pm 1.5$ after centering and scaling). We will label these slices as $S_1^{\pm}$. Here we will also look at slices of the observed data points, using a thicker slice ($h=1.5$) to capture enough points in a given view.
+We have seen that starting from $A_1$ using the manual controls to change the contribution of the second variable we could find a clear separation boundary indicating the relation between this variable (bill depth) and the Gentoo penguin species. Instead of rotating to a different projection, we might also change the view by moving the slice along one axis in the 4D space. Here we will continue our exploration of the dependence on `bd` and move the slice defined by $A_1$ to either large positive or negative values ($c^{\pm}_{bd} = \pm 1.5$ after centering and scaling). Thus we define $\mathbf{c}^{\pm} = (0, c^{\pm}_{bd}, 0, 0)$. Here we will also look at slices of the observed data points, using a thicker slice ($h=1.5$) to capture enough points in a given view.
 
-We start by a comparison of the two models and the data distribution in $S_1^{+}$, thus the slice is localized towards high values of bill depth in Figure \ref{slice1p}. We can see that all three slices (the two models and the data) contain almost no points from the third class (green, Gentoo), and that the decision boundary between the two models is very similar.
+We start by a comparison of the two models and the data distribution shifting to $\mathbf{c}^{+}$, thus the slice is localized towards high values of bill depth in Figure \ref{slice1p}. We can see that all three slices (the two models and the data) contain almost no points from the third class (green, Gentoo), and that the decision boundary between the two models is very similar.
 
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.32\textwidth]{figures/slice1_p_rf.png}
@@ -400,7 +410,7 @@ We start by a comparison of the two models and the data distribution in $S_1^{+}
 \end{figure*}
 
 
-A more interesting comparison is found for $S_1^{-}$, thus the slice localized towards low values of bill depth, shown in Figure \ref{slice1m}. The RF model (left) predicts all three species within this slice, with an interesting boundary for the third class (green, Gentoo). On the other hand the LDA model (middle) predominantly predicts the third class within the slice, this appears to be enforced through the linear structure of the model. Looking finally at the thick slice through the data we see that there are primarily observations from this class within the slice we can conclude that the two models have filled in the "empty" space (where we do not have any training observations) in very different ways and according to what we might expect given the model structure.
+A more interesting comparison is found for $\mathbf{c}^{-}$, thus the slice localized towards low values of bill depth, shown in Figure \ref{slice1m}. The RF model (left) predicts all three species within this slice, with an interesting boundary for the third class (green, Gentoo). On the other hand the LDA model (middle) predominantly predicts the third class within the slice, this appears to be enforced through the linear structure of the model. Looking finally at the thick slice through the data we see that there are primarily observations from this class within the slice we can conclude that the two models have filled in the "empty" space (where we do not have any training observations) in very different ways and according to what we might expect given the model structure.
 
 Finally it is interesting to compare the slice views to the projection of the models seen in Fig. \ref{proj1} to better understand how the boundaries change along the `bd` direction and where the differences in the projections come from.
 
