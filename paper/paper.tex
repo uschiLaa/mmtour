@@ -305,33 +305,42 @@ N_S(h, p, R, N) = \frac{N}{2} \left(\frac{h}{R}\right)^{p-2} \left(p - (p-2)\lef
 \hypertarget{sec:implementation}{%
 \section{Software}\label{sec:implementation}}
 
-XXX copied from the slicing part to be weaved in below:
+\hypertarget{structure}{%
+\subsection{Structure}\label{structure}}
 
-The current implementation allows the user to individually enter the
-components of the vector defining the center point, and updates the
-display by jumping to the new slice.
+The implementation of the manual tour with slice control needs a
+visualization of the current projection in terms of an axis display.
+This display should be able to track the mouse position and adjust the
+projection based on the user selection. The user can select one axis
+(corresponding to one variable) via clicking on it, and then adjust the
+position of that axis by dragging it during the click event. In practice
+the closest axis will be selected, and the dragging results in a
+tracking of the mouse position that will update the projection in small
+steps, rendering interpolation unnecessary.
 
-The current implementation contains a switch to change between the slice
-view and the projected view of the data, while keeping all other
-settings fixed.
+The interaction in the axis display need to be mapped back onto the
+projection matrix, which in turn needs to be linked to both the
+orthonormalization procedure and to a second display that is showing the
+projected data.
 
-In practice we define the center point \(\mathbf{c}\) explicitly in
-terms of all \(p\) components and calculate the slice display following
-Eq. \ref{eq:slice}.
+In addition, we also want to be able to look at slices of the data and
+select slicing parameters interactively. Here we have implemented a
+switch to change between projection and slice view, a slider that
+adjusts the slice height \(h\) and a numeric input to specify the center
+point \(c\) explicitly. The display will update based on these inputs,
+in particular the view will jump to a new slice when \(c\) is changed
+(though an interpolation might also be useful).
 
-This was implemented as a slider, and to allow the user to efficiently
-explore the interesting range we provide the slider range as an input.
+One might implement such an interactive interface via R Shiny, but in
+particular the tracking of the mouse position in small increments might
+pose a challenge. Here we found the dynamic graphics interface from
+Mathematica to be especially useful. In the following we first describe
+the relevant Mathematica functionalities and how they were used in the
+implementation, followed by a brief sketch of how the new approach might
+be implemented in the \texttt{tourr} package.
 
 \hypertarget{mathematica-notebook}{%
 \subsection{Mathematica notebook}\label{mathematica-notebook}}
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Why is this a good sandbox}
-\item
-  \textbf{Explain the functionality available in the notebooks}
-\end{itemize}
 
 Mathematica provides much utility and versatility, such as inbuilt data
 visualisation, data manipulation and analysis, dynamic functionality,
@@ -348,33 +357,28 @@ This is the essential ingredient for this implementation of the manual
 tour. However, it can be hard to alter the behaviour of the control
 objects such as setting the 1D slider on a different scale (Slider
 increments add 10 points into the slice rather than increasing the slice
-height by 0.1 for example). \{\textcolor{red}Alex, is this still true
-with the controls you are using now?\}
+height by 0.1 for example).
+\textcolor{red}{but this is no longer true if you replace it with animate??}
+\textcolor{red}{Alex, is this still true with the controls you are using now?}
 
 The examples presented in the penguins' notebooks all utilise our
 primary new function, \texttt{SliceDynamic}. This function typically
 accepts grouped data in the form of a matrix where the second last
 column details the name of the group and the last column details the
-group index. After specifying the initial slice height and the slice
-range, the user is then presented with an interactive display in which
-the control objects appear on the left and the slice visulisation
-appears on the right. The user can change the orientation of the slice
-via the locator pane, which changes the projection matrix; a slider
-controls the slice height; and there is an input field, which changes
-the slice centre. The user can also change the appearance of the plot by
-zooming into the center or changing the point size with sliders
-provided. The current projection can be displayed to contrast it with
-the slice by ticking a box. The explicit projection matrix can be
-displayed via another checkbox. The Slice Tour* notebooks include the
-additional functions: ProjectionPlot, Projected2DSliderPlot, and
-VisualiseSliceDyanmic. ProjectionPlot is very similar to SliceDynamic,
-except it only displays projections and VisualiseSliceDynamic allows you
-to discern which points exist inside the slice and outside it. However,
-ProjectedLocatorPlot displays the interactive slightly differently.
-Several locator panes are displayed above the plot and each one
-corresponds to a row in the projection matrix but behaves the same as
-ProjectionPlot. \{\textcolor{blue}(this may be easier to implement in
-another language (?) )\}
+group index
+\textcolor{red}{(which can be one if there is only one group)}. After
+specifying the initial slice thickness and the slice range, the user is
+then presented with an interactive display in which the control objects
+appear on the left and the slice visulisation appears on the right. The
+user can change the orientation of the slice via the locator pane, which
+changes the projection matrix; a slider controls the slice thickness;
+and there is an input field, which changes the slice centre. The user
+can also change the appearance of the plot by zooming into the center or
+changing the point size with sliders
+provided.\textcolor{red}{this zoom doesn't work very well} The current
+projection can be displayed to contrast it with the slice by ticking a
+box. The explicit projection matrix can also be displayed via another
+checkbox in order to store it for further study.
 
 \hypertarget{extensions-to-the-r-package-tourr}{%
 \subsection{\texorpdfstring{Extensions to the R package
