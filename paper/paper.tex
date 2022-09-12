@@ -70,15 +70,19 @@ Valencia. Email: \href{mailto:german.valencia@monash.edu}{\nolinkurl{german.vale
 \begin{abstract}
 This paper describes new user controls for examining high-dimensional
 data using low-dimensional linear projections and slices. A user can
-interactively change the coefficients of a variable in a low-dimensional
+interactively change the
+\textcolor{blue} {coefficients of a variable in}
+\textcolor{red}{contribution of a given variable to} a low-dimensional
 projection, which is useful for exploring the sensitivity of structure
 to particular variables. The user can also interactively shift the slice
 center, which is useful for exploring how structure changes in local
 subspaces. These controls are implemented in Mathematica to take
-advantage of it's mathematics functions, and interactivity tools that
-allow construction of functions that interact with the position of the
-cursor. We demonstrate the usefulness of this new tool with an example
-exploring region boundaries in classification problems.
+advantage of \textcolor{blue}{it's} \textcolor{red}{its}
+\textcolor{blue}{remove this: mathematics functions, and interactivity tools}
+\textcolor{red}{location controls} that allow construction of functions
+that interact with the position of the cursor. We demonstrate the
+usefulness of this new tool with an example exploring region boundaries
+in classification problems.
 \end{abstract}
 
 \begin{keywords}
@@ -104,8 +108,8 @@ tour through low-dimensional projections. (A video illustrating the
 capabilities is available through video library of \citet{ASA22}.)
 Steering through all possible projections is impossible, unlike Asimov's
 tours which allows one to quickly see many, many different projections.
-After Asimov there have been many, many tour developments, which are
-summarized in \citet{lee2021}.
+After Asimov there have been many \textcolor{blue}{remove: }, many\}
+tour developments, which are summarized in \citet{lee2021}.
 
 One such direction of work develops the ideas from PRIM-9, to provide
 manual control of a tour. \citet{cook_manual_1997} describe controls for
@@ -119,38 +123,40 @@ animation sequences.
 Manual controls are especially useful for assessing sensitivity of
 structure to particular elements of the projection. There are many
 places where it is useful. In exploratory data analysis, where one sees
-clusters in a projection, can some variables be removed from the
-projection without affecting the clustering. For interpreting models,
-one can reduce or increase a variable's contribution to examine the
-variable importance. Having the user interact with a projection is
-extremely valuable for understanding high-dimensional data. However,
-these algorithms have two problems: (1) the pre-processing of creating a
-manipulation space overly complicates the algorithm, (2) extending to
-higher dimensional control is difficult.
+clusters in a projection, \textcolor{red}{} one may ask whether some\}
+variables can be removed from the projection without affecting the
+clustering. For interpreting models, one can reduce or increase a
+variable's contribution to examine the variable importance. Having the
+user interact with a projection is extremely valuable for understanding
+high-dimensional data. However, these algorithms have two problems: (1)
+the pre-processing of creating a manipulation space overly complicates
+the algorithm, (2) extending to higher dimensional control is difficult.
 
 Another potentially useful manual control, is to allow the user to
-control the position of the center of a slice. The slice tour was
-introduced in \citet{slicetour}. It operates by converting the
-projection plane into a slice, by removing or de-emphasizing points that
-are further than a fixed orthogonal distance from the plane. The
-projection plane is usually thought of as passing through the center of
-the data. Manual control would allow the user to change the value of
-center point, by shifting it along a coordinate axis, while keeping the
-orientation of the projection plane fixed. The purpose would be to
-explore how or if the shape of the data, in the space orthogonal to the
-projection, changes as one gets away from the center.
+\textcolor{blue}{control}\textcolor{red}{choose} the position of the
+center of a slice. The slice tour was introduced in \citet{slicetour}.
+It operates by converting the projection plane into a slice, by removing
+or de-emphasizing points that are further than a fixed orthogonal
+distance from the plane. The projection plane is usually thought of as
+passing through the center of the data. Manual control would allow the
+user to change the value of center point, by shifting it along a
+coordinate axis, while keeping the orientation of the projection plane
+fixed. The purpose would be to explore how or if the shape of the data,
+in the space orthogonal to the projection, changes as one gets away from
+the center.
+\textcolor{red}{It would also allow the user to interactively decide on the thickness of the slice.}
 
 This paper explains the new manual controls for projection and slice
 tours. The next section describes the new algorithm for manual control,
-for both projections and slices. The use of these methods are
-illustrated to compare and contrast boundaries constructed by different
-classifiers. The software section describes a mathematica notebook that
-is used for the application, and describes the interactive environment
-that would be desirable within R as new technology becomes available.
-The paper is accompanied by an appendix with more details and
-adjustments to the manual controls, and two mathematica notebooks, one
-focused on the application, and the other that could be used generically
-for new data.
+for both projections and slices. The use of these methods
+\textcolor{blue}{are}\textcolor{red}{ is} illustrated to compare and
+contrast boundaries constructed by different classifiers. The software
+section describes a mathematica notebook that is used for the
+application, and describes the interactive environment that would be
+desirable within R as new technology becomes available. The paper is
+accompanied by an appendix with more details and adjustments to the
+manual controls, and two mathematica notebooks, one focused on the
+application, and another that could be used generically for new data.
 
 \hypertarget{sec:method}{%
 \section{How to construct a manual tour}\label{sec:method}}
@@ -166,7 +172,7 @@ controlled variable \(V_m\) is then needed.
 \hypertarget{existing-methods}{%
 \subsection{Existing methods}\label{existing-methods}}
 
-The method for updating component values in \citet{cook_manual_1997}
+The methods for updating component values in \citet{cook_manual_1997}
 (and utilised in \citet{spyrison_spinifex_2020}) are prescribed
 primarily for a 2D projection, to take advantage of (then) newly
 developed 3D trackball controls made available for computer gaming. The
@@ -239,9 +245,11 @@ orthonormalisation, but are uncontrolled.
 \subsection{Refinements to enforce exact
 position}\label{refinements-to-enforce-exact-position}}
 
-The problem with new simple method is that it is not faithful to the
-precise values for \(V_m\) because the orthonormalisation will change
-them. There are numerous ways that this can be enforced, and details are
+The problem with \textcolor{red}{the} new simple method is that it is
+not faithful to the precise values for \(V_m\) because the
+orthonormalisation will change them.
+\textcolor{red}{Even though these changes are for the most part imperceptible, one may wits to remove them and}
+there are numerous ways that this can be enforced, and details are given
 in the Appendix.
 \textcolor{red}{While they all enforce the same position for the selected variable, they differ in how the remaining variables are adjusted during orthonormalisation.}
 
