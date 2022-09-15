@@ -345,40 +345,48 @@ be implemented in the \texttt{tourr} package.
 Mathematica provides much utility and versatility, such as inbuilt data
 visualisation, data manipulation and analysis, dynamic functionality,
 and symbolic and numeric computation. Most of this inbuilt functionality
-is quite user-friendly and can be found in the Mathematica
-documentation; typically, numerous examples are provided within the
-documentation, and some possible issues are outlined there. Also, it is
-relatively simple to create dynamic objects via the inbuilt commands
-\texttt{Manipulate} or \texttt{DynamicModule}. Control objects, such as
-sliders, locator panes, and input fields, can then be used on dynamic
-variables, and when there is a change in the dynamic variable the
-dynamic objects which contain that dynamic variable will be updated.
-This is the essential ingredient for this implementation of the manual
-tour. However, it can be hard to alter the behaviour of the control
-objects such as setting the 1D slider on a different scale (Slider
-increments add 10 points into the slice rather than increasing the slice
-height by 0.1 for example).
+is user-friendly and described in the Mathematica documentation;
+typically, numerous examples are provided within the documentation, and
+some possible issues are outlined there.
+
+Importantly for our work, it is relatively simple to create dynamic
+objects via the inbuilt commands \texttt{Manipulate} or
+\texttt{DynamicModule}. Control objects, such as sliders, locator panes,
+and input fields, can then be used on dynamic variables, and when there
+is a change in the dynamic variable the dynamic objects which contain
+that variable will be updated. This is the essential ingredient for this
+implementation of the manual tour.
+
+However, it can be hard to alter the behaviour of the control objects
+such as setting the 1D slider on a different scale (Slider increments
+add 10 points into the slice rather than increasing the slice height by
+0.1 for example).
 \textcolor{red}{but this is no longer true if you replace it with animate??}
 \textcolor{red}{Alex, is this still true with the controls you are using now?}
 
-The examples presented in the penguins' notebooks all utilise our
-primary new function, \texttt{SliceDynamic}. This function typically
-accepts grouped data in the form of a matrix where the second last
-column details the name of the group and the last column details the
-group index
-\textcolor{red}{(which can be one if there is only one group)}. After
-specifying the initial slice thickness and the slice range, the user is
-then presented with an interactive display in which the control objects
-appear on the left and the slice visulisation appears on the right. The
-user can change the orientation of the slice via the locator pane, which
-changes the projection matrix; a slider controls the slice thickness;
-and there is an input field, which changes the slice centre. The user
-can also change the appearance of the plot by zooming into the center or
-changing the point size with sliders
-provided.\textcolor{red}{this zoom doesn't work very well} The current
-projection can be displayed to contrast it with the slice by ticking a
-box. The explicit projection matrix can also be displayed via another
-checkbox in order to store it for further study.
+\textcolor{red}{Ursula: this comment about slider scale seems to specific, can we have a more general comment about difficulties, e.g. I remember some issues with the color mapping? Also there seem to be a lot of loops needed? Can you explain what the locator pane is?}
+
+The examples presented in the penguins' notebooks all use our primary
+new function, \texttt{SliceDynamic}. This function typically accepts
+grouped data in the form of a matrix where the second last column
+details the name of the group and the last column details the group
+index \textcolor{red}{(which can be one if there is only one group)}.
+After specifying the initial slice thickness and the slice range, the
+user is presented with an interactive display in which the control
+objects appear on the left and the slice visulisation appears on the
+right. The user can change the orientation of the slice via the locator
+pane, which changes the projection matrix; a slider controls the slice
+thickness; and there is an input field, which changes the slice centre.
+The user can also change the appearance of the plot by zooming into the
+center or changing the point size with sliders
+provided.\textcolor{red}{this zoom doesn't work very well} The projected
+data can be displayed to contrast it with the slice by ticking a box.
+The explicit projection matrix can also be displayed via another
+checkbox. This is especially useful when we wish to import a projection
+that was identified as interesting in the manual exploration later, as
+shown in the applications below.
+
+\textcolor{red}{Details about the implementation and usage instructions are given in the Appendix.}
 
 \hypertarget{extensions-to-the-r-package-tourr}{%
 \subsection{\texorpdfstring{Extensions to the R package
