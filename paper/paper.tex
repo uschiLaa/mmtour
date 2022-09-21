@@ -248,9 +248,9 @@ position}\label{refinements-to-enforce-exact-position}}
 The problem with \textcolor{red}{the} new simple method is that it is
 not faithful to the precise values for \(V_m\) because the
 orthonormalisation will change them.
-\textcolor{red}{Even though these changes are for the most part imperceptible, one may wits to remove them and}
-there are numerous ways that this can be enforced, and details are given
-in the Appendix.
+\textcolor{red}{Even though these changes are for the most part imperceptible, one may wish to avoid them and}
+there are numerous ways that this can be enforced, a few are detailed in
+the Appendix.
 \textcolor{red}{While they all enforce the same position for the selected variable, they differ in how the remaining variables are adjusted during orthonormalisation.}
 
 \hypertarget{manual-control-for-slices}{%
@@ -357,14 +357,12 @@ is a change in the dynamic variable the dynamic objects which contain
 that variable will be updated. This is the essential ingredient for this
 implementation of the manual tour.
 
-However, it can be hard to alter the behaviour of the control objects
-such as setting the 1D slider on a different scale (Slider increments
-add 10 points into the slice rather than increasing the slice height by
-0.1 for example).
-\textcolor{red}{but this is no longer true if you replace it with animate??}
-\textcolor{red}{Alex, is this still true with the controls you are using now?}
+The most important inbuilt Mathematica function for our purpose is the
+locator pane. This creates a region on the screen where the position of
+the mouse is converted to input for the graphics functions, enabling the
+manual navigation of the tour.
 
-\textcolor{red}{Ursula: this comment about slider scale seems to specific, can we have a more general comment about difficulties, e.g. I remember some issues with the color mapping? Also there seem to be a lot of loops needed? Can you explain what the locator pane is?}
+\textcolor{red}{To Ursula:I removed the comment on the slider. There are no problems with color mapping. What do you mean by:" Also there seem to be a lot of loops needed?"? as far as I can tell the code does not use any loop. Is my explanantion of the locator pane enough? Please modify as you see fit and finish up this section.}
 
 The examples presented in the penguins' notebooks all use our primary
 new function, \texttt{SliceDynamic}. This function typically accepts
@@ -378,13 +376,13 @@ right. The user can change the orientation of the slice via the locator
 pane, which changes the projection matrix; a slider controls the slice
 thickness; and there is an input field, which changes the slice centre.
 The user can also change the appearance of the plot by zooming into the
-center or changing the point size with sliders
-provided.\textcolor{red}{this zoom doesn't work very well} The projected
-data can be displayed to contrast it with the slice by ticking a box.
-The explicit projection matrix can also be displayed via another
-checkbox. This is especially useful when we wish to import a projection
-that was identified as interesting in the manual exploration later, as
-shown in the applications below.
+center or changing the point size with sliders provided.
+\textcolor{red}{It is worth noting that this zoom works best with data that has been centred and scaled.}
+The projected data can be displayed to contrast it with the slice by
+ticking a box. The explicit projection matrix can also be displayed via
+another checkbox. This is especially useful when we wish to import a
+projection that was identified as interesting in the manual exploration
+later, as shown in the applications below.
 
 \textcolor{red}{Details about the implementation and usage instructions are given in the Appendix.}
 
