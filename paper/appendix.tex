@@ -84,7 +84,7 @@ will change them.
 \subsection{Adjustment method 1}\label{adjustment-method-1}}
 
 A small modification to algorithm 1 will maintain the components of
-\(V_m\) precisely (Figure \ref{fig:othermethod}. It is as follows:
+\(V_m\) precisely (Figure \ref{fig:othermethod}). It is as follows:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -104,11 +104,11 @@ A small modification to algorithm 1 will maintain the components of
   For \(d=2\), adjust the values of \({\boldmath a}^{**}_{.2}\) using
 \end{enumerate}
 
-\[a^{**}_{j2}+\frac{a_{m1}a_{m2}}{p-1}, j=1, ..., p, j\neq m\].
+\[a^{**}_{j2}+\frac{a_{m1}a_{m2}}{p-1}, j=1, ..., p, j\neq m.\]
 
 which ensures that
 
-\[\sum_{j=1, j\neq m}^p a^{**}_{j1}a^{**}_{j2} + a_{m1}a_{m2} = 0\].
+\[\sum_{j=1, j\neq m}^p a^{**}_{j1}a^{**}_{j2} + a_{m1}a_{m2} = 0.\]
 
 If \(d>2\) the process would be sequentially repeated in the same manner
 that Gram-Schmidt is applied sequentially to orthormalise the columns of
@@ -122,10 +122,12 @@ vector would simply need to be normalized after each adjustment.
 \hypertarget{adjustment-method-2}{%
 \subsection{Adjustment method 2}\label{adjustment-method-2}}
 
+\textcolor{red}{Notation does not match, everywhere else $A$ is the projection matrix onto 2d, so just the two columns, this is called $P$ here...maybe switch? $A$ can be considered as first two directions of the complete rotation matrix $P$?}
+
 For \(d=2\) projections, the projection matrix is the sub-matrix of
 \(A\) formed by its first two columns. Whereas orthonormality of the
 basis for the p-dimensional space is given by
-\(e_i\cdot e_j=\delta_{ij},{i,j,=1,\cdots,}\), orthonormality of the
+\(e_i\cdot e_j=\delta_{ij},{i,j,=1,\cdots, p}\), orthonormality of the
 projection matrix is expressed as
 \(P_i\cdot P_j=\delta_{ij}, {i,j=1,2}\). Movement of the cursor takes
 the two components \({x_{m1},x_{m2}}\) into a selected new value
@@ -169,9 +171,14 @@ e_p \to&x_{p1} & x_{p2} &\cdot &\cdots & x_{pp}
 \hypertarget{adjustment-method-3}{%
 \subsection{Adjustment method 3}\label{adjustment-method-3}}
 
-A very simple adjustment method works purely within the (hyper)plane,
-and is using the fact that the first direction will not be rotated when
-applying Gram-Schmidt. The following steps are needed:
+Finally we may also consider an adjustment that works within the
+projection plane. The idea is that when applying Gram-Schmidt, the
+direction of the first basis vector is not changed. We thus rotate the
+projection matrix within the plane such that the first basis is aligned
+with the direction of the selected variable \(m\) before applying
+orthonormalization. In addition we need to keep the contribution of
+variable \(m\) along that direction fixed when normalizing the vector.
+The following steps are needed:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -181,15 +188,15 @@ applying Gram-Schmidt. The following steps are needed:
 \item
   Change values in row \(m\), giving \(A^*\).
 \item
-  Rotate the basis within the projection (hyper-)plane, such that the
-  first direction is aligned with the direction of \(m\) in \(A^*\),
+  Rotate the basis within the projection plane, such that the first
+  basis direction is aligned with the direction of \(m\) in \(A^*\),
   giving \(\hat A^*\). In a 2D projection this means finding the angle
   \(\theta\) by which the basis should be rotated.
 \item
-  Normalise the first direction in \(\hat A^*\) while keeping the
+  Normalize the first direction in \(\hat A^*\) while keeping the
   contribution in row \(m\) fixed, giving \(\hat A^{*0}\).
 \item
-  Orthonormalise \(\hat A^{*0}\) using Gram-Schmidt, giving
+  Orthonormalize \(\hat A^{*0}\) using Gram-Schmidt, giving
   \(\hat A^{**}\). By construction the contribution of \(m\) will remain
   fixed.
 \item
@@ -205,24 +212,16 @@ somewhere?\}
 \hypertarget{software-details}{%
 \section{Software details}\label{software-details}}
 
+Here we describe the functions implemented in the Mathematica package
+\texttt{mmtour.wl}. The main function and its arguments are given below:
+
+\texttt{SliceDynamic{[}data,\ projmat,\ height,\ heightRange,\ legendQ(=1),\ flagQ(=1),\ colorFunc(=ColorData{[}97{]}){]}}
+
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Why is this a good sandbox}
-\item
-  \textbf{Explain the functionality available in the notebooks}
-\end{itemize}
-
-Here we describe the functions implemented in the Mathematica package
-\texttt{mmtour.wl}. The main function is
-
-\begin{itemize}
-\item
-  \texttt{SliceDynamic{[}data,\ projmat,\ height,\ heightRange,\ legendQ(=1),\ flagQ(=1),\ colorFunc(=ColorData{[}97{]}){]}}
-  with arguments
-\item
-  \texttt{data}: A data matrix with an extra grouping that has a label
-  (string) and a flag (numerical)
+  \texttt{data}: A data matrix, potentially with grouping that has a
+  label (string) and a flag (numerical) in the last two columns.
 \item
   \texttt{projmat}: The initial projection matrix. It is possible to
   start with a random projection with the input ``random'' (including
@@ -242,6 +241,8 @@ Here we describe the functions implemented in the Mathematica package
   groups.
 \end{itemize}
 
+\textcolor{red}{The first four arguments are required. As possible starting values we suggest using a random input projection, and selecting slice height parameters using the estimate given in Section 2.4.2 of the paper.}
+
 The function renders a manual tour with controls that allow the user to
 navigate through different projections. For a given projection, a slider
 permits the user to change the slide width within its range and a
@@ -250,29 +251,31 @@ the centre point of slices; the size of the points rendered and the
 scale of the plot through sliders. An additional box displays the
 coordinates of the projection matrix explicitly.
 
-This function can be used for ungrouped data setting legendQ and flagQ
-to 0.
-
-To remove a group from the visual display, the user can choose specific
-colours for the entry colorFunc. For example, \{Red,White,Green\} would
-display groups 1 (red) and 3 (green) while making 2 invisible.
+This function can be used for ungrouped data by setting legendQ and
+flagQ to 0. To remove a group from the visual display, the user can
+choose specific colours for the entry colorFunc. For example,
+\{Red,White,Green\} would display groups 1 (red) and 3 (green) while
+making 2 invisible.
 
 The Slice Tour* notebooks include the additional functions:
-ProjectionPlot, Projected2DSliderPlot, and VisualiseSliceDyanmic.
-ProjectionPlot is very similar to SliceDynamic, except it only displays
-projections and VisualiseSliceDynamic allows you to discern which points
-exist inside the slice and outside it. However, ProjectedLocatorPlot
-displays the interactive slightly differently. Several locator panes are
-displayed above the plot and each one corresponds to a row in the
-projection matrix but behaves the same as ProjectionPlot.
+\texttt{ProjectionPlot}, \texttt{Projected2DSliderPlot}, and
+\texttt{VisualiseSliceDyanmic}.
+
+\texttt{ProjectionPlot} is very similar to \texttt{SliceDynamic}, except
+it only displays projections. Using it instead of \texttt{SliceDynamic}
+simplifies the display and is more efficient. The interface is slightly
+different, the data file should not contain labels for groups, if these
+are desired they are passed through the optional argument legendNames as
+\{``group 1'', ``group 2'',\ldots\}, for example. The function and its
+arguments are given below:
+
+\texttt{ProjectionPlot{[}data,\ projmat,\ legendNames(=\{\}),\ colorFunc(=ColorData{[}97{]}){]}}
 
 \begin{itemize}
-\item
-  \texttt{ProjectionPlot{[}data,\ projmat,\ legendNames(=\{\}),\ colorFunc(=ColorData{[}97{]}){]}}
-  with arguments
+\tightlist
 \item
   \texttt{data}: A data matrix with one or more groups labeled by a flag
-  (numerical)
+  (numerical, last column).
 \item
   \texttt{projmat}: The initial projection matrix. It is possible to
   start with a random projection with the input ``random'' (including
@@ -284,23 +287,19 @@ projection matrix but behaves the same as ProjectionPlot.
   groups.
 \end{itemize}
 
-This function is similar to SliceDynamic but can only display
-projections. Using it instead of SliceDynamic simplifies the display and
-is more efficient. The data file should not contain labels for groups,
-if these are desired they are passed through the optional argument
-legendNames as \{``group 1'', ``group 2'',\ldots\}, for example.
+\texttt{ProjectedLocatorPlot} displays the interactive controls slightly
+differently. Several locator panes are displayed above the display of
+the projected data and each one corresponds to a row in the projection
+matrix. The updating behaviour of the projection is the same as in
+\texttt{ProjectionPlot}. The function and its arguments are given below:
 
-The display allows the user to navigate through different projections,
-choose the point size and zoom the factor, and explicitly display the
-coordinates of the projection.
+\texttt{ProjectedLocatorPlot{[}data,\ projmat,\ legendNames(=\{\}),\ colorFunc(=ColorData{[}97{]}){]}}
 
 \begin{itemize}
-\item
-  \texttt{ProjectedLocatorPlot{[}data,\ projmat,\ legendNames(=\{\}),\ colorFunc(=ColorData{[}97{]}){]}}
-  with arguments
+\tightlist
 \item
   \texttt{data}: A data matrix with one or more groups labeled by a flag
-  (numerical)
+  (numerical, last column).
 \item
   \texttt{projmat}: The initial projection matrix. It is possible to
   start with a random projection with the input ``random'' (including
@@ -312,17 +311,21 @@ coordinates of the projection.
   groups.
 \end{itemize}
 
-This function is very similar to ProjectionPlot but uses a different
-display for navigation of projections in which each coordinate is
-represented on a separate dial.
+Finally \texttt{VisualiseSliceDynamic} allows to discern which points
+exist inside the slice and outside it. This function differs from
+\texttt{SliceDynamic} in that it looks at only one data set but displays
+both the points inside and outside the slice. The display panel allows
+the user to specify the size of both sets of points (inside and outside)
+along with the slice height, centre point and zoom level. The function
+and its arguments are given below:
+
+\texttt{VisualiseSliceDynamic{[}data,\ projmat,\ height,\ heightRange{]}}
 
 \begin{itemize}
+\tightlist
 \item
-  \texttt{VisualiseSliceDynamic{[}data,\ projmat,\ height,\ heightRange{]}}
-  with arguments
-\item
-  \texttt{data}: A data matrix containg only one set.In this case the
-  data matrix should not contain column labels.
+  \texttt{data}: A data matrix containing only one group. In this case
+  the data matrix should not contain column labels.
 \item
   \texttt{projmat}: The initial projection matrix. It is possible to
   start with a random projection with the input ``random'' (including
@@ -333,11 +336,7 @@ represented on a separate dial.
   \texttt{heightRange}: The range of slice heights to be explored.
 \end{itemize}
 
-This function differs from SliceDynamic in that it looks at only one
-data set but displays both the points inside and outside the slice. The
-display panel allows the user to specify the size of both sets of points
-(inside and outside) along with the slice height, centre point and zoom
-level.
+\textcolor{red}{How are they shown, different colors? Fading points that are outside?}
 
 \bibliographystyle{tfcad}
 \bibliography{biblio.bib}
