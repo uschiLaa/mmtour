@@ -149,35 +149,34 @@ for (i in 1:3) {
 
 ## Adjustment method 2
 
-\textcolor{red}{Notation does not match, everywhere else $A$ is the projection matrix onto 2d, so just the two columns, this is called $P$ here...maybe switch? $A$ can be considered as first two directions of the complete rotation matrix $P$?}
 
-For $d=2$ projections, the projection matrix is the sub-matrix of $A$ formed by its first two columns. Whereas orthonormality of the basis for the p-dimensional space is given by $e_i\cdot e_j=\delta_{ij},{i,j,=1,\cdots, p}$, orthonormality of the projection matrix is expressed as $P_i\cdot P_j=\delta_{ij}, {i,j=1,2}$. Movement of the cursor takes the two components ${x_{m1},x_{m2}}$ into a selected new value ${a,b}$. Although the motion is constrained by $a^2+b^2\leq 1$, this is not sufficient to guarantee orthonormality of the new projection matrix. One possible algorithm to achieve this is
+For $d=2$ projections, the projection matrix is the sub-matrix $A$, of $O$, formed by its first two columns. Whereas orthonormality of the basis for the p-dimensional space is given by $e_i\cdot e_j=\delta_{ij},{i,j,=1,\cdots, p}$, orthonormality of the projection matrix is expressed as $\sum_{k=1}^p a_{ki} a_{kj}=\delta_{ij}, ~{i,j=1,2}, ~{k=1,\cdots,p}$. Movement of the cursor takes the two components ${a_{m1},a_{m2}}$ into a selected new value ${a^*_{m1},a^*_{m2}}$. Although the motion is constrained by $a^{*2}_{m1}+a^{*2}_{m2}\leq 1$, this is not sufficient to guarantee orthonormality of the new projection matrix. One possible algorithm to achieve this is
 \begin{enumerate}
-\item Cursor movement takes ${x_{m1},x_{m2}}\to {a,b}$
-\item The freedom to change the components $A_{i3}\cdots A_{ip}$ (the columns of $A$ not corresponding to the projection matrix) is used to select a new orthonormal basis as follows:
+\item Cursor movement takes ${x_{m1},x_{m2}}\to {a^*_{m1},a^*_{m2}}$
+\item The freedom to change the components $a_{m3}\cdots a_{mp}$ (the columns of $O$ not corresponding to the projection matrix $A$) is used to select a new orthonormal basis as follows:
 \begin{enumerate}
-\item For row $m$ one chooses $A_{m3}=\sqrt{1-a^2-b^2},~A_{m,k>3}=0$
-\item For other rows, $A_{i\neq m,j\geq3}$ random selections in the range $(-1,1)$ are made.
+\item For row $m$ one chooses $a^*_{m3}=\sqrt{1-a^{*2}_{m1}-a^{*2}_{m1}},~a^*_{m,k>3}=0$
+\item For other rows, $a_{i\neq m,j\geq3}$ random selections in the range $(-1,1)$ are made.
 \item The Gram-Schmidt algorithm is then used to obtain an orthonormal basis taking $e_m$ as the first vector (which is already normalized), and then proceeding as usual $e_1\to e_1-(e_1\cdot e_m) e_m$, $e_1\to e_1/(e_1\cdot e_1)$, etc.
 \end{enumerate}
-\item this results in the orthonormal basis $A^*$ and a new projection matrix with $P_{m1}=a,~P_{m2}=b$.
+\item this results in the orthonormal basis $O^*$ and a new projection matrix with $A^{**}_{m1}=a^*_{m1},~A^{**}_{m2}=a^*_{m2}$.
 \end{enumerate}
-The random completion of $A$ outside the projection matrix provides an exploration of dimensions orthogonal to the projection plane. However, it renders projections in a way that is not continuouns and may be distracting. This can be alleviated by replacing the random completion with a rule restricting the size of the jumps.
+The random completion of $O$ outside the projection matrix provides an exploration of dimensions orthogonal to the projection plane. However, it renders projections in a way that is not continuouns and may be distracting. This can be alleviated by replacing the random completion with a rule restricting the size of the jumps, for example in step (b) the values $a_{i\neq m,j\geq3}$ can be left unchanged before orthogonalisation.
 
 \begin{align}
-A=~~~& \begin{pNiceArray}{ccccc}[first-row,first-col]
+O=~~~& \begin{pNiceArray}{ccccc}[first-row,first-col]
 \CodeBefore
        \columncolor{red!15}{1,2}
               \rowcolor{blue!15}{4}
      \Body
-       & \stackrel{P_1}{\downarrow} & \stackrel{P_2}{\downarrow} &  & &\\
-e_1\to & x_{11} & x_{12}  & x_{13} & \cdots & x_{1p} \\
-e_2 \to& x_{21}  & x_{22}  & \cdot  &\cdots & x_{2p} \\
+       & \stackrel{A_1}{\downarrow} & \stackrel{A_2}{\downarrow} &  & &\\
+e_1\to & a_{11} & a_{12}  & a_{13} & \cdots & a_{1p} \\
+e_2 \to& a_{21}  & a_{22}  & \cdot  &\cdots & a_{2p} \\
 \vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\ 
- e_m \to& x_{m1}  & x_{m2}  & \cdot  &\cdots & x_{mp} \\   
+ e_m \to& a_{m1}  & a_{m2}  & \cdot  &\cdots & a_{mp} \\   
 \vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\
-e_p \to&x_{p1} & x_{p2} &\cdot &\cdots & x_{pp} 
-\end{pNiceArray},\quad (x_{m1},x_{m2})\to (a,b)
+e_p \to&a_{p1} & a_{p2} &\cdot &\cdots & a_{pp} 
+\end{pNiceArray},\quad (a_{m1},a_{m2})\to (a^*_{m1},a^*_{m2})
 \end{align}
 
 
@@ -252,6 +251,7 @@ Finally `VisualiseSliceDynamic` allows to discern which points exist inside the 
 - `height`: The initial height of the slice.
 - `heightRange`: The range of slice heights to be explored.
 
-\textcolor{red}{How are they shown, different colors? Fading points that are outside?}
+The points inside the slice are shown in black whereas those outside the slice are shown in light blue, with labels indicating this.
+
 
 
