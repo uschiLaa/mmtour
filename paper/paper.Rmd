@@ -200,7 +200,7 @@ The interactions in the axis display need to be mapped back onto the current pro
 
 In addition, we also want to be able to look at slices of the data and select slicing parameters interactively. Here we have implemented a switch to change between projection and slice view, a slider that adjusts the slice height $h$ and a numeric input to specify the center point $c$ explicitly. The display will update based on these inputs, in particular the view will jump to a new slice when $c$ is changed (though an interpolation might also be useful).
 
-One might implement such an interactive interface via R Shiny, but in particular the tracking of the mouse position in small increments might pose a challenge. Here we found the dynamic graphics interface from Mathematica to be especially useful. In the following we first describe the relevant Mathematica functionalities and how they were used in the implementation, followed by a brief sketch of how the new approach might be implemented in the `tourr` package.
+One might implement such an interactive interface via R Shiny, but in particular the tracking of the mouse position in small increments might pose a challenge. Here we found the dynamic graphics interface from Mathematica to be especially useful. In the following we first describe the relevant Mathematica functionalities and how they were used in the implementation, followed by a brief sketch of how the new approaches are implemented in the `tourr` package.
 
 ## Mathematica notebook
 
@@ -294,9 +294,7 @@ This function uses a different display for the projection that I find very usefu
 
 ## Extensions to the R package `tourr`
 
-The R package tourr [@tourr] provides numerous types of tours. An additional function, `radial_tour()` has been constructed that will generate a sequence of projections that will decrease the coordinates for $V_m$ to $\boldsymbol{0}$ and back to the original values. It is applicable for any projection dimension, $d$.
-
-Changing slice center
+The R package tourr [@tourr] provides numerous types of tours. An additional function, `radial_tour()` has been constructed that will generate a sequence of projections that will decrease the coordinates for $V_m$ to $\boldsymbol{0}$ and back to the original values. It is applicable for any projection dimension, $d$. Changing slice center manually can be accomplished with the new function, `manual_slice()`. This changes the value of the center point ($\mathbf{c}$) of the slice, along a selected variable axis. It slices from the center of the data out to one side, back to the center, out to the opposite side, and then back to the center.
 
 ## Desirable interactivity
 
@@ -478,8 +476,10 @@ The authors gratefully acknowledge the support of the Australian Research Counci
 
 # Supplementary material {-}
 
-The source material and animated gifs for this paper are available at 
+The source material and animated gifs for this paper are available at [https://github.com/uschiLaa/mmtour](https://github.com/uschiLaa/mmtour).
 
-Mathematica notebook
+The supplementary materials include:
 
-Appendix
+- Two Mathematica notebooks, one focused on the application, and another that could be used generically for new data.
+- Appendix with additional details about manual controls, and Mathematica functions.
+- Animated gifs illustrating the manual tour and slicing, matching the static figures in the paper. These are also available at https://vimeo.com/747585410 and https://vimeo.com/747590472.
