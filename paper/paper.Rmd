@@ -306,7 +306,7 @@ Potential adjustments for future work include a better visualization of the curr
 
 # Application {#sec:examples}
 
-```{r penguins-scatmat, out.width="80%", width=10, height=10, fig.align='center', fig.cap="Scatterplot matrix of the (standardised) penguins data. The three species are reasonably different in size, with Gentoo distinguised from the other two on body depth relative to flipper length and body mass."}
+```{r penguins-scatmat, out.width="60%", width=10, height=10, fig.align='center', fig.cap="Scatterplot matrix of the (standardised) penguins data. The three species are reasonably different in size, with Gentoo distinguised from the other two on body depth relative to flipper length and body mass."}
 library(tidyverse)
 library(palmerpenguins)
 library(GGally)
@@ -317,9 +317,53 @@ penguins_data <- penguins[, c(1,3, 4, 5, 6)] %>%
          "bd"="bill_depth_mm",
          "fl"="flipper_length_mm",
          "bm"="body_mass_g")
-ggscatmat(penguins_data, columns = 2:5, col="species") +
+#ggscatmat(penguins_data, columns = 2:5, col="species") +
+penguins_diag <- tibble(x=1, y=c(3,2,1),
+     species=levels(penguins_data$species))
+pscat <- ggpairs(penguins_data, columns = 2:5, 
+          mapping = ggplot2::aes(color = species, 
+                                 fill = species),
+          upper = list(continuous = "points"),
+          diag = list(continuous = "densityDiag")) +
   scale_colour_manual("", values=c("Adelie" = "#5E82B6", "Chinstrap" = "#E19C24", "Gentoo" = "#8FB132")) +
-  theme(legend.position = "bottom")
+  scale_fill_manual("", values=c("Adelie" = "#5E82B6", "Chinstrap" = "#E19C24", "Gentoo" = "#8FB132")) +
+  theme(aspect.ratio=1, 
+        #legend.position = "bottom", 
+        axis.text = element_blank(),
+        axis.ticks = element_blank())
+pscat[1,1] <- ggplot(penguins_diag, 
+                     aes(x=x, 
+                         y=y, 
+                         label=species, 
+                         colour=species)) + 
+  geom_text() +
+  scale_colour_manual("", values=c("Adelie" = "#5E82B6", "Chinstrap" = "#E19C24", "Gentoo" = "#8FB132")) +
+  ylim(c(0,4))
+pscat[2,2] <- ggplot(penguins_diag, 
+                     aes(x=x,
+                         y=y, 
+                         label=species, 
+                         colour=species)) + 
+  geom_text() +
+  scale_colour_manual("", values=c("Adelie" = "#5E82B6", "Chinstrap" = "#E19C24", "Gentoo" = "#8FB132")) +
+  ylim(c(0,4))
+pscat[3,3] <- ggplot(penguins_diag, 
+                     aes(x=x,
+                         y=y, 
+                         label=species, 
+                         colour=species)) + 
+  geom_text() +
+  scale_colour_manual("", values=c("Adelie" = "#5E82B6", "Chinstrap" = "#E19C24", "Gentoo" = "#8FB132")) +
+  ylim(c(0,4))
+pscat[4,4] <- ggplot(penguins_diag, 
+                     aes(x=x,
+                         y=y, 
+                         label=species, 
+                         colour=species)) + 
+  geom_text() +
+  scale_colour_manual("", values=c("Adelie" = "#5E82B6", "Chinstrap" = "#E19C24", "Gentoo" = "#8FB132")) +
+  ylim(c(0,4))
+pscat
 ```
 
 To illustrate the usefulness of the manual controls we use the 4D penguins data [@penguins] and look at classification models following @sam11271. We will show how classification boundaries can be explored and better understood on projections and slices through 4D space. Figure \ref{fig:penguins-scatmat} shows a scatterplot matrix of this data. There are four variables (`bl = bill_length_mm, bd = bill_depth_mm, fl = flipper_length_mm, bm = body_mass_g`) measuring the size of the penguins from three species (Adelie, Chinstrap and Gentoo). The scatterplot matrix shows that the three species appear to be likely separable, and that at least the Gentoo can be distinguished from the other two species when `bd` is paired with `fl` or `bm`. The steps for exploring boundaries in this example are as follows:
