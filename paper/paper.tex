@@ -319,7 +319,8 @@ projected data in sync with the updates from the axis display.
 In addition, we also want to be able to look at slices of the data and
 select slicing parameters interactively. Here we have implemented a
 switch to change between projection and slice view, a slider that
-adjusts the slice height \(h\) and a numeric input to specify the center
+adjusts the slice thickness \(h\) (dubbed \texttt{height} in the
+\texttt{Mathematica} package) and a numeric input to specify the center
 point \(c\) explicitly. The display will update based on these inputs,
 in particular the view will jump to a new slice when \(c\) is changed
 (though an interpolation might also be useful).
@@ -351,9 +352,10 @@ that variable will be updated. This is the essential ingredient for this
 implementation of the manual tour.
 
 The most relevant inbuilt Mathematica function for our purpose is the
-locator pane. This creates a region on the screen where the position of
-the mouse is captured and then converted to input that updates the
-graphics functions, enabling the manual navigation of the tour.
+\texttt{LocatorPane}. This creates a region on the screen where the
+position of the mouse is captured and then converted to input that
+updates the graphics functions, enabling the manual navigation of the
+tour.
 
 The examples presented in the application section below (and attached in
 notebook format in the supplementary material) all use our primary new
@@ -363,18 +365,18 @@ name of the group and the last column details the group index (which can
 be one if there is only one group). After specifying the initial slice
 thickness and the slice range, the user is presented with an interactive
 display in which the control objects appear on the left and the slice
-visulisation appears on the right. The user can change the orientation
+visualisation appears on the right. The user can change the orientation
 of the slice via the locator pane, which changes the projection matrix;
 a slider controls the slice thickness; and there is an input field,
 which changes the slice centre. The user can also change the appearance
 of the plot by zooming into the center or changing the point size with
-sliders provided. It is worth noting that this zoom works best with data
-that has been centred and scaled. The projected data can be displayed to
-contrast it with the slice by ticking a box. The explicit projection
-matrix can also be displayed via another checkbox. This is especially
-useful when we wish to import a projection that was identified as
-interesting in the manual exploration later, as shown in the
-applications below.
+the sliders provided. It is worth noting that this zoom works best with
+data that has been centred and scaled. The projected data can be
+displayed to contrast it with the slice by ticking a box. The explicit
+projection matrix can also be displayed via another checkbox. This is
+especially useful when we wish to import a projection that was
+identified as interesting in the manual exploration into a later study,
+as shown in the applications below.
 
 Details about the implementation and usage instructions are given in the
 Appendix.
@@ -399,7 +401,7 @@ the opposite side, and then back to the center.
 
 Potential adjustments for future work include a better visualization of
 the current center point, potentially with interactive graphics to move
-the slice similar to how the manual tour was implemented here. An
+the slice, similarly to how the manual tour was implemented here. An
 alternative would be a step-wise shift of the slice towards the new
 center point to get a better understanding of the distribution along the
 selected direction.
@@ -463,22 +465,21 @@ and scaled (standard deviation \(= 1\)).
 \subsection{Exploring projections
 manually}\label{exploring-projections-manually}}
 
-We start by first exploring the projections of the model prediction.
-Figure \ref{proj1} summarises the process. Through manual rotation of
-the view we can get a feeling for where in the space we primarily
-predict each of the three species, and we also get a sense of the
-difference between the two models. To illustrate this difference we have
-manually rotated the projection for the RF model (left plot) to identify
-a view that shows the non-linear but block-type structure that is
-typical of this type of model. This particular projection (\(A_1\)) is
-exported so that the same projection can be used to show the LDA model
-(middle plot) and the actual data (right plot). What can be seen is the
-linearity of the LDA model, where the boundaries are linear and oblique
-to the variable axes. And, interestingly this particular projection of
-the original data shows very distinct clusters of the three species.
-That means, the obscuring of the boundaries between groups for both of
-the models is driven by what is happening in the orthogonal space to the
-plane of the selected projection.
+We start by exploring the projections of the model prediction. Figure
+\ref{proj1} summarises the process. Rotating manually the view, we can
+visualise the location of predictions for each of the three species, and
+also get a sense of the difference between the two models. To illustrate
+this difference, we have manually rotated the projection for the RF
+model (left plot) to identify a view that shows the non-linear but
+block-type structure that is typical of this type of model. This
+particular projection (\(A_1\)) is exported so that it can later be used
+to show the LDA model (middle plot) and the actual data (right plot).
+What can be seen is the linearity of the LDA model, where the boundaries
+are linear and oblique to the variable axes. And, interestingly, this
+particular projection of the original data shows very distinct clusters
+of the three species. That means, the obscuring of the boundaries
+between groups for both of the models is driven by what is happening in
+the orthogonal space to the plane of the selected projection.
 
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.32\textwidth]{figures/proj1_rf.png}
@@ -496,7 +497,7 @@ at \url{https://vimeo.com/747585410}.
 \subsection{Slicing through the
 center}\label{slicing-through-the-center}}
 
-We continue the investigation by now slicing orthogonally to the
+We now continue the investigation by slicing orthogonally to the
 projection \(A_1\). For both models we look at a thin (\(h=0.5\)) slice
 through the center, \(\mathbf{c}^0 = (0,0,0,0)\). At first we explore
 how changing the projection away from \(A_1\) can help with
@@ -549,14 +550,15 @@ a boundary half-way between the group means.
 \label{proj2}
 \end{figure*}
 
-Finally, to determine which model does the boundaries better, compare
-them with the \(A_2\) projection of the data (Figure \ref{proj2}).
-Gentoo is more separated from the other two in this projection, and one
-can imagine that the trees in the forest has greedily grasped any one of
-many places to make a split to separate the group. It might be argued
-though the that RF boundary is cut too close to the Chinstrap species,
-and might lead to some unnecessary misclassification with new data. The
-LDA boundary is better placed for all species.
+Finally, to determine which model describes the boundaries better,
+compare them with the \(A_2\) projection of the data (Figure
+\ref{proj2}). Gentoo is more separated from the other two in this
+projection, and one can imagine that the trees in the forest has
+greedily grasped any one of many places to make a split to separate the
+group. It might be argued though the that RF boundary is cut too close
+to the Chinstrap species, and might lead to some unnecessary
+misclassification with new data. The LDA boundary is better placed for
+all species.
 
 This example can be reproduced with the code in
 penguins\_slicing\_through\_center.nb and a run through is shown in the
