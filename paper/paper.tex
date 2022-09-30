@@ -331,7 +331,9 @@ pose a challenge. Here we found the dynamic graphics interface from
 Mathematica to be especially useful. In the following we first describe
 the relevant Mathematica functionalities and how they were used in the
 implementation, followed by a brief sketch of how the new approaches are
-implemented in the \texttt{tourr} package.
+implemented in the \texttt{tourr} package. There is hope that better
+interactivity will be available for R soon, which might allow for
+implementation of the techniques developed in Mathematica.
 
 \hypertarget{mathematica-notebook}{%
 \subsection{Mathematica notebook}\label{mathematica-notebook}}
@@ -394,17 +396,8 @@ slice center manually can be accomplished with the new function,
 \texttt{manual\_slice()}. This changes the value of the center point
 (\(\mathbf{c}\)) of the slice, along a selected variable axis. It slices
 from the center of the data out to one side, back to the center, out to
-the opposite side, and then back to the center.
-
-\hypertarget{desirable-interactivity}{%
-\subsection{Desirable interactivity}\label{desirable-interactivity}}
-
-Potential adjustments for future work include a better visualization of
-the current center point, potentially with interactive graphics to move
-the slice, similarly to how the manual tour was implemented here. An
-alternative would be a step-wise shift of the slice towards the new
-center point to get a better understanding of the distribution along the
-selected direction.
+the opposite side, and then back to the center. The appendix contains a
+discussion of a possible visual guide for the slice center location.
 
 \hypertarget{sec:examples}{%
 \section{Application}\label{sec:examples}}
