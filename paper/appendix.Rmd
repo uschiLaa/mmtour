@@ -182,24 +182,12 @@ e_p \to&a_{p1} & a_{p2} &\cdot &\cdots & a_{pp}
 
 
 
-## Adjustment method 3
+\textcolor{red}{We could also take a similar approach without completing the basis, through rotation within the $d$-dimensional hyperplane defined by the new projection. In that case we would again start from $A^*$ as above, and then rotate the basis such that the first direction is aligned with the selected variable $m$. Applying Gram-Schmid within that basis definition will not alter the direction for the first vector, thus the direction of $m$ remains fixed to what was selected with the cursor. By adjusting the normalization procedure we can also ensure that the lenght remains as selcted manually by the user. The advantage is that we do not introduce random jumps from the other variables, but keep changes minimal within the $p\times d$ projection matrix.}
 
-Finally we may also consider an adjustment that works within the projection plane. The idea is that when applying Gram-Schmidt, the direction of the first basis vector is not changed. We thus rotate the projection matrix within the plane such that the first basis is aligned with the direction of the selected variable $m$ before applying orthonormalization. In addition we need to keep the contribution of variable $m$ along that direction fixed when normalizing the vector. The following steps are needed:
-
-1. Provide $A$, and $m$.
-2. Change values in row $m$, giving $A^*$.
-3. Rotate the basis within the projection plane, such that the first basis direction is aligned with the direction of $m$ in $A^*$, giving $\hat A^*$. In a 2D projection this means finding the angle $\theta$ by which the basis should be rotated.
-4. Normalize the first direction in $\hat A^*$ while keeping the contribution in row $m$ fixed, giving $\hat A^{*0}$.
-5. Orthonormalize $\hat A^{*0}$ using Gram-Schmidt, giving $\hat A^{**}$. By construction the contribution of $m$ will remain fixed.
-6. Rotate $\hat A^{**}$ back into the original basis to obtain $A^{**}$.
-
-Diagram needed? 
-
-{\textcolor{blue} Ursula, I am more convinced now that this is exactly method 2, the only difference is that you want to rotate to get to the "first" direction, whereas I simply relabel the rows of the matrix}
 
 # Slice center guide
 
-The slice center, $c$, from Equation 1 in the main paper, is a point in the $p$-dimensional space. By default, it is placed in the center of the data (Figure \ref{fig:anchornav} A). Moving this along a variable axis moves the slice outwards from the center of the data (Figure \ref{fig:anchornav} B, C). The visual display of the center position is a form of star plot as suggested useful in \textcolor{red}{REF to Catherine's paper}, where the position of the point is marked by a polygon on radial axes indicating its position relative to the variable minimum to maximum values.
+The slice center, $c$, from Equation 1 in the main paper, is a point in the $p$-dimensional space. By default, it is placed in the center of the data (Figure \ref{fig:anchornav} A). Moving this along a variable axis moves the slice outwards from the center of the data (Figure \ref{fig:anchornav} B, C). The visual display of the center position is a form of star plot as suggested useful in @condviz2, where the position of the point is marked by a polygon on radial axes indicating its position relative to the variable minimum to maximum values.
 
 ```{r anchornav, fig.width=10, fig.height=3, out.width="100%", fig.cap="Visual guide for the slice center. Variable axes are displayed in polar coordinates, where the center corresponds to minimum value and outer end corresponds to maximum value. The position of the center corresponds to the dark polygon. If the center is at the center of the data, this will be displayed as a regular polygon (A), and plots B, C show it's position when moving the center along one axis."}
 par(pty="s", mfrow=c(1,3))
@@ -246,9 +234,7 @@ This function can be used for ungrouped data by setting legendQ and flagQ to 0.
 To remove a group from the visual display, the user can choose specific colours for the entry colorFunc. For example, {Red,White,Green} would display groups 1 (red) and 3 (green) while making 2 invisible.
 
 
-The Slice Tour* notebooks include the additional functions: `ProjectionPlot`, `Projected2DSliderPlot`, and `VisualiseSliceDyanmic`.
-
-\textcolor{red}{does this mean that we are changing the name of the package from mmtour.wl to Slice Tour notebook?}
+The package includes the additional functions not used in the example application: `ProjectionPlot`, `Projected2DSliderPlot`, and `VisualiseSliceDyanmic`.
 
 `ProjectionPlot` is very similar to `SliceDynamic`, except it only displays projections.
 Using it instead of `SliceDynamic` simplifies the display and is more efficient. The interface is slightly different, the data file should not contain labels for groups, if these are desired they are passed through the optional argument legendNames as {"group 1", "group 2",...}, for example. The function and its arguments are given below:
