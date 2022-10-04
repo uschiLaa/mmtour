@@ -172,7 +172,15 @@ e_p \to&a_{p1} & a_{p2} &\cdot &\cdots & a_{pp}
 \label{matrices}
 \end{align}
 
-\textcolor{red}{We could also take a similar approach without completing the basis, through rotation within the $d$-dimensional hyperplane defined by the new projection. In that case we would again start from $A^*$ as above, and then rotate the basis such that the first direction is aligned with the selected variable $m$. Applying Gram-Schmid within that basis definition will not alter the direction for the first vector, thus the direction of $m$ remains fixed to what was selected with the cursor. By adjusting the normalization procedure we can also ensure that the lenght remains as selcted manually by the user. The advantage is that we do not introduce random jumps from the other variables, but keep changes minimal within the $p\times d$ projection matrix.}
+We could also take a similar approach without completing the basis,
+through rotation within the \(d\)-dimensional hyperplane defined by the
+new projection. In that case we would again start from \(A^*\) as above,
+and then rotate the basis such that the first direction is aligned with
+the selected variable \(m\). Applying Gram-Schmid within that basis
+definition will not alter the direction for the first vector, thus the
+direction of \(m\) remains fixed to what was selected with the cursor.
+By adjusting the normalization procedure we can also ensure that the
+lenght remains as selcted manually by the user.
 
 \hypertarget{slice-center-guide}{%
 \section{Slice center guide}\label{slice-center-guide}}
@@ -222,7 +230,9 @@ Here we describe the functions implemented in the Mathematica package
   groups.
 \end{itemize}
 
-\textcolor{red}{The first four arguments are required. As possible starting values we suggest using a random input projection, and selecting slice height parameters using the estimate given in Section 2.4.2 of the paper.}
+The first four arguments are required. As possible starting values we
+suggest using a random input projection, and selecting slice height
+parameters using the estimate given in Section 2.4.2 of the paper.
 
 The function renders a manual tour with controls that allow the user to
 navigate through different projections. For a given projection, a slider
