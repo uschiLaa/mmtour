@@ -218,7 +218,7 @@ Here we describe the functions implemented in the Mathematica package
   \texttt{flagQ}: A flag signaling whether the data matrix includes a
   numerical flag for the groups.
 \item
-  \texttt{colorFunc}: specifies the colour mapping for the different
+  \texttt{colorFunc}: specifies the color mapping for the different
   groups.
 \end{itemize}
 
@@ -228,13 +228,13 @@ The function renders a manual tour with controls that allow the user to
 navigate through different projections. For a given projection, a slider
 permits the user to change the slice width within its range and a
 separate box switches the view to a projection. The user can also change
-the centre point of slices; the size of the points rendered and the
+the center point of slices; the size of the points rendered and the
 scale of the plot through sliders. An additional box displays the
 coordinates of the projection matrix explicitly.
 
 This function can be used for ungrouped data by setting legendQ and
 flagQ to 0. To remove a group from the visual display, the user can
-choose specific colours for the entry colorFunc. For example,
+choose specific colors for the entry colorFunc. For example,
 \{Red,White,Green\} would display groups 1 (red) and 3 (green) while
 making 2 invisible.
 
@@ -264,14 +264,14 @@ arguments are given below:
 \item
   \texttt{legendNames}: an optional list of labels for the groups.
 \item
-  \texttt{colorFunc}: specifies the colour mapping for the different
+  \texttt{colorFunc}: specifies the color mapping for the different
   groups.
 \end{itemize}
 
 \texttt{ProjectedLocatorPlot} displays the interactive controls slightly
 differently. Several locator panes are displayed above the display of
 the projected data and each one corresponds to a row in the projection
-matrix. The updating behaviour of the projection is the same as in
+matrix. The updating behavior of the projection is the same as in
 \texttt{ProjectionPlot}. The function and its arguments are given below:
 
 \texttt{ProjectedLocatorPlot{[}data,\ projmat,\ legendNames(=\{\}),\ colorFunc(=ColorData{[}97{]}){]}}
@@ -288,7 +288,7 @@ matrix. The updating behaviour of the projection is the same as in
 \item
   \texttt{legendNames}: an optional list of labels for the groups.
 \item
-  \texttt{colorFunc}: specifies the colour mapping for the different
+  \texttt{colorFunc}: specifies the color mapping for the different
   groups.
 \end{itemize}
 
@@ -297,7 +297,7 @@ exist inside the slice and outside it. This function differs from
 \texttt{SliceDynamic} in that it looks at only one data set but displays
 both the points inside and outside the slice. The display panel allows
 the user to specify the size of both sets of points (inside and outside)
-along with the slice height, centre point and zoom level. The function
+along with the slice height, center point and zoom level. The function
 and its arguments are given below:
 
 \texttt{VisualiseSliceDynamic{[}data,\ projmat,\ height,\ heightRange{]}}

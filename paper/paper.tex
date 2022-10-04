@@ -75,7 +75,7 @@ low-dimensional projection, which is useful for exploring the
 sensitivity of structure to particular variables. The user can also
 interactively shift the center of a slice, for example, to explore how
 structure changes in local subspaces. Two Mathematica notebooks are
-provided, which contains functions enabling the user to experiment with
+provided, which contain functions enabling the user to experiment with
 these new manual controls, with one specifically for exploring regions
 and boundaries produced by classification models. The advantage of
 Mathematica is its linear algebra capabilities, and interactive cursor
@@ -93,7 +93,7 @@ graphics; multivariate data; dynamic graphics
 
 From a statistical perspective 3D is a rare data dimension, so unlike in
 most 3D rotation computer graphics applications, the more useful methods
-for data analysis need to work for arbitrary dimension. A good approch
+for data analysis need to work for arbitrary dimension. A good approach
 is to show projections from an arbitrary dimensional space to create
 dynamic data visualizations called \emph{tours}. Tours involve views of
 high-dimensional (\(p\)) data with low-dimensional (\(d\)) projections.
@@ -136,9 +136,9 @@ introduced in \citet{slicetour}. It operates by converting the
 projection plane into a slice, by removing or de-emphasizing points that
 are further than a fixed orthogonal distance from the plane. The
 projection plane is usually thought of as passing through the center of
-the data. Manual control would allow the user to change the value of
-center point, by shifting it along a coordinate axis, while keeping the
-orientation of the projection plane fixed. The purpose would be to
+the data. Manual control would allow the user to change the position of
+the center point, by shifting it along a coordinate axis, while keeping
+the orientation of the projection plane fixed. The purpose would be to
 explore how or if the shape of the data, in the space orthogonal to the
 projection, changes as one gets away from the center. It would also
 allow the user to interactively decide on the thickness of the slice.
@@ -169,7 +169,7 @@ controlled variable \(V_m\) is then needed.
 \subsection{Existing methods}\label{existing-methods}}
 
 The methods for updating component values in \citet{cook_manual_1997}
-(and utilised in \citet{spyrison_spinifex_2020}) are prescribed
+(and utilized in \citet{spyrison_spinifex_2020}) are prescribed
 primarily for a 2D projection, to take advantage of (then) newly
 developed 3D trackball controls made available for computer gaming. The
 first step was to construct a 3D manipulation space from a 2D
@@ -188,9 +188,10 @@ approach}\label{a-new-simpler-and-broadly-applicable-approach}}
 
 The new approach emerged from experiments on the tour using the linear
 algebra capabilities, and relatively new interactive graphics interface,
-available in \citet{Mathematica}. The components corresponding to
-\(V_m\) are directly controlled by cursor movement, which updates row
-\(m\) of \(A\). The updated matrix is then orthonormalised.
+available in Mathematica \citep{Mathematica}. The components
+corresponding to \(V_m\) are directly controlled by cursor movement,
+which updates row \(m\) of \(A\). The updated matrix is then
+orthonormalised.
 
 \hypertarget{algorithm}{%
 \subsubsection{Algorithm}\label{algorithm}}
@@ -339,7 +340,7 @@ implementation of the techniques developed in Mathematica.
 \subsection{Mathematica notebook}\label{mathematica-notebook}}
 
 Mathematica provides much utility and versatility, such as inbuilt data
-visualisation, data manipulation and analysis, dynamic functionality,
+visualization, data manipulation and analysis, dynamic functionality,
 and symbolic and numeric computation. Most of this inbuilt functionality
 is user-friendly and described in the Mathematica documentation;
 typically, numerous examples are provided within the documentation, and
@@ -367,13 +368,13 @@ name of the group and the last column details the group index (which can
 be one if there is only one group). After specifying the initial slice
 thickness and the slice range, the user is presented with an interactive
 display in which the control objects appear on the left and the slice
-visualisation appears on the right. The user can change the orientation
+visualization appears on the right. The user can change the orientation
 of the slice via the locator pane, which changes the projection matrix;
 a slider controls the slice thickness; and there is an input field,
-which changes the slice centre. The user can also change the appearance
+which changes the slice center. The user can also change the appearance
 of the plot by zooming into the center or changing the point size with
 the sliders provided. It is worth noting that this zoom works best with
-data that has been centred and scaled. The projected data can be
+data that has been centered and scaled. The projected data can be
 displayed to contrast it with the slice by ticking a box. The explicit
 projection matrix can also be displayed via another checkbox. This is
 especially useful when we wish to import a projection that was
@@ -459,8 +460,8 @@ and scaled (standard deviation \(= 1\)).
 manually}\label{exploring-projections-manually}}
 
 We start by exploring the projections of the model prediction. Figure
-\ref{proj1} summarises the process. Rotating manually the view, we can
-visualise the location of predictions for each of the three species, and
+\ref{proj1} summarizes the process. Rotating manually the view, we can
+visualize the location of predictions for each of the three species, and
 also get a sense of the difference between the two models. To illustrate
 this difference, we have manually rotated the projection for the RF
 model (left plot) to identify a view that shows the non-linear but
