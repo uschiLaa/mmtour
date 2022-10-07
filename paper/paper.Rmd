@@ -28,14 +28,14 @@ affiliation:
 bibliography: biblio.bib
 geometry: margin=2.5cm
 abstract: | 
-  This paper describes new user controls for examining high-dimensional data using low-dimensional linear projections and slices. A user can interactively change the contribution of a given variable to a low-dimensional projection, which is useful for exploring the sensitivity of structure to particular variables. The user can also interactively shift the center of a slice, for example, to explore how structure changes in local subspaces. Two Mathematica notebooks are provided, which contain functions enabling the user to experiment with these new manual controls, with one specifically for exploring regions and boundaries produced by classification models. The advantage of Mathematica is its linear algebra capabilities, and interactive cursor location controls. Some limited implementation has also been made available in the R package \tt{tourr}. 
+  This paper describes new user controls for examining high-dimensional data using low-dimensional linear projections and slices. A user can interactively change the contribution of a given variable to a low-dimensional projection, which is useful for exploring the sensitivity of structure to particular variables. The user can also interactively shift the center of a slice, for example, to explore how structure changes in local subspaces. The Mathematica package as well as example notebooks are provided, which contain functions enabling the user to experiment with these new manual controls, with one specifically for exploring regions and boundaries produced by classification models. The advantage of Mathematica is its linear algebra capabilities, and interactive cursor location controls. Some limited implementation has also been made available in the R package \tt{tourr}. 
 keywords: |
   data visualisation; grand tour; statistical computing; statistical graphics; multivariate data; dynamic graphics
 header-includes: |
   \usepackage{hyperref}
   \usepackage[utf8]{inputenc}
   \def\tightlist{}
-  \usepackage{setspace}
+  \usepackage{setspace}\doublespacing
   \usepackage{graphicx}
   \usepackage{nicematrix}
   \NiceMatrixOptions{code-for-first-row = \color{red} ,code-for-last-row = \color{red} ,code-for-first-col = \color{blue} ,code-for-last-col = \color{blue}}
@@ -70,7 +70,7 @@ Manual controls are especially useful for assessing sensitivity of structure to 
 
 Another potentially useful manual control, is to allow the user to choose the position of the center of a slice. The slice tour was introduced in @slicetour. It operates by converting the projection plane into a slice, by removing or de-emphasizing points that are further than a fixed orthogonal distance from the plane. The projection plane is usually thought of as passing through the center of the data. Manual control would allow the user to change the position of the center point, by shifting it along a coordinate axis, while keeping the orientation of the projection plane fixed. The purpose would be to explore how or if the shape of the data, in the space orthogonal to the projection, changes as one gets away from the center. It would also allow the user to interactively decide on the thickness of the slice.
 
-This paper explains the new manual controls for projection and slice tours. The next section describes the new algorithm for manual control, for both projections and slices. The use of these methods is illustrated to compare and contrast boundaries constructed by different classifiers. The software section describes a mathematica notebook that is used for the application, and describes the interactive environment that would be desirable within R as new technology becomes available. The paper is accompanied by an appendix with more details and adjustments to the manual controls, and two Mathematica notebooks, one focused on the application, and another that could be used generically for new data.
+This paper explains the new manual controls for projection and slice tours. The next section describes the new algorithm for manual control, for both projections and slices. The use of these methods is illustrated to compare and contrast boundaries constructed by different classifiers. The software section describes a mathematica package that is used for the application, and describes the interactive environment that would be desirable within R as new technology becomes available. The paper is accompanied by an appendix with more details and adjustments to the manual controls, and three Mathematica notebooks that can be used to reproduce the application.
 
 # How to construct a manual tour {#sec:method}
 
@@ -202,7 +202,7 @@ In addition, we also want to be able to look at slices of the data and select sl
 
 One might implement such an interactive interface via R Shiny, but in particular the tracking of the mouse position in small increments might pose a challenge. Here we found the dynamic graphics interface from Mathematica to be especially useful. In the following we first describe the relevant Mathematica functionalities and how they were used in the implementation, followed by a brief sketch of how the new approaches are implemented in the `tourr` package. There is hope that better interactivity will be available for R soon, which might allow for implementation of the techniques developed in Mathematica.
 
-## Mathematica notebook
+## Mathematica package
 
 Mathematica provides much utility and versatility, such as inbuilt data visualization, data manipulation and analysis, dynamic functionality, and symbolic and numeric computation. Most of this inbuilt functionality is user-friendly and described in the Mathematica documentation; typically, numerous examples are provided within the documentation, and some possible issues are outlined there.
 
@@ -483,6 +483,7 @@ The source material and animated gifs for this paper are available at [https://g
 
 The supplementary materials include:
 
-- Two Mathematica notebooks, one focused on the application, and another that could be used generically for new data.
+- The Mathematica source code defining the new functions in mmtour.wl.
+- Three Mathematica notebooks with the code used in the application (corresponding to the three subsections).
 - Appendix with additional details about manual controls, and Mathematica functions.
-- Animated gifs illustrating the manual tour and slicing, matching the static figures in the paper. These are also available at https://vimeo.com/747585410 and https://vimeo.com/747590472.
+- Animations illustrating the manual tour and slicing, matching the static figures in the paper. These are also available at https://vimeo.com/747585410 and https://vimeo.com/747590472.

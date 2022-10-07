@@ -35,7 +35,7 @@
 \usepackage{hyperref}
 \usepackage[utf8]{inputenc}
 \def\tightlist{}
-\usepackage{setspace}
+\usepackage{setspace}\doublespacing
 \usepackage{graphicx}
 \usepackage{nicematrix}
 \NiceMatrixOptions{code-for-first-row = \color{red} ,code-for-last-row = \color{red} ,code-for-first-col = \color{blue} ,code-for-last-col = \color{blue}}
@@ -74,13 +74,13 @@ interactively change the contribution of a given variable to a
 low-dimensional projection, which is useful for exploring the
 sensitivity of structure to particular variables. The user can also
 interactively shift the center of a slice, for example, to explore how
-structure changes in local subspaces. Two Mathematica notebooks are
-provided, which contain functions enabling the user to experiment with
-these new manual controls, with one specifically for exploring regions
-and boundaries produced by classification models. The advantage of
-Mathematica is its linear algebra capabilities, and interactive cursor
-location controls. Some limited implementation has also been made
-available in the R package \tt{tourr}. 
+structure changes in local subspaces. The Mathematica package as well as
+example notebooks are provided, which contain functions enabling the
+user to experiment with these new manual controls, with one specifically
+for exploring regions and boundaries produced by classification models.
+The advantage of Mathematica is its linear algebra capabilities, and
+interactive cursor location controls. Some limited implementation has
+also been made available in the R package \tt{tourr}. 
 \end{abstract}
 
 \begin{keywords}
@@ -147,12 +147,12 @@ This paper explains the new manual controls for projection and slice
 tours. The next section describes the new algorithm for manual control,
 for both projections and slices. The use of these methods is illustrated
 to compare and contrast boundaries constructed by different classifiers.
-The software section describes a mathematica notebook that is used for
+The software section describes a mathematica package that is used for
 the application, and describes the interactive environment that would be
 desirable within R as new technology becomes available. The paper is
 accompanied by an appendix with more details and adjustments to the
-manual controls, and two Mathematica notebooks, one focused on the
-application, and another that could be used generically for new data.
+manual controls, and three Mathematica notebooks that can be used to
+reproduce the application.
 
 \hypertarget{sec:method}{%
 \section{How to construct a manual tour}\label{sec:method}}
@@ -336,8 +336,8 @@ implemented in the \texttt{tourr} package. There is hope that better
 interactivity will be available for R soon, which might allow for
 implementation of the techniques developed in Mathematica.
 
-\hypertarget{mathematica-notebook}{%
-\subsection{Mathematica notebook}\label{mathematica-notebook}}
+\hypertarget{mathematica-package}{%
+\subsection{Mathematica package}\label{mathematica-package}}
 
 Mathematica provides much utility and versatility, such as inbuilt data
 visualization, data manipulation and analysis, dynamic functionality,
@@ -666,13 +666,15 @@ The supplementary materials include:
 \begin{itemize}
 \tightlist
 \item
-  Two Mathematica notebooks, one focused on the application, and another
-  that could be used generically for new data.
+  The Mathematica source code defining the new functions in mmtour.wl.
+\item
+  Three Mathematica notebooks with the code used in the application
+  (corresponding to the three subsections).
 \item
   Appendix with additional details about manual controls, and
   Mathematica functions.
 \item
-  Animated gifs illustrating the manual tour and slicing, matching the
+  Animations illustrating the manual tour and slicing, matching the
   static figures in the paper. These are also available at
   \url{https://vimeo.com/747585410} and
   \url{https://vimeo.com/747590472}.
