@@ -1,0 +1,270 @@
+---
+title: |
+  Appendix: New and simplified manual controls for projection and slice tours
+type: Short Technical Note
+author:
+  - name: Ursula Laa
+    affil: a
+    email: ursula.laa@boku.ac.at
+  - name: Alex Aumann
+    affil: b
+    email: aaum0002@student.monash.edu
+  - name: Dianne Cook
+    affil: c
+    email: dicook@monash.edu
+  - name: German Valencia
+    affil: b
+    email: german.valencia@monash.edu
+affiliation:
+  - num: a
+    address: |
+      Institute of Statistics, University of Natural Resources and Life Sciences, Vienna
+  - num: b
+    address: |
+      School of Physics and Astronomy, Monash University
+  - num: c
+    address: |
+      Department of Econometrics and Business Statistics, Monash University
+bibliography: biblio.bib
+geometry: margin=2.5cm
+keywords: |
+  data visualisation; grand tour; statistical computing; statistical graphics; multivariate data; dynamic graphics
+header-includes: |
+  \usepackage{hyperref}
+  \usepackage[utf8]{inputenc}
+  \def\tightlist{}
+  \usepackage{setspace}\doublespacing
+  \usepackage{graphicx}
+  \usepackage{nicematrix}
+  \NiceMatrixOptions{code-for-first-row = \color{red} ,code-for-last-row = \color{red} ,code-for-first-col = \color{blue} ,code-for-last-col = \color{blue}}
+output: rticles::tf_article
+keep_tex: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE, 
+  message = FALSE,
+  warning = FALSE)
+```
+
+```{r libraries}
+# Load libraries
+library(tourr)
+library(plotrix)
+```
+
+<!-- \doublespacing-->
+
+# Refinements to enforce exact position
+
+The problem with the new simple method (Algorithm 1) is that the precise values for $V_m$ cannot be specified because the orthonormalisation will change them. 
+
+## Adjustment method 1
+
+A small modification to algorithm 1 will maintain the components of $V_m$ precisely (Figure \ref{fig:othermethod}). It is as follows:
+
+1. Provide $A$, and $m$.
+2. Change values in row $m$, giving $A^*$.
+3. Store row $m$ separately, and zero the values of row $m$ in $A^*$, giving $A^{*0}$. 
+4. Orthonormalise $A^{*0}$, using Gram-Schmidt.
+5. Replace row $m$ with the original values, giving $A^{**}$. 
+6. For $d=2$, adjust the values of ${\boldmath a}^{**}_{.2}$ using 
+
+$$a^{**}_{j2}+\frac{a_{m1}a_{m2}}{p-1}, j=1, ..., p, j\neq m.$$
+
+which ensures that 
+
+$$\sum_{j=1, j\neq m}^p a^{**}_{j1}a^{**}_{j2} + a_{m1}a_{m2} = 0.$$
+
+If $d>2$ the process would be sequentially repeated in the same manner that Gram-Schmidt is applied sequentially to orthormalise the columns of a matrix. If $d=1$ no orthonormalisation is needed, and the projection vector would simply need to be normalized after each adjustment. 
+
+<!-- Need to think about how the values for selected variable are made exact, that is constrained orthonormalisation.
+
+Need to think about checks, and error catching, maybe in implementation section. If selected variable has 0 coefficient, will that generate an orthonormalisation error?-->
+
+```{r othermethod, out.width="100%", width=12, height=4, fig.cap="Manual controls with algorithm 2. The precise location of the axis is maintained."}
+source("../code/plot_basis.R")
+source("../code/linear_alg.R")
+
+# Base plot set up
+plot.new()
+par(pty="s", xaxt="n", yaxt="n", bty="n",
+      omi=c(0,0,0,0), mar=c(0,0,0,0),
+    mfrow=c(1,4))
+
+# Create manual tour example
+p <- 4
+d <- 2
+set.seed(24)
+A <- matrix(runif(p*d, min=-1), ncol=d, byrow=TRUE)
+colnames(A) <- c("P1", "P2")
+rownames(A) <- paste0("V", 1:p)
+A <- tourr::orthonormalise(A)
+  
+# Now set a new position
+vchange <- 3
+eps <- 0.1
+plot_basis(A, vchange, vcol="black")
+
+# j is the component that should be kept fixed
+orthonormalize_rotated <- function(A, j){
+  m1 <- A[j, 1]
+  m2 <- A[j, 2]
+  c <- 1 / (sqrt(1 + (m2/m1)^2))
+  s <- (m2/m1) / (sqrt(1 + (m2/m1)^2))
+  rot <- matrix(c(c, -s, s, c), nrow = 2)
+  rot_inv <- matrix(c(c, s, -s, c), nrow = 2)
+  for(i in 1:nrow(A)){
+    A[i,] <- rot %*% A[i,]
+  }
+  A[,1] <- normalize_w_fixed(A[,1], j)
+  A <- tourr::orthonormalise(A)
+  for(i in 1:nrow(A)){
+    A[i,] <- rot_inv %*% A[i,]
+    }
+  A
+}
+
+# normalize a vector while keeping component j fixed
+normalize_w_fixed <- function(v, j){
+  c <- v[j]
+  k <- sqrt((1-c^2) / sum(v[-j]^2))
+  v[-j] <- k * v[-j]
+  v
+}
+
+# Iterate and save images
+# Unconstrained orthonormalisation
+Anew <- A
+for (i in 1:3) {
+  Anew[vchange,] <- A[vchange,]*(1-i*eps)
+  exact <- Anew[vchange,]
+  Anew <- orthonormalize_rotated(Anew, vchange)
+  plot_basis(Anew, vchange, vcol="black")
+  points(exact[1], exact[2], pch=16, col="orange")
+}
+
+```
+
+## Adjustment method 2
+
+
+For $d=2$ projections, the projection matrix is the sub-matrix $A$, of $O$ (an orthonormal basis for the p-dimensional space), formed by its first two columns as illustrated in Eq.~\ref{matrices}. Whereas orthonormality of the basis for the p-dimensional space is given by $e_i\cdot e_j=\delta_{ij},{i,j,=1,\cdots, p}$, orthonormality of the projection matrix is expressed as $\sum_{k=1}^p a_{ki} a_{kj}=\delta_{ij}, ~{i,j=1,2}, ~{k=1,\cdots,p}$. Movement of the cursor takes the two components ${a_{m1},a_{m2}}$ into a selected new value ${a^*_{m1},a^*_{m2}}$. Although the motion is constrained by $a^{*2}_{m1}+a^{*2}_{m2}\leq 1$, this is not sufficient to guarantee orthonormality of the new projection matrix. One possible algorithm to achieve this is
+\begin{enumerate}
+\item Cursor movement takes ${a_{m1},a_{m2}}\to {a^*_{m1},a^*_{m2}}$, called $V_m$ above.
+\item The freedom to change the components $a_{m3}\cdots a_{mp}$ (the columns of $O$ not corresponding to the projection matrix $A$) is used to select a new orthonormal basis as follows:
+\begin{enumerate}
+\item For row $m$ one chooses $a^*_{m3}=\sqrt{1-a^{*2}_{m1}-a^{*2}_{m1}},~a^*_{m,k>3}=0$
+\item For other rows, $a_{i\neq m,j\geq3}$ random selections in the range $(-1,1)$ are made.
+\item The Gram-Schmidt algorithm is then used to obtain an orthonormal basis taking $e_m$ as the first vector (which is already normalized), and then proceeding as usual $e_1\to e_1-(e_1\cdot e_m) e_m$, $e_1\to e_1/(e_1\cdot e_1)$, etc, resulting in $A^{**}$.
+\end{enumerate}
+\item this results in the orthonormal basis $O^*$ and a new projection matrix with $A^{**}_{m1}=a^*_{m1},~A^{**}_{m2}=a^*_{m2}$.
+\end{enumerate}
+The random completion of $O$ outside the projection matrix provides an exploration of dimensions orthogonal to the projection plane. However, it renders projections in a way that is not continuous  and may be distracting. This can be alleviated by replacing the random completion with a rule restricting the size of the jumps, for example in step (b) the values $a_{i\neq m,j\geq3}$ can be left unchanged before orthogonalisation.
+
+\begin{align}
+O=~~~& \begin{pNiceArray}{ccccc}[first-row,first-col]
+\CodeBefore
+       \columncolor{red!15}{1,2}
+              \rowcolor{blue!15}{4}
+     \Body
+       & \stackrel{A_1}{\downarrow} & \stackrel{A_2}{\downarrow} &  & &\\
+e_1\to & a_{11} & a_{12}  & a_{13} & \cdots & a_{1p} \\
+e_2 \to& a_{21}  & a_{22}  & \cdot  &\cdots & a_{2p} \\
+\vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\ 
+ e_m \to& a_{m1}  & a_{m2}  & \cdot  &\cdots & a_{mp} \\   
+\vdots ~~~&\vdots & \vdots  & \vdots & \ddots & \vdots \\
+e_p \to&a_{p1} & a_{p2} &\cdot &\cdots & a_{pp} 
+\end{pNiceArray},\quad (a_{m1},a_{m2})\to (a^*_{m1},a^*_{m2})
+\label{matrices}
+\end{align}
+
+
+We could also take a similar approach without completing the basis, through rotation within the $d$-dimensional hyperplane defined by the new projection. In that case we would again start from $A^*$ as above, and then rotate the basis such that the first direction is aligned with the selected variable $m$. Applying Gram-Schmid within that basis definition will not alter the direction for the first vector, thus the direction of $m$ remains fixed to what was selected with the cursor. By adjusting the normalization procedure we can also ensure that the lenght remains as selcted manually by the user. 
+
+
+# Slice center guide
+
+The slice center, $c$, from Equation 1 in the main paper, is a point in the $p$-dimensional space. By default, it is placed in the center of the data (Figure \ref{fig:anchornav} A). Moving this along a variable axis moves the slice outwards from the center of the data (Figure \ref{fig:anchornav} B, C). The visual display of the center position is a form of star plot as suggested useful in @condviz2, where the position of the point is marked by a polygon on radial axes indicating its position relative to the variable minimum to maximum values.
+
+```{r anchornav, fig.width=10, fig.height=3, out.width="100%", fig.cap="Visual guide for the slice center. Variable axes are displayed in polar coordinates, where the center corresponds to minimum value and outer end corresponds to maximum value. The position of the center corresponds to the dark polygon. If the center is at the center of the data, this will be displayed as a regular polygon (A), and plots B, C show it's position when moving the center along one axis."}
+par(pty="s", mfrow=c(1,3))
+plot(c(-1, 1), c(-1, 1), type="n", axes=FALSE, xlab = "", ylab = "", main="A. data center")
+anchor = data.frame(matrix(rep(0.5, 6), ncol=6))
+tourr:::draw_slice_center(
+   anchor, 
+   rng = matrix(rep(c(0,1), 6), ncol=6, byrow=FALSE),
+   limits = 1, anchor_nav = "center")
+plot(c(-1, 1), c(-1, 1), type="n", axes=FALSE, xlab = "", ylab = "", main="B. center moved towards max value of X3")
+anchor[3] <- 0.75
+tourr:::draw_slice_center(
+   anchor, 
+   rng = matrix(rep(c(0,1), 6), ncol=6, byrow=FALSE),
+   limits = 1, anchor_nav = "center")
+plot(c(-1, 1), c(-1, 1), type="n", axes=FALSE, xlab = "", ylab = "", main="C. center moved towards min value of X3")
+anchor[3] <- 0.25
+tourr:::draw_slice_center(
+   anchor, 
+   rng = matrix(rep(c(0,1), 6), ncol=6, byrow=FALSE),
+   limits = 1, anchor_nav = "center")
+```
+
+# Software details
+
+
+Here we describe the functions implemented in the Mathematica package `mmtour.wl`. The main function and its arguments are given below:
+
+`SliceDynamic[data, projmat, height, heightRange, legendQ(=1), flagQ(=1), colorFunc(=ColorData[97])]`
+
+- `data`: A data matrix, potentially with grouping that has a label (string) and a flag  (numerical) in the last two columns.
+- `projmat`: The initial projection matrix. It is possible to start with a random projection with the input "random" (including the quotes) in this entry field.
+- `height`: The initial height of the slice.
+- `heightRange`: The range of slice heights to be explored.
+- `legendQ`: A flag signaling whether the data matrix includes a column with group labels (1) or not (0).
+- `flagQ`: A flag signaling whether the data matrix includes a numerical flag for the groups.
+- `colorFunc`: specifies the color mapping for the different groups.
+
+The first four arguments are required. As possible starting values we suggest using a random input projection, and selecting slice height parameters using the estimate given in Section 2.4.2 of the paper.
+
+The function renders a manual tour with controls that allow the user to navigate through different projections. For a given projection, a slider permits the user to change the slice width within its range and a separate box switches the view to a projection. The user can also change the center point of slices; the size of the points rendered and the scale of the plot through sliders. An additional box displays the coordinates of the projection matrix explicitly.
+
+This function can be used for ungrouped data by setting legendQ and flagQ to 0.
+To remove a group from the visual display, the user can choose specific colors for the entry colorFunc. For example, {Red,White,Green} would display groups 1 (red) and 3 (green) while making 2 invisible.
+
+
+The package includes the additional functions not used in the example application: `ProjectionPlot`, `Projected2DSliderPlot`, and `VisualiseSliceDyanmic`.
+
+`ProjectionPlot` is very similar to `SliceDynamic`, except it only displays projections.
+Using it instead of `SliceDynamic` simplifies the display and is more efficient. The interface is slightly different, the data file should not contain labels for groups, if these are desired they are passed through the optional argument legendNames as {"group 1", "group 2",...}, for example. The function and its arguments are given below:
+
+`ProjectionPlot[data, projmat, legendNames(={}), colorFunc(=ColorData[97])]`
+
+- `data`: A data matrix with one or more groups labeled by a flag (numerical, last column).
+- `projmat`: The initial projection matrix. It is possible to start with a random projection with the input "random" (including the quotes) in this entry field.
+- `legendNames`: an optional list of labels for the groups.
+- `colorFunc`: specifies the color mapping for the different groups.
+
+`ProjectedLocatorPlot` displays the interactive controls slightly differently. Several locator panes are displayed above the display of the projected data and each one corresponds to a row in the projection matrix. The updating behavior of the projection is the same as in `ProjectionPlot`. The function and its arguments are given below:
+
+`ProjectedLocatorPlot[data, projmat, legendNames(={}), colorFunc(=ColorData[97])]` 
+
+- `data`: A data matrix with one or more groups labeled by a flag  (numerical, last column). 
+- `projmat`: The initial projection matrix. It is possible to start with a random projection with the input "random" (including the quotes) in this entry field.
+- `legendNames`: an optional list of labels for the groups.
+- `colorFunc`: specifies the color mapping for the different groups.
+
+
+Finally `VisualiseSliceDynamic` allows to discern which points exist inside the slice and outside it. This function differs from `SliceDynamic` in that it looks at only one data set but displays both the points inside and outside the slice. The display panel allows the user to specify the size of both sets of points (inside and outside) along with the slice height, center point and zoom level. The function and its arguments are given below:
+
+`VisualiseSliceDynamic[data, projmat, height, heightRange]`
+
+- `data`: A data matrix containing only one group. In this case the data matrix should not contain column labels.
+- `projmat`: The initial projection matrix. It is possible to start with a random projection with the input "random" (including the quotes) in this entry field.
+- `height`: The initial height of the slice.
+- `heightRange`: The range of slice heights to be explored.
+
+The points inside the slice are shown in black whereas those outside the slice are shown in light blue, with labels indicating this.
+
+
+
