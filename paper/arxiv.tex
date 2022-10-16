@@ -1,70 +1,51 @@
-\documentclass{article}
+% interactcadsample.tex
+% v1.03 - April 2017
 
-\usepackage{arxiv}
+\documentclass[]{interact}
 
-\usepackage[utf8]{inputenc} % allow utf-8 input
-\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
-\usepackage{lmodern}        % https://github.com/rstudio/rticles/issues/343
-\usepackage{hyperref}       % hyperlinks
-\usepackage{url}            % simple URL typesetting
-\usepackage{booktabs}       % professional-quality tables
-\usepackage{amsfonts}       % blackboard math symbols
-\usepackage{nicefrac}       % compact symbols for 1/2, etc.
-\usepackage{microtype}      % microtypography
+\usepackage{epstopdf}% To incorporate .eps illustrations using PDFLaTeX, etc.
+\usepackage{subfigure}% Support for small, `sub' figures and tables
+%\usepackage[nolists,tablesfirst]{endfloat}% To `separate' figures and tables from text if required
+
+\usepackage{natbib}% Citation support using natbib.sty
+\bibpunct[, ]{(}{)}{;}{a}{}{,}% Citation support using natbib.sty
+\renewcommand\bibfont{\fontsize{10}{12}\selectfont}% Bibliography support using natbib.sty
+
+\theoremstyle{plain}% Theorem-like structures provided by amsthm.sty
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newtheorem{notation}{Notation}
+
+% see https://stackoverflow.com/a/47122900
+
+% Pandoc citation processing
+
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\def\tightlist{}
+\usepackage{setspace}
 \usepackage{graphicx}
+\usepackage{nicematrix}
+\NiceMatrixOptions{code-for-first-row = \color{red} ,code-for-last-row = \color{red} ,code-for-first-col = \color{blue} ,code-for-last-col = \color{blue}}
+
+
+\begin{document}
+
+\articletype{}
 
 \title{New and simplified manual controls for projection and slice
 tours, with application to exploring classification boundaries in high
 dimensions}
 
-
-% tightlist command for lists without linebreak
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
-
-% Pandoc citation processing
-\newlength{\cslhangindent}
-\setlength{\cslhangindent}{1.5em}
-\newlength{\csllabelwidth}
-\setlength{\csllabelwidth}{3em}
-\newlength{\cslentryspacingunit} % times entry-spacing
-\setlength{\cslentryspacingunit}{\parskip}
-% for Pandoc 2.8 to 2.10.1
-\newenvironment{cslreferences}%
-  {}%
-  {\par}
-% For Pandoc 2.11+
-\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
- {% don't indent paragraphs
-  \setlength{\parindent}{0pt}
-  % turn on hanging indent if param 1 is 1
-  \ifodd #1
-  \let\oldpar\par
-  \def\par{\hangindent=\cslhangindent\oldpar}
-  \fi
-  % set entry spacing
-  \setlength{\parskip}{#2\cslentryspacingunit}
- }%
- {}
-\usepackage{calc}
-\newcommand{\CSLBlock}[1]{#1\hfill\break}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
-\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
-
-\usepackage{hyperref}
-\usepackage[utf8]{inputenc}
-\def\tightlist{}
-\usepackage{setspace}\doublespacing
-\usepackage{graphicx}
-\usepackage{nicematrix}
-
-\NiceMatrixOptions{code-for-first-row = \color{red} ,code-for-last-row = \color{red} ,code-for-first-col = \color{blue} ,code-for-last-col = \color{blue}}
-
-
-\begin{document}
-\maketitle
 
 \author{\name{Ursula Laa$^{a}$, Alex Aumann$^{b}$, Dianne
 Cook$^{c}$, German Valencia$^{b}$}
@@ -80,8 +61,7 @@ Aumann. Email: \href{mailto:aaum0002@student.monash.edu}{\nolinkurl{aaum0002@stu
 Cook. Email: \href{mailto:dicook@monash.edu}{\nolinkurl{dicook@monash.edu}}, German
 Valencia. Email: \href{mailto:german.valencia@monash.edu}{\nolinkurl{german.valencia@monash.edu}}}
 
-
-
+\maketitle
 
 \begin{abstract}
 This paper describes new user controls for examining high-dimensional
@@ -99,10 +79,10 @@ interactive cursor location controls. Some limited implementation has
 also been made available in the R package \tt{tourr}. 
 \end{abstract}
 
-\keywords{
-    data visualisation; grand tour; statistical computing; statistical
-    graphics; multivariate data; dynamic graphics
-  }
+\begin{keywords}
+data visualisation; grand tour; statistical computing; statistical
+graphics; multivariate data; dynamic graphics
+\end{keywords}
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
@@ -113,27 +93,26 @@ for data analysis need to work for arbitrary dimension. A good approach
 is to show projections from an arbitrary dimensional space to create
 dynamic data visualizations called \emph{tours}. Tours involve views of
 high-dimensional (\(p\)) data with low-dimensional (\(d\)) projections.
-In his original paper on the grand tour, Asimov (1985) provided several
+In his original paper on the grand tour, \citet{As85} provided several
 algorithms for tour paths that could theoretically show the viewer the
 data \emph{from all sides}. Prior to Asimov's work, there were numerous
-preparatory developments including Fisherkeller, Friedman, and Tukey
-(1974)'s PRIM-9. PRIM-9 had user-controlled rotations on coordinate
-axes, allowing one to manually tour through low-dimensional projections.
-(A video illustrating the capabilities is available through video
-library of ASA Statistical Graphics Section (2022).) Steering through
-all possible projections is impossible, unlike Asimov's tours which
-allows one to quickly see many, many different projections. After Asimov
-there have been many tour developments, which are summarized in Lee et
-al. (2021).
+preparatory developments including \citet{tukey}'s PRIM-9. PRIM-9 had
+user-controlled rotations on coordinate axes, allowing one to manually
+tour through low-dimensional projections. (A video illustrating the
+capabilities is available through video library of \citet{ASA22}.)
+Steering through all possible projections is impossible, unlike Asimov's
+tours which allows one to quickly see many, many different projections.
+After Asimov there have been many tour developments, which are
+summarized in \citet{lee2021}.
 
 One such direction of work develops the ideas from PRIM-9, to provide
-manual control of a tour. Cook and Buja (1997) describe controls for 1D
-(or 2D) projections, respectively in a 2D (or 3D) manipulation space,
+manual control of a tour. \citet{cook_manual_1997} describe controls for
+1D (or 2D) projections, respectively in a 2D (or 3D) manipulation space,
 allowing the user to select any variable axis, and rotate it into, or
 out of, or around the projection through horizontal, vertical, oblique,
-radial or angular changes in value. Spyrison and Cook (2020) refined
-this algorithm and implemented it to generate radial tour animation
-sequences.
+radial or angular changes in value. \citet{spyrison_spinifex_2020}
+refined this algorithm and implemented it to generate radial tour
+animation sequences.
 
 Manual controls are especially useful for assessing sensitivity of
 structure to particular elements of the projection. There are many
@@ -149,9 +128,9 @@ the algorithm, (2) extending to higher dimensional control is difficult.
 
 Another potentially useful manual control, is to allow the user to
 choose the position of the center of a slice. The slice tour was
-introduced in Laa, Cook, and Valencia (2020). It operates by converting
-the projection plane into a slice, by removing or de-emphasizing points
-that are further than a fixed orthogonal distance from the plane. The
+introduced in \citet{slicetour}. It operates by converting the
+projection plane into a slice, by removing or de-emphasizing points that
+are further than a fixed orthogonal distance from the plane. The
 projection plane is usually thought of as passing through the center of
 the data. Manual control would allow the user to change the position of
 the center point, by shifting it along a coordinate axis, while keeping
@@ -185,18 +164,19 @@ controlled variable \(V_m\) is then needed.
 \hypertarget{existing-methods}{%
 \subsection{Existing methods}\label{existing-methods}}
 
-The methods for updating component values in Cook and Buja (1997) (and
-utilized in Spyrison and Cook (2020)) are prescribed primarily for a 2D
-projection, to take advantage of (then) newly developed 3D trackball
-controls made available for computer gaming. The first step was to
-construct a 3D manipulation space from a 2D projection. In this space,
-the coefficient of the controlled variable ranges between -1 and 1.
-Movements of a cursor are recorded and converted into changes in the
-values of \(V_m\) thus changing the displayed 2D projection. The
-algorithm also provided constraints to horizontal, vertical, radial or
-angular motions only. The construction of the manipulation space overly
-complicates the manual controls, especially when considering possible
-techniques that will apply to arbitrary \(d\).
+The methods for updating component values in \citet{cook_manual_1997}
+(and utilized in \citet{spyrison_spinifex_2020}) are prescribed
+primarily for a 2D projection, to take advantage of (then) newly
+developed 3D trackball controls made available for computer gaming. The
+first step was to construct a 3D manipulation space from a 2D
+projection. In this space, the coefficient of the controlled variable
+ranges between -1 and 1. Movements of a cursor are recorded and
+converted into changes in the values of \(V_m\) thus changing the
+displayed 2D projection. The algorithm also provided constraints to
+horizontal, vertical, radial or angular motions only. The construction
+of the manipulation space overly complicates the manual controls,
+especially when considering possible techniques that will apply to
+arbitrary \(d\).
 
 \hypertarget{a-new-simpler-and-broadly-applicable-approach}{%
 \subsection{A new simpler and broadly applicable
@@ -204,7 +184,7 @@ approach}\label{a-new-simpler-and-broadly-applicable-approach}}
 
 The new approach emerged from experiments on the tour using the linear
 algebra capabilities, and relatively new interactive graphics interface,
-available in Mathematica (Wolfram Research, Inc. 2022). The components
+available in Mathematica \citep{Mathematica}. The components
 corresponding to \(V_m\) are directly controlled by cursor movement,
 which updates row \(m\) of \(A\). The updated matrix is then
 orthonormalised.
@@ -251,7 +231,7 @@ Changes in the other components happen as a result of the
 orthonormalisation, but are uncontrolled.
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{paper_files/figure-latex/manualsequence-1} \caption{Sequence of projections where contribution of one variable is controlled (black) is changed using unconstrained orthonormalisation. The dot (orange) indicates the chosen values for the controlled variable. It can be seen that the actual axis does not precisely match the chosen position, but it is close.}\label{fig:manualsequence}
+\includegraphics[width=1\linewidth]{arxiv_files/figure-latex/manualsequence-1} \caption{Sequence of projections where contribution of one variable is controlled (black) is changed using unconstrained orthonormalisation. The dot (orange) indicates the chosen values for the controlled variable. It can be seen that the actual axis does not precisely match the chosen position, but it is close.}\label{fig:manualsequence}
 \end{figure}
 
 \hypertarget{refinements-to-enforce-exact-position}{%
@@ -271,14 +251,14 @@ how the remaining variables are adjusted during orthonormalisation.
 To better explore the space we combine the manual controls for the
 projection with manual controls for slicing. A slice is a section of the
 data that is defined by a projection, a center point that is anchoring
-it in the high-dimensional space and the slice thickness \(h\) (Laa,
-Cook, and Valencia 2020). A data point is inside the slice if its
-orthogonal distance from the projection plane (passing through the
-center point) is below the thickness \(h\). This orthogonal distance is
-computed in terms of the component that is normal on the projection
-plane. For \(\mathbf{x}_i\) a \(p\) dimensional data point and
-\(\mathbf{c}\) the center point (in the same \(p\) dimensional space) we
-compute the orthogonal distance as \begin{equation}
+it in the high-dimensional space and the slice thickness \(h\)
+\citep{slicetour}. A data point is inside the slice if its orthogonal
+distance from the projection plane (passing through the center point) is
+below the thickness \(h\). This orthogonal distance is computed in terms
+of the component that is normal on the projection plane. For
+\(\mathbf{x}_i\) a \(p\) dimensional data point and \(\mathbf{c}\) the
+center point (in the same \(p\) dimensional space) we compute the
+orthogonal distance as \begin{equation}
 v_i^2 = ||\mathbf{x}_i' - \mathbf{c}'||^2 = \mathbf{x}_i'^2 + \mathbf{c}'^2 - 2 \mathbf{x}_i'\cdot\mathbf{c}' ,
 \label{eq:slice}
 \end{equation} with
@@ -306,10 +286,10 @@ In addition it is also useful to interactively change the slice
 thickness \(h\) (also called the slice radius), in particular to find
 the preferred value for exploring the input data. For guidance the
 estimates of the number of points inside the slice as a function of the
-original sample size \(N\) and the number of dimensions \(p\) from Laa
-et al. (2022) can be used: in case of a uniform distribution inside a
-sphere of radius \(R\) a slice with thickness \(h\) will contain \(N_S\)
-points, with \begin{equation}
+original sample size \(N\) and the number of dimensions \(p\) from
+\citet{sectionpursuit} can be used: in case of a uniform distribution
+inside a sphere of radius \(R\) a slice with thickness \(h\) will
+contain \(N_S\) points, with \begin{equation}
 N_S(h, p, R, N) = \frac{N}{2} \left(\frac{h}{R}\right)^{p-2} \left(p - (p-2)\left(\frac{h}{R}\right)^{2}\right).
 \label{eq:count}
 \end{equation}
@@ -404,25 +384,24 @@ Appendix.
 \subsection{\texorpdfstring{Extensions to the R package
 \texttt{tourr}}{Extensions to the R package tourr}}\label{extensions-to-the-r-package-tourr}}
 
-The R package tourr (Wickham et al. 2011) provides numerous types of
-tours. An additional function, \texttt{radial\_tour()} has been
-constructed that will generate a sequence of projections that will
-decrease the coordinates for \(V_m\) to \(\boldsymbol{0}\) and back to
-the original values. It is applicable for any projection dimension,
-\(d\). Changing slice center manually can be accomplished with the new
-function, \texttt{manual\_slice()}. This changes the value of the center
-point (\(\mathbf{c}\)) of the slice, along a selected variable axis. It
-slices from the center of the data out to one side, back to the center,
-out to the opposite side, and then back to the center. The appendix
-contains a discussion of a possible visual guide for the slice center
-location.
+The R package tourr \citep{tourr} provides numerous types of tours. An
+additional function, \texttt{radial\_tour()} has been constructed that
+will generate a sequence of projections that will decrease the
+coordinates for \(V_m\) to \(\boldsymbol{0}\) and back to the original
+values. It is applicable for any projection dimension, \(d\). Changing
+slice center manually can be accomplished with the new function,
+\texttt{manual\_slice()}. This changes the value of the center point
+(\(\mathbf{c}\)) of the slice, along a selected variable axis. It slices
+from the center of the data out to one side, back to the center, out to
+the opposite side, and then back to the center. The appendix contains a
+discussion of a possible visual guide for the slice center location.
 
 \hypertarget{sec:examples}{%
 \section{Application}\label{sec:examples}}
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.6\linewidth]{paper_files/figure-latex/penguins-scatmat-1} 
+{\centering \includegraphics[width=0.6\linewidth]{arxiv_files/figure-latex/penguins-scatmat-1} 
 
 }
 
@@ -430,12 +409,11 @@ location.
 \end{figure}
 
 To illustrate the usefulness of the manual controls we use the 4D
-penguins data (Horst, Hill, and Gorman 2020) and look at classification
-models following Wickham, Cook, and Hofmann (2015). We will show how
-classification boundaries can be explored and better understood on
-projections and slices through 4D space. Figure
-\ref{fig:penguins-scatmat} shows a scatterplot matrix of this data.
-There are four variables
+penguins data \citep{penguins} and look at classification models
+following \citet{sam11271}. We will show how classification boundaries
+can be explored and better understood on projections and slices through
+4D space. Figure \ref{fig:penguins-scatmat} shows a scatterplot matrix
+of this data. There are four variables
 (\texttt{bl\ =\ bill\_length\_mm,\ bd\ =\ bill\_depth\_mm,\ fl\ =\ flipper\_length\_mm,\ bm\ =\ body\_mass\_g})
 measuring the size of the penguins from three species (Adelie, Chinstrap
 and Gentoo). The scatterplot matrix shows that the three species appear
@@ -467,7 +445,7 @@ example are as follows:
 \subsection{Constructing the 4D prediction
 regions}\label{constructing-the-4d-prediction-regions}}
 
-We use the \texttt{classifly} package (Wickham 2022) to generate
+We use the \texttt{classifly} package \citep{classifly} to generate
 predictions across the 4D cube spanned by the data, with two
 classification models: linear discriminant analysis (LDA) and random
 forest (RF). Both the data and the model points in the grid are centered
@@ -665,12 +643,12 @@ comparing fits.
 
 The authors gratefully acknowledge the support of the Australian
 Research Council and the ResearchFirst undergraduate research program at
-Monash University. The paper was written in \texttt{rmarkdown} (Xie,
-Allaire, and Grolemund 2018) using \texttt{knitr} (Xie 2015). The
-scatterplot matrix of the penguins data was produced by the GGally
-(Emerson et al. 2013) package built on ggplot2 (Wickham 2016) graphics.
-We thank the Institute of Statistics, BOKU, for their hospitality while
-part of this work was conducted.
+Monash University. The paper was written in \texttt{rmarkdown}
+\citep{rmarkdown} using \texttt{knitr} \citep{knitr}. The scatterplot
+matrix of the penguins data was produced by the GGally \citep{GGally}
+package built on ggplot2 \citep{ggplot2} graphics. We thank the
+Institute of Statistics, BOKU, for their hospitality while part of this
+work was conducted.
 
 \hypertarget{supplementary-material}{%
 \section*{Supplementary material}\label{supplementary-material}}
@@ -700,9 +678,9 @@ The supplementary materials include:
 
 \appendix
 
-\hypertarget{refinements-to-enforce-exact-position}{%
+\hypertarget{refinements-to-enforce-exact-position-1}{%
 \section{Refinements to enforce exact
-position}\label{refinements-to-enforce-exact-position}}
+position}\label{refinements-to-enforce-exact-position-1}}
 
 The problem with the new simple method (Algorithm 1) is that the precise
 values for \(V_m\) cannot be specified because the orthonormalisation
@@ -744,7 +722,7 @@ a matrix. If \(d=1\) no orthonormalisation is needed, and the projection
 vector would simply need to be normalized after each adjustment.
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{appendix_files/figure-latex/othermethod-1} \caption{Manual controls with algorithm 2. The precise location of the axis is maintained.}\label{fig:othermethod}
+\includegraphics[width=1\linewidth]{arxiv_files/figure-latex/othermethod-1} \caption{Manual controls with algorithm 2. The precise location of the axis is maintained.}\label{fig:othermethod}
 \end{figure}
 
 \hypertarget{adjustment-method-2}{%
@@ -818,12 +796,12 @@ in the \(p\)-dimensional space. By default, it is placed in the center
 of the data (Figure \ref{fig:anchornav} A). Moving this along a variable
 axis moves the slice outwards from the center of the data (Figure
 \ref{fig:anchornav} B, C). The visual display of the center position is
-a form of star plot as suggested useful in \cite{condviz2}, where the
+a form of star plot as suggested useful in \citet{condviz2}, where the
 position of the point is marked by a polygon on radial axes indicating
 its position relative to the variable minimum to maximum values.
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{appendix_files/figure-latex/anchornav-1} \caption{Visual guide for the slice center. Variable axes are displayed in polar coordinates, where the center corresponds to minimum value and outer end corresponds to maximum value. The position of the center corresponds to the dark polygon. If the center is at the center of the data, this will be displayed as a regular polygon (A), and plots B, C show it's position when moving the center along one axis.}\label{fig:anchornav}
+\includegraphics[width=1\linewidth]{arxiv_files/figure-latex/anchornav-1} \caption{Visual guide for the slice center. Variable axes are displayed in polar coordinates, where the center corresponds to minimum value and outer end corresponds to maximum value. The position of the center corresponds to the dark polygon. If the center is at the center of the data, this will be displayed as a regular polygon (A), and plots B, C show it's position when moving the center along one axis.}\label{fig:anchornav}
 \end{figure}
 
 \hypertarget{software-details}{%
@@ -958,106 +936,10 @@ and its arguments are given below:
 The points inside the slice are shown in black whereas those outside the
 slice are shown in light blue, with labels indicating this.
 
-
-\hypertarget{refs}{}
-\begin{CSLReferences}{1}{0}
-\leavevmode\vadjust pre{\hypertarget{ref-ASA22}{}}%
-ASA Statistical Graphics Section. 2022. {``Video {L}ibrary.''}
-\url{https://community.amstat.org/jointscsg-section/media/videos}.
-
-\leavevmode\vadjust pre{\hypertarget{ref-As85}{}}%
-Asimov, D. 1985. {``{T}he {G}rand {T}our: {A} {T}ool for {V}iewing
-{M}ultidimensional {D}ata.''} \emph{SIAM Journal of Scientific and
-Statistical Computing} 6 (1): 128--43.
-https://doi.org/\url{https://doi.org/10.1137/0906011}.
-
-\leavevmode\vadjust pre{\hypertarget{ref-cook_manual_1997}{}}%
-Cook, Dianne, and Andreas Buja. 1997. {``Manual {Controls} for
-{High}-{Dimensional} {Data} {Projections}.''} \emph{Journal of
-Computational and Graphical Statistics} 6 (4): 464--80.
-\url{https://doi.org/10.2307/1390747}.
-
-\leavevmode\vadjust pre{\hypertarget{ref-GGally}{}}%
-Emerson, John W., Walton A. Green, Barret Schloerke, Jason Crowley,
-Dianne Cook, Heike Hofmann, and Hadley Wickham. 2013. {``The Generalized
-Pairs Plot.''} \emph{Journal of Computational and Graphical Statistics}
-22 (1): 79--91. \url{http://www.jstor.org/stable/43304816}.
-
-\leavevmode\vadjust pre{\hypertarget{ref-tukey}{}}%
-Fisherkeller, M. A., J. H. Friedman, and J. W. Tukey. 1974. {``{PRIM-9},
-an Interactive Multidimensional Data Display and Analysis System.''} In
-\emph{The Collected Works of John w. Tukey: Graphics 1965-1985, Volume
-v}, edited by William S. Cleveland, 340--46.
-
-\leavevmode\vadjust pre{\hypertarget{ref-penguins}{}}%
-Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020.
-\emph{Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data}.
-\url{https://allisonhorst.github.io/palmerpenguins/}.
-
-\leavevmode\vadjust pre{\hypertarget{ref-sectionpursuit}{}}%
-Laa, Ursula, Dianne Cook, Andreas Buja, and German Valencia. 2022.
-{``Hole or Grain? A Section Pursuit Index for Finding Hidden Structure
-in Multiple Dimensions.''} \emph{Journal of Computational and Graphical
-Statistics} 0 (0): 1--14.
-\url{https://doi.org/10.1080/10618600.2022.2035230}.
-
-\leavevmode\vadjust pre{\hypertarget{ref-slicetour}{}}%
-Laa, Ursula, Dianne Cook, and German Valencia. 2020. {``A Slice Tour for
-Finding Hollowness in High-Dimensional Data.''} \emph{Journal of
-Computational and Graphical Statistics} 29 (3): 681--87.
-\url{https://doi.org/10.1080/10618600.2020.1777140}.
-
-\leavevmode\vadjust pre{\hypertarget{ref-lee2021}{}}%
-Lee, Stuart, Dianne Cook, Natalia da Silva, Ursula Laa, Earo Wang, Nick
-Spyrison, and H. Sherry Zhang. 2021. {``Advanced {Review}: {The}
-{State}-of-the-{Art} on {Tours} for {Dynamic} {Visualization} of
-{High}-Dimensional {Data}.''} \emph{arXiv:2104.08016 {[}Cs, Stat{]}},
-April. \url{http://arxiv.org/abs/2104.08016}.
-
-\leavevmode\vadjust pre{\hypertarget{ref-spyrison_spinifex_2020}{}}%
-Spyrison, Nicholas, and Dianne Cook. 2020. {``Spinifex: An {R} {Package}
-for {Creating} a {Manual} {Tour} of {Low}-Dimensional {Projections} of
-{Multivariate} {Data}.''} \emph{The R Journal} 12 (1): 243.
-\url{https://doi.org/10.32614/RJ-2020-027}.
-
-\leavevmode\vadjust pre{\hypertarget{ref-ggplot2}{}}%
-Wickham, Hadley. 2016. \emph{Ggplot2: Elegant Graphics for Data
-Analysis}. Springer-Verlag New York.
-\url{https://ggplot2.tidyverse.org}.
-
-\leavevmode\vadjust pre{\hypertarget{ref-classifly}{}}%
----------. 2022. \emph{Classifly: Explore Classification Models in High
-Dimensions}. \url{https://CRAN.R-project.org/package=classifly}.
-
-\leavevmode\vadjust pre{\hypertarget{ref-sam11271}{}}%
-Wickham, Hadley, Dianne Cook, and Heike Hofmann. 2015. {``Visualizing
-Statistical Models: Removing the Blindfold.''} \emph{Statistical
-Analysis and Data Mining: The ASA Data Science Journal} 8 (4): 203--25.
-\url{https://doi.org/10.1002/sam.11271}.
-
-\leavevmode\vadjust pre{\hypertarget{ref-tourr}{}}%
-Wickham, Hadley, Dianne Cook, Heike Hofmann, and Andreas Buja. 2011.
-{``{tourr}: An {R} Package for Exploring Multivariate Data with
-Projections.''} \emph{Journal of Statistical Software} 40 (2): 1--18.
-https://doi.org/\url{http://dx.doi.org/10.18637/jss.v040.i02}.
-
-\leavevmode\vadjust pre{\hypertarget{ref-Mathematica}{}}%
-Wolfram Research, Inc. 2022. \emph{Mathematica, {V}ersion 13.1}.
-Champaign, IL. \url{https://www.wolfram.com/mathematica}.
-
-\leavevmode\vadjust pre{\hypertarget{ref-knitr}{}}%
-Xie, Yihui. 2015. \emph{Dynamic Documents with {R} and Knitr}. 2nd ed.
-Boca Raton, Florida: Chapman; Hall/CRC. \url{https://yihui.name/knitr/}.
-
-\leavevmode\vadjust pre{\hypertarget{ref-rmarkdown}{}}%
-Xie, Yihui, Joseph J. Allaire, and Garrett Grolemund. 2018. \emph{R
-Markdown: The Definitive Guide}. Chapman; Hall/CRC.
-\url{https://bookdown.org/yihui/rmarkdown}.
-
-\end{CSLReferences}
-
-\bibliographystyle{unsrt}
+\bibliographystyle{tfcad}
 \bibliography{biblio.bib}
+
+
 
 
 \end{document}

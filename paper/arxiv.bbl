@@ -1,0 +1,107 @@
+\begin{thebibliography}{18}
+\newcommand{\enquote}[1]{``#1''}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\normalfont{#1}}
+\providecommand{\urlprefix}{}
+
+\bibitem[{ASA Statistical Graphics Section}(2022)]{ASA22}
+{ASA Statistical Graphics Section}. 2022. ``Video {L}ibrary.''
+  \url{https://community.amstat.org/jointscsg-section/media/videos}.
+
+\bibitem[Asimov(1985)]{As85}
+Asimov, D. 1985. ``{T}he {G}rand {T}our: {A} {T}ool for {V}iewing
+  {M}ultidimensional {D}ata.'' \emph{SIAM Journal of Scientific and Statistical
+  Computing} 6 (1): 128--143.
+
+\bibitem[Cook and Buja(1997)]{cook_manual_1997}
+Cook, Dianne, and Andreas Buja. 1997. ``Manual {Controls} for
+  {High}-{Dimensional} {Data} {Projections}.'' \emph{Journal of Computational
+  and Graphical Statistics} 6 (4): 464--480.
+  \urlprefix\url{http://www.jstor.org/stable/1390747}.
+
+\bibitem[Emerson et~al.(2013)]{GGally}
+Emerson, John~W., Walton~A. Green, Barret Schloerke, Jason Crowley, Dianne
+  Cook, Heike Hofmann, and Hadley Wickham. 2013. ``The Generalized Pairs
+  Plot.'' \emph{Journal of Computational and Graphical Statistics} 22 (1):
+  79--91. Accessed 2022-07-14.
+  \urlprefix\url{http://www.jstor.org/stable/43304816}.
+
+\bibitem[Fisherkeller, Friedman, and Tukey(1974)]{tukey}
+Fisherkeller, M.A., J.H. Friedman, and J.W. Tukey. 1974. ``{PRIM-9}, an
+  interactive multidimensional data display and analysis system.'' In \emph{The
+  Collected Works of John W. Tukey: Graphics 1965-1985, Volume V},  edited by
+  William~S. Cleveland, 340--346.
+
+\bibitem[Horst, Hill, and Gorman(2020)]{penguins}
+Horst, Allison~Marie, Alison~Presmanes Hill, and Kristen~B Gorman. 2020.
+  \emph{palmerpenguins: Palmer Archipelago (Antarctica) penguin data}. R
+  package version 0.1.0,
+  \urlprefix\url{https://allisonhorst.github.io/palmerpenguins/}.
+
+\bibitem[Hurley, O'Connell, and Domijan(2022)]{condviz2}
+Hurley, Catherine~B., Mark O'Connell, and Katarina Domijan. 2022. ``Interactive
+  Slice Visualization for Exploring Machine Learning Models.'' \emph{Journal of
+  Computational and Graphical Statistics} 31 (1): 1--13.
+  \urlprefix\url{https://doi.org/10.1080/10618600.2021.1983439}.
+
+\bibitem[Laa et~al.(2022)]{sectionpursuit}
+Laa, Ursula, Dianne Cook, Andreas Buja, and German Valencia. 2022. ``Hole or
+  Grain? A Section Pursuit Index for Finding Hidden Structure in Multiple
+  Dimensions.'' \emph{Journal of Computational and Graphical Statistics} 0 (0):
+  1--14.  \urlprefix\url{https://doi.org/10.1080/10618600.2022.2035230}.
+
+\bibitem[Laa, Cook, and Valencia(2020)]{slicetour}
+Laa, Ursula, Dianne Cook, and German Valencia. 2020. ``A Slice Tour for Finding
+  Hollowness in High-Dimensional Data.'' \emph{Journal of Computational and
+  Graphical Statistics} 29 (3): 681--687.
+  \urlprefix\url{https://doi.org/10.1080/10618600.2020.1777140}.
+
+\bibitem[Lee et~al.(2021)]{lee2021}
+Lee, Stuart, Dianne Cook, Natalia {da Silva}, Ursula Laa, Earo Wang, Nick
+  Spyrison, and H.~Sherry Zhang. 2021. ``Advanced {Review}: {The}
+  {State}-of-the-{Art} on {Tours} for {Dynamic} {Visualization} of
+  {High}-dimensional {Data}.'' \emph{arXiv:2104.08016 [cs, stat]}
+  \urlprefix\url{http://arxiv.org/abs/2104.08016}.
+
+\bibitem[Spyrison and Cook(2020)]{spyrison_spinifex_2020}
+Spyrison, Nicholas, and Dianne Cook. 2020. ``spinifex: an {R} {Package} for
+  {Creating} a {Manual} {Tour} of {Low}-dimensional {Projections} of
+  {Multivariate} {Data}.'' \emph{The R Journal} 12 (1): 243.
+  \urlprefix\url{https://journal.r-project.org/archive/2020/RJ-2020-027/index.html}.
+
+\bibitem[Wickham(2016)]{ggplot2}
+Wickham, Hadley. 2016. \emph{ggplot2: Elegant Graphics for Data Analysis}.
+  Springer-Verlag New York.  \urlprefix\url{https://ggplot2.tidyverse.org}.
+
+\bibitem[Wickham(2022)]{classifly}
+Wickham, Hadley. 2022. \emph{classifly: Explore Classification Models in High
+  Dimensions}. R package version 0.4.1,
+  \urlprefix\url{https://CRAN.R-project.org/package=classifly}.
+
+\bibitem[Wickham, Cook, and Hofmann(2015)]{sam11271}
+Wickham, Hadley, Dianne Cook, and Heike Hofmann. 2015. ``Visualizing
+  statistical models: Removing the blindfold.'' \emph{Statistical Analysis and
+  Data Mining: The ASA Data Science Journal} 8 (4): 203--225.
+  \urlprefix\url{https://onlinelibrary.wiley.com/doi/abs/10.1002/sam.11271}.
+
+\bibitem[Wickham et~al.(2011)]{tourr}
+Wickham, Hadley, Dianne Cook, Heike Hofmann, and Andreas Buja. 2011. ``{tourr}:
+  An {R} Package for Exploring Multivariate Data with Projections.''
+  \emph{Journal of Statistical Software} 40 (2): 1--18.
+  \urlprefix\url{http://www.jstatsoft.org/v40/i02/}.
+
+\bibitem[{Wolfram Research{,} Inc.}(2022)]{Mathematica}
+{Wolfram Research{,} Inc.} 2022. \emph{Mathematica, {V}ersion 13.1}. Champaign,
+  IL.  \urlprefix\url{https://www.wolfram.com/mathematica}.
+
+\bibitem[Xie(2015)]{knitr}
+Xie, Yihui. 2015. \emph{Dynamic Documents with {R} and knitr}. 2nd ed. Boca
+  Raton, Florida: Chapman and Hall/CRC.
+  \urlprefix\url{https://yihui.name/knitr/}.
+
+\bibitem[Xie, Allaire, and Grolemund(2018)]{rmarkdown}
+Xie, Yihui, Joseph~J. Allaire, and Garrett Grolemund. 2018. \emph{R Markdown:
+  The Definitive Guide}. Chapman and Hall/CRC.
+  \urlprefix\url{https://bookdown.org/yihui/rmarkdown}.
+
+\end{thebibliography}
