@@ -28,6 +28,8 @@ A referee, an Associate Editor (AE), and I have reviewed your paper. There's ent
 
 4- Please be sure all figures have font size of labels and any text in the figure of at least 10pt.
 
+\textcolor{blue}{Done}
+
 Articles published in JCGS are ordinarily accompanied by online publication of the data and computer code used to illustrate the proposed methods. The goal is to enable readers to replicate much of the analysis and simulations described in a paper and to apply proposed methods in their own data without having to write code from scratch.  When it is not practical to include a whole dataset in the manuscript, the manuscript should state how the complete dataset can be obtained. Please let me know if you would not be able to publish your data for reasons of security or confidentiality. Please provide the computer code and/or data that you hope to publish along with your revision. I have attached the instructions for including online materials here.
 
 **Associate Editor**
@@ -50,7 +52,9 @@ Major Issues
     – Page 3, line 32: Cite R 
     
     – Page 7, line 28: Cite Shiny
-\textcolor{blue}{done}    
+    
+\textcolor{blue}{Done - the citations were there, but not placed at the first mention.}  
+
 - Notation
 
     – Define your notation better: $V_m$ is used without being defined, and it would probably be helpful to have a clearer mathematical definition of the relationship between your basis $A$ and $V_m$.
@@ -63,7 +67,11 @@ should be).
 
     - Page 7, line 46: "Mathematica provides much utility and versatility, such as inbuilt data visualization, data manipulation and analysis, dynamic functionality, and sym- bolic and numeric computation. Most of this inbuilt functionality is user-friendly and described in the Mathematica documentation; typically, numerous examples are provided within the documentation, and some possible issues are outlined there." The same could be said of R, so I'm not sure why this is relevant. It seems mostly like Mathematica propaganda.
     
+\textcolor{blue}{Modified}
+
       – Page 7-8: "Importantly for our work, it is relatively simple to create dynamic objects via the inbuilt commands Manipulate or DynamicModule. Control objects, such as sliders, locator panes, and input fields, can then be used on dynamic variables, and when there is a change in the dynamic variable the dynamic objects which contain that variable will be updated. This is the essential ingredient for this implementation of the manual tour." Again, the same dynamic control creation exists in Shiny, along with the basic reactivity to user inputs. It's hard to see why Mathematica is different here.
+
+\textcolor{blue}{This is better explained}
 
         – Page 8, line 11: "The most relevant inbuilt Mathematica function for our purpose is the LocatorPane. This creates a region on the screen where the position of the mouse is captured and then converted to input that updates the graphics functions, enabling the manual navigation of the tour."
     

@@ -148,12 +148,12 @@ This paper explains the new manual controls for projection and slice
 tours. The next section describes the new algorithm for manual control,
 for both projections and slices. The use of these methods is illustrated
 to compare and contrast boundaries constructed by different classifiers.
-The software section describes a Mathematica \citet{Mathematica} package
+The software section describes a Mathematica \citep{Mathematica} package
 that is used for the application, and describes the interactive
-environment that would be desirable within R \citet{rref} as new
+environment that would be desirable within R \citep{rref} as new
 technology becomes available. The paper is accompanied by an appendix
 with more details and adjustments to the manual controls, and three
-Mathematica notebooks that can be used to reproduce the application.
+Mathematica notebooks that can be used to reproduce the applications.
 
 \hypertarget{sec:method}{%
 \section{How to construct a manual tour}\label{sec:method}}
@@ -307,37 +307,27 @@ The implementation of the manual tour as suggested here requires the
 visualization of the current projection in terms of an axis display (see
 Figure \ref{fig:manualsequence} for an example). This display should be
 able to track the mouse position and adjust the projection based on the
-user selection. The user can select one axis (corresponding to one
-variable) by clicking on it, and then adjust the position of that axis
-by dragging it during the click event. In practice the closest axis will
+\textcolor{blue}{user's cursor position}. The user can select one axis
+(corresponding to one variable) by clicking on it, and then adjust the
+position of that axis by dragging it. In practice, the closest axis will
 be selected, and the dragging results in tracking of the mouse position
 which will update the projection in small steps, such that no further
 interpolation is required.
 
 The interactions in the axis display need to be mapped back onto the
-current projection matrix, which will then be orthonormalized before
-feeding back into the axis display. A second, linked display shows the
+current projection matrix, which will then be orthonormalized and
+\textcolor{blue}{re-displayed}. A second, linked display shows the
 projected data in sync with the updates from the axis display.
 
 In addition, we also want to be able to look at slices of the data and
 select slicing parameters interactively. Here we have implemented a
 switch to change between projection and slice view, a slider that
-adjusts the slice thickness \(h\) (dubbed \texttt{height} in the
-\texttt{Mathematica} package) and a numeric input to specify the center
-point \(c\) explicitly. The display will update based on these inputs,
-in particular the view will jump to a new slice when \(c\) is changed
-(though an interpolation might also be useful).
+adjusts the slice thickness, \(h\) (named \texttt{height} in the
+Mathematica interface), and a numeric input to specify the center point
+\(c\) explicitly. The display will update based on these input values,
+in particular the view will jump to a new slice when \(c\) is changed.
 
-One might implement such an interactive interface via R Shiny
-\citet{shinym}, but in particular the tracking of the mouse position in
-small increments might pose a challenge. Here we found the dynamic
-graphics interface from Mathematica to be especially useful. In the
-following we first describe the relevant Mathematica functionalities and
-how they were used in the implementation, followed by a brief sketch of
-how the new approaches are implemented in the \texttt{tourr} package.
-There is hope that better interactivity will be available for R soon,
-which might allow for implementation of the techniques developed in
-Mathematica.
+\textcolor{blue}{One might implement such an interactive interface in R, for example using `shiny` [@shinym], with `plotly` [@plotly] drawing. It could be possible with `rgl` [@rgl] but this package is focused on 3D, not the arbitrary $p$-D of tours. The primary tool needed is the tracking of the cursor position in small increments and it is not readily available in R. The `plotly` package is designed to add on to `ggplot2` graphics, not to be a programmable interactive graphics system. It would have been possible with the `cranvas` system [@cranvas] or `rJava` [@rJava] but neither has a graphics toolkit that operates across platforms today. What we have chosen to do is to use the interactivity of Mathematica to experiment, and to implement as an animation in the `tourr` [@tourr] package. There is hope that better interactivity will be available for R soon, perhaps in javascript, which might allow for experimentation to develop new techniques as available in Mathematica.}
 
 \hypertarget{mathematica-package}{%
 \subsection{Mathematica package}\label{mathematica-package}}
@@ -374,7 +364,7 @@ Appendix.
 \subsection{\texorpdfstring{Extensions to the R package
 \texttt{tourr}}{Extensions to the R package tourr}}\label{extensions-to-the-r-package-tourr}}
 
-The R package tourr \citep{tourr} provides numerous types of tours. An
+The R package \texttt{tourr} provides numerous types of tours. An
 additional function, \texttt{radial\_tour()} has been constructed that
 will generate a sequence of projections that will decrease the
 coordinates for \(V_m\) to \(\boldsymbol{0}\) and back to the original
