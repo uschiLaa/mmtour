@@ -77,7 +77,7 @@ should be).
     
     - Finally, after all of this time, this is the one input that might be a bit harder to implement in R/Shiny, though I think via WebGL it should be workable. This is where the focus should be, rather than the previous two paragraphs, which are a distraction.
 
-\textcolor{blue}{The first two paragraphs have been removed and the third restructured to explain why this is difficult in R/Shiny}  
+\textcolor{blue}{The first two paragraphs have been removed and the third restructured to explain why this is difficult in R/Shiny/rgl.}  
 
 Minor issues and suggestions
 
