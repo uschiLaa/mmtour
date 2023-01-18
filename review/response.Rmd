@@ -9,6 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+ XXX If use new slice center control for fig 7, need to make a note of it here, updated the mathematica notebook and check text and captions correct.
 
 **Editor**
 

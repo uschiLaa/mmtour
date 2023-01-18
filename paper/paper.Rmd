@@ -398,7 +398,7 @@ To illustrate this difference, we have manually rotated the projection for the R
 %\centerline{\includegraphics[width=0.32\textwidth]{figures/proj1_rf.png}
 %\includegraphics[width=0.32\textwidth]{figures/proj1_lda.png}
 %\includegraphics[width=0.32\textwidth]{figures/proj1_data.png}}
-\caption{Projection identified using the manual tour, because it reveals an interesting structure in the predictions from the RF model (left). We can clearly see a block structure, while the LDA model (middle) produces linear boundaries. The three groups are nicely separated in this projection of the data (right).}
+\caption{A projection identified using the manual tour, because it shows differences in classification boundaries induced by different models. A RF model produces blocky, rectangular, boundaries, while the LDA model produces oblique linear boundaries. For comparison, in this projection the data shows the three groups are almost perfectly separable.}
 \label{proj1}
 \end{figure*}
 
@@ -422,23 +422,26 @@ In contrast, the LDA boundary has an oblique split between the two, and roughly 
 By rotating in the second variable we can find a view that shows three neatly separated blocks for the RF model, and we export the corresponding projection matrix $A_2$ to see the same views for the LDA model which also shows a neater separation of the classes along the boundary (see bottom row of Fig. \ref{slice1}).-->
 
 \begin{figure*}[ht]
-\centerline{\includegraphics[width=0.45\textwidth]{figures/slice1_rf.png}
-\includegraphics[width=0.45\textwidth]{figures/slice1_lda.png}}
-\centerline{\includegraphics[width=0.45\textwidth]{figures/slice2_rf.png}
-\includegraphics[width=0.45\textwidth]{figures/slice2_lda.png}}
-\caption{Comparing slices based on two projections $A_1$ (top row) and $A_2$ (bottom row), for the two models RF (left) and LDA (right). With $A_1$ we see two groups overlap (green - Gentoo with yellow - Chinstrap), while the rotation to $A_2$ results in clear boundaries inside the slice. The boundary between Adelie (blue) and Chinstrap (yellow) is similar for both models but very different between Chinstrap and Gentoo (green).}
+\centerline{\includegraphics[width=0.95\textwidth]{figures/proj2.pdf}}
+%\centerline{\includegraphics[width=0.45\textwidth]{figures/slice1_rf.png}
+%\includegraphics[width=0.45\textwidth]{figures/slice1_lda.png}}
+%\centerline{\includegraphics[width=0.45\textwidth]{figures/slice2_rf.png}
+%\includegraphics[width=0.45\textwidth]{figures/slice2_lda.png}}
+\caption{Comparing slices from two different projections $A_1$ (top row) and $A_2$ (bottom row), to compare and contrast classification boundaries induced by two models RF and LDA. A thin slice through the center of the data is shown. The plot of the data shows that the Gentoo group (light grey/green) is less separated in $A_1$, and the rotation to $A_2$ produces a bigger gap. The boundaries between groups are clear in $A_2$ also. The LDA boundary is more oblique between Gentoo and Chinstrap than the RF, which is too close to the Chinstrap group. On the other hand between Adelie and Gentoo, the RF is better situated about half-way between the two groups. Interestingly, the RF boundaries, which can be highly nonlinear, albeit blocky, are relatively linear for this problem. }
 \label{slice1}
 \end{figure*}
 
+<!--
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.45\textwidth]{figures/proj2_data.png}}
 \caption{Projection of the data based on $A_2$. Compared to projecting onto $A_1$ we see that the green observations (Gentoo) are more separated from the other two species.}
 \label{proj2}
 \end{figure*}
+-->
 
-Finally, to determine which model describes the boundaries better, compare them with the $A_2$ projection of the data (Figure \ref{proj2}). Gentoo is more separated from the other two in this projection, and one can imagine that the trees in the forest has greedily grasped any one of many places to make a split to separate the group. It might be argued though the that RF boundary is cut too close to the Chinstrap species, and might lead to some unnecessary misclassification with new data. The LDA boundary is better placed for all species. 
+Finally, to determine which model describes the boundaries better, compare them with the $A_2$ projection of the data (bottom row of Figure \ref{slice1}). Gentoo is more separated from the other two in this projection, and one can imagine that the trees in the forest has greedily grasped any one of many places to make a split to separate the group. It might be argued though the that RF boundary is cut too close to the Chinstrap species, and might lead to some unnecessary misclassification with new data. The LDA boundary is better placed for all species. 
 
-This example can be reproduced with the code in penguins_slicing_through_center.nb and a run through is shown in the first part of the video at https://vimeo.com/747590472.
+This example can be reproduced with the code in `penguins_slicing_through_center.nb` and a run through is shown in the first part of the video at https://vimeo.com/747590472.
 
 ## Shifting the slice center
 
