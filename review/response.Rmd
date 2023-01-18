@@ -23,6 +23,8 @@ A referee, an Associate Editor (AE), and I have reviewed your paper. There's ent
 
 3- Your paper will be printed in black and white.  The online version will be in color but to accommodate printing without color please be sure you don't refer to color in either the figure captions or text and that all figures are still interpretable in black and white.
 
+\textcolor{blue}{Colour in figures has been changed to work in black and white as well as colour. Captions have been adjusted accordingly. TODO}
+
 4- Please be sure all figures have font size of labels and any text in the figure of at least 10pt.
 
 Articles published in JCGS are ordinarily accompanied by online publication of the data and computer code used to illustrate the proposed methods. The goal is to enable readers to replicate much of the analysis and simulations described in a paper and to apply proposed methods in their own data without having to write code from scratch.  When it is not practical to include a whole dataset in the manuscript, the manuscript should state how the complete dataset can be obtained. Please let me know if you would not be able to publish your data for reasons of security or confidentiality. Please provide the computer code and/or data that you hope to publish along with your revision. I have attached the instructions for including online materials here.
