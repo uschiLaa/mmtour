@@ -495,9 +495,9 @@ correspond to the two models, with RF on the left and LDA on the right.
 Both models have some overlap at the center for the thin slice based on
 \(A_1\) (despite the small value for \(h\)). The second slice (based on
 \(A_2\)) mostly resolves this overlap and reveals the primary
-differences between the models. The boundary between Adelie (blue) and
-Chinstrap (yellow) is very similar for both models. The boundary between
-Chinstrap and Gentoo (green) is where they differ.
+differences between the models. The boundary between Adelie and
+Chinstrap is very similar for both models. The boundary between
+Chinstrap and Gentoo is where they differ.
 
 The RF is almost straight in this view, as something we might expect
 from a tree model where splitting occurs on single variables only.
@@ -561,14 +561,14 @@ We start by a comparison of the two models and the data distribution
 shifting to \(\mathbf{c}^{+}\), thus the slice is localized towards high
 values of bill depth in Figure \ref{slice1p}. We can see that all three
 slices (the two models and the data) contain almost no points from the
-third class (green, Gentoo), and that the decision boundary between the
-two models is very similar.
+third class (Gentoo), and that the decision boundary between the two
+models is very similar.
 
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.32\textwidth]{figures/slice1_p_rf.png}
 \includegraphics[width=0.32\textwidth]{figures/slice1_p_lda.png}
 \includegraphics[width=0.32\textwidth]{figures/slice1_p_data.png}}
-\caption{Shifting the slice center in the positive direction of bill depth produces regions that have no Gentoo (green). The two models have similar boundaries except that the RF is more of a step function.}
+\caption{Shifting the slice center in the positive direction of bill depth produces regions that have no Gentoo. The two models have similar boundaries except that the RF is more of a step function.}
 \label{slice1p}
 \end{figure*}
 
@@ -576,17 +576,17 @@ two models is very similar.
 \centerline{\includegraphics[width=0.32\textwidth]{figures/slice1_m_rf.png}
 \includegraphics[width=0.32\textwidth]{figures/slice1_m_lda.png}
 \includegraphics[width=0.32\textwidth]{figures/slice1_m_data.png}}
-\caption{Shifting the slice center in the negative direction of bill depth produces regions that are mostly Gentoo (green). The two models have very different boundaries: the nonlinear potential of RF can be seen here where still some subspaces would predict to be Adelie and Chinstrap.}
+\caption{Shifting the slice center in the negative direction of bill depth produces regions that are mostly Gentoo. The two models have very different boundaries: the nonlinear potential of RF can be seen here where still some subspaces would predict to be Adelie and Chinstrap.}
 \label{slice1m}
 \end{figure*}
 
 A more interesting comparison is found for \(\mathbf{c}^{-}\), thus the
 slice localized towards low values of bill depth, shown in Figure
 \ref{slice1m}. The RF model (left) predicts all three species within
-this slice, with an interesting boundary for the third class (green,
-Gentoo). On the other hand the LDA model (middle) predominantly predicts
-the third class within the slice, this appears to be enforced through
-the linear structure of the model. Looking finally at the thick slice
+this slice, with an interesting boundary for the third class (Gentoo).
+On the other hand the LDA model (middle) predominantly predicts the
+third class within the slice, this appears to be enforced through the
+linear structure of the model. Looking finally at the thick slice
 through the data we see that there are primarily observations from this
 class within the slice we can conclude that the two models have filled
 in the ``empty'' space (where we do not have any training observations)
