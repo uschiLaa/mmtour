@@ -448,10 +448,11 @@ We have seen that starting from $A_1$ using the manual controls to change the co
 We start by a comparison of the two models and the data distribution shifting to $\mathbf{c}^{+}$, thus the slice is localized towards high values of bill depth in Figure \ref{slice1p}. We can see that all three slices (the two models and the data) contain almost no points from the third class (Gentoo), and that the decision boundary between the two models is very similar.
 
 \begin{figure*}[ht]
-\centerline{\includegraphics[width=0.32\textwidth]{figures/slice1_p_rf.png}
-\includegraphics[width=0.32\textwidth]{figures/slice1_p_lda.png}
-\includegraphics[width=0.32\textwidth]{figures/slice1_p_data.png}}
-\caption{Shifting the slice center in the positive direction of bill depth produces regions that have no Gentoo. The two models have similar boundaries except that the RF is more of a step function.}
+\centerline{\includegraphics[width=0.95\textwidth]{figures/slice1_p.pdf}}
+%\centerline{\includegraphics[width=0.32\textwidth]{figures/slice1_p_rf.png}
+%\includegraphics[width=0.32\textwidth]{figures/slice1_p_lda.png}
+%\includegraphics[width=0.32\textwidth]{figures/slice1_p_data.png}}
+\caption{Shifting the slice center allows for exploring the boundary in different subspaces. Here the center has been shifted out along the axis of bill depth (icon display at right represents slice center position). This region has no Gentoo. The two models have similar boundaries except that the RF is has a step shift in the middle.}
 \label{slice1p}
 \end{figure*}
 
