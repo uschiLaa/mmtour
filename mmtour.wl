@@ -54,6 +54,49 @@ StyleBox[\"\\\\n\",\nFontSlant->\"Italic\"]\)\!\(\*
 StyleBox[\"data\",\nFontSlant->\"Italic\"]\): A data matrix with numeric entries.";
 
 
+DefineDataSets[data_, flagQ_] := If[TrueQ[flagQ == 1],
+  If[StringQ[data[[1, 1]]],
+    CreateDataSets[data[[2 ;; -1]]]
+    ,
+    CreateDataSets[data]
+  ]
+  ,
+  If[StringQ[data[[1, 1]]],
+    {data[[2 ;; -1]]}
+    ,
+    {data}
+  ]
+]
+
+(*Should try and compile*)
+
+
+DefineLegend[dataSets_, legendQ_, flagQ_] := Module[{legend = {}},
+  If[TrueQ[legendQ == 1],
+    Do[
+      With[{i = i},
+        AppendTo[legend, Style[dataSets[[i, 1, -(legendQ + flagQ)]], 
+          FontFamily -> "Times New Roman"]]
+      ]
+      ,
+      {i, 1, Length[dataSets]}
+    ]
+    ,
+    Do[
+      With[{i = i},
+        AppendTo[legend, Style[StringForm["Index ``", i], FontFamily 
+          -> "Times New Roman"]]
+      ]
+      ,
+      {i, 1, Length[dataSets]}
+    ]
+  ];
+  Return[legend]
+]
+
+(*Should try and compile*)
+
+
 RandomMatrix[data_,col_] :=
 (*This function creates a random matrix based on the dimension of data.
 If the last column of data represents groups, then a 1 is used for col. Otherwise, 0 is used.*)
@@ -677,110 +720,72 @@ StyleBox[\"colourFunc\",\nFontSlant->\"Italic\"]\):A list of colours or the inbu
 The first colour will correspond to the flag of the lowest index and so on.";
 
 
-SliceDynamic2[data_,projMat_,height_,heightRange_,projFunc_:"None",FunctionRng_:"None", legendQ_:1,flagQ_:1, colorFunc_:ColorData[97]]:=
+SliceDynamicCC[data_,projMat_,height_,heightRange_, legendQ_:1,flagQ_:1, colorFunc_:ColorData[97]]:=
 DynamicModule[{
 lst=If[TrueQ[projMat=="random"],RandomMatrix[data, legendQ + flagQ],projMat],
-centreLst =Array[{-0.625Sin[(2 \[Pi](# - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],0.625Cos[(2\[Pi](#- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}&,Length[data[[1]]]-(legendQ + flagQ)],
-centreCopy =Array[{-Sin[(2 \[Pi](# - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],Cos[(2\[Pi](#- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}&,Length[data[[1]]]-(legendQ + flagQ)],
-centreLines=Array[Line[
-{{0.,0.},{-Sin[(2 \[Pi](# - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],Cos[(2\[Pi](#- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}}]&,Length[data[[1]]]-(legendQ + flagQ)],
+(*centre/outline variables are used for the centre guide*)
+centreLst =Array[{-0.625Sin[(2 \[Pi](# - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],
+0.625Cos[(2\[Pi](#- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}&,
+Length[data[[1]]]-(legendQ + flagQ)],
+centreCopy =Array[{-Sin[(2 \[Pi](# - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],
+Cos[(2\[Pi](#- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}&,
+Length[data[[1]]]-(legendQ + flagQ)],
+centreLines=Array[Line[{{0.,0.},{-Sin[(2 \[Pi](# - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],
+Cos[(2\[Pi](#- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}}]&,
+Length[data[[1]]]-(legendQ + flagQ)],
 outline = {},
 centreText  ={},
-centre={},
-projValues=If[TrueQ[projFunc=="None"],False, Table[projFunc[i//N],{i, FunctionRng[[1]],FunctionRng[[2]], FunctionRng[[3]]}]],(*To be changed*)
-projBool = If[TrueQ[projFunc=="None"],False,True],
 range=If[StringQ[data[[1, 1]]],
- RangeHelper[data[[2;;-1,1;;-(1+ legendQ + flagQ)]]], 
- RangeHelper[data[[All, 1;;-(1+ legendQ + flagQ)]]]], 
+RangeHelper[data[[2;;-1,1;;-(1+ legendQ + flagQ)]]], 
+RangeHelper[data[[All, 1;;-(1+ legendQ + flagQ)]]]], 
 arrowData={Circle[{0.,0.},1.]},legend={}, colours={},
 zoom=0.,h=height//N,dataSets, pntSize=0.0115,
-boolVal = False,showMat=False
-},
+boolVal = False,showMat=False},
 
+(*Visuals for projection control*)
 If[StringQ[data[[1, 1]]], 
 Do[With[{i=i},
-AppendTo[arrowData,Dynamic[Arrow[{{0.,0.},lst[[i]]}]]];
-AppendTo[arrowData, Dynamic[Text[Style[data[[1, i]], FontFamily->"Times New Roman"], lst[[i]]+lst[[i]]/20]]];
-AppendTo[centreText,Text[data[[1, i]], 1.2centreCopy[[i]]]]
-],
+AppendTo[arrowData,Dynamic[Arrow[{{0.,0.},lst[[i]]}]]];AppendTo[arrowData, Dynamic[Text[Style[data[[1, i]], FontFamily->"Times New Roman"], lst[[i]]+lst[[i]]/20]]];AppendTo[centreText,Text[data[[1, i]], 1.2centreCopy[[i]]]]],
 {i,1,Length[data[[1]]]-(legendQ + flagQ)}],
 Do[With[{i=i},
-AppendTo[arrowData,Dynamic[Arrow[{{0,0},lst[[i]]}]]];AppendTo[arrowData, Dynamic[Text[Style[StringForm["\!\(\*StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], FontFamily->"Times New Roman"], lst[[i]]+lst[[i]]/20]]];
-AppendTo[centreText, Text[Style[StringForm["\!\(\*StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], FontFamily->"Times New Roman"],  1.2centreCopy[[i]]]]
-],
-{i,1,Length[data[[1]]]-(legendQ + flagQ)}]];
-
+AppendTo[arrowData,Dynamic[Arrow[{{0,0},lst[[i]]}]]];AppendTo[arrowData, Dynamic[Text[Style[StringForm["\!\(\*StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], FontFamily->"Times New Roman"],
+lst[[i]]+lst[[i]]/20]]];AppendTo[centreText, Text[Style[StringForm["\!\(\*StyleBox[\"x\",\nFontWeight->\"Plain\"]\)``",i], FontFamily->"Times New Roman"],  1.2centreCopy[[i]]]]],
+	{i,1,Length[data[[1]]]-(legendQ + flagQ)}]];
 
 Do[With[{i=i},
-AppendTo[outline,Dynamic[Line[{centreLst[[i]], centreLst[[If[i+1>Length[data[[1]]]-(legendQ + flagQ), 1, i+1]]]}]]]],
-{i,1,Length[data[[1]]]-(legendQ + flagQ)}];
+AppendTo[outline,Dynamic[Line[{centreLst[[i]], centreLst[[If[i+1>Length[data[[1]]]-(legendQ + flagQ), 1, i+1]]]}]]]],{i,1,Length[data[[1]]]-(legendQ + flagQ)}];
 
-If[TrueQ[flagQ==1],
-If[StringQ[data[[1, 1]]],
-dataSets=CreateDataSets[data[[2;;-1]]],
-dataSets = CreateDataSets[data]
-],
-If[StringQ[data[[1, 1]]],
-dataSets ={data[[2;;-1]]},
-dataSets={data}
-]
-];
+dataSets = DefineDataSets[data, flagQ];
 
-
-
-If[StringQ[data[[1, 1]]],
-Do[With[{i=i},AppendTo[centre,Dynamic[(0.75-( Norm[centreLst[[i]]]-0.25))/0.75 Min[data[[2;;-1, i]] ]+ (Norm[centreLst[[i]]]-0.25)/0.75 Max[data[[2;;-1, i]]]]]
-] ,{i,1,Length[centreLst]}],
-Do[With[{i=i},AppendTo[centre,Dynamic[(0.75-(Norm[centreLst[[i]]]-0.25))/0.75 Min[data[[All, i]] ]+ (Norm[centreLst[[i]]]-0.25)/0.75 Max[data[[All, i]]]]]
-] ,{i,1,Length[centreLst]}]
-];
-
-
-
-If[TrueQ[legendQ==1],
-Do[With[{i=i},
-AppendTo[legend,
-Style[dataSets[[i, 1, -(legendQ + flagQ)]], FontFamily->"Times New Roman"]]],{i, 1, Length[dataSets]}],
-Do[With[{i = i},
-AppendTo[legend,
-Style[StringForm["Index ``",i], FontFamily->"Times New Roman"]]],
-{i, 1, Length[dataSets]}
-]
-];
+legend = DefineLegend[ dataSets, legendQ, flagQ];
 
 Do[With[{n=i},
- AppendTo[colours, 
+AppendTo[colours, 
 {If[ListQ[colorFunc],
 colorFunc[[If[TrueQ[flagQ==1],dataSets[[i, 1, -1]],1]]], 
 colorFunc[If[TrueQ[flagQ==1],dataSets[[i, 1, -1]],1]]],
 PointSize[Dynamic[pntSize]]}]],
 {i, 1, Length[dataSets]}];
 
-
-
 Grid[{{Column[{
 LocatorPane[Dynamic[centreLst, 
 (For[i = 1,i<=Length[centreCopy],i++,
 centreLst[[i]]=#[[i]] . centreCopy[[i]] centreCopy[[i]];
-If[#[[i]] . centreCopy[[i]]>1., centreLst[[i]] = centreCopy[[i]]];
-If[#[[i]] . centreCopy[[i]]<0.25,centreLst[[i]]=0.25{-Sin[(2 \[Pi](i - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],Cos[(2\[Pi](i- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}]
+If[#[[i]] . centreCopy[[i]]>1., centreLst[[i]] = centreCopy[[i]]];If[#[[i]] . centreCopy[[i]]<0.25,centreLst[[i]]=0.25{-Sin[(2 \[Pi](i - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],Cos[(2\[Pi](i- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}]
 ])&],
 Graphics[{EdgeForm[{Gray, Dashed}],White,Polygon[centreCopy], Polygon[3/4 centreCopy], Polygon[1/2 centreCopy],Polygon[1/4 centreCopy], Black,centreLines,centreText, PointSize[0.0325],Point[Dynamic[centreLst]],outline }], 
 Appearance->None],
 
 Style["Slice Height:"Dynamic[h], FontFamily->"Times New Roman"], 
- Slider[Dynamic[h],heightRange],
+Slider[Dynamic[h],heightRange],
 Style["Zoom Scale:"Dynamic[Round[(zoom + 0.2)/(0.999 + 0.2),0.001]], FontFamily->"Times New Roman"],
 Slider[Dynamic[zoom],{-0.2,0.999}],
 Style["Point Size:" Dynamic[50 pntSize], FontFamily->"Times New Roman"],
 Slider[Dynamic[pntSize],{0,0.02}],
 Style["Projection:" Dynamic[boolVal], FontFamily->"Times New Roman"],
-Checkbox[Dynamic[boolVal]], LocatorPane[Dynamic[lst,({lst[[All, 1]], lst[[All,2]]}=Orthogonalize[{#[[All, 1]], #[[All, 2]]}])&],Graphics[arrowData,Frame->True,ImageSize->165, PlotRange->{{-1, 1},{-1, 1}}],
+Checkbox[Dynamic[boolVal]],
+LocatorPane[Dynamic[lst,({lst[[All, 1]], lst[[All,2]]}=Orthogonalize[{#[[All, 1]], #[[All, 2]]}])&],Graphics[arrowData,Frame->True,ImageSize->165, PlotRange->{{-1, 1},{-1, 1}}],
 {{-1, -1},{1, 1},{0.001, 0.001}},Appearance->None],
-
-If[projBool,
-Animate[MatrixForm[lst=u],{u,projValues},AnimationRate->15],
-Nothing],
 
 Grid[{{}},ItemSize->{15, 1}],
 Style["Proj. Matrix:"Dynamic[showMat], FontFamily->"Times New Roman"],
@@ -789,13 +794,21 @@ Dynamic[If[showMat,Grid[{{InputField[Dynamic[lst], FieldSize->15]}},ItemSize->{1
 Grid[{{}}, ItemSize->{15, 13.5}]]]}, Center, 0.85],
 
 
-(*Main computational cost incurred here*)
-Dynamic[Module[{sliceSet ={}, slice={}},(*Change to block command?*)
 
+Dynamic[Module[{sliceSet ={}, slice={}, centre={}},
 
-Do[Do[If[Re[genDist[xPrime[dataSets[[i,j, 1;;- (1 +  legendQ + flagQ)]], lst], cPrime[centre[[All, 1]], lst]]]<h,
+If[StringQ[data[[1, 1]]],
+Do[With[{i=i},AppendTo[centre,
+(0.75-(Norm[centreLst[[i]]]-0.25))/0.75 Min[data[[2;;-1, i]]]+ ((Norm[centreLst[[i]]]-0.25))/0.75 Max[data[[2;;-1, i]]]]] ,{i,1,Length[centreLst]}],
+Do[With[{i=i},AppendTo[centre,
+(0.75-(Norm[centreLst[[i]]]-0.25))/0.75 Min[data[[All, i]] ]+ ((Norm[centreLst[[i]]]-0.25))/0.75 Max[data[[All, i]]]]] ,
+{i,1,Length[centreLst]}]
+];
+
+Do[Do[If[Re[genDist[xPrime[dataSets[[i,j, 1;;- (1 +  legendQ + flagQ)]], lst],cPrime[centre, lst]]]<h,
 AppendTo[slice, dataSets[[i,j,1;;-(1 + legendQ + flagQ)]]];
-],{j, 1, Length[dataSets[[i]]]}];
+],
+{j, 1, Length[dataSets[[i]]]}];
 
 (*I'm ensuring that I won't have a list of empty lists by using Missing[]*)
 If[Length[slice]>0, 
@@ -810,19 +823,15 @@ slice ={},
 ListPlot[
 (*The if statement which determines whether a slice or a projection will be displayed*)
 If[boolVal,Map[Function[x,If[MissingQ[x],{Missing[]}, x[[All, 1;;-(1 +  legendQ + flagQ)]]] . lst], dataSets],
-Map[Function[x,If[MissingQ[x], {Missing[]}, x . lst]], sliceSet]]
-,
-AxesLabel->{"\!\(\*
-StyleBox[\"P1\",\nFontSlant->\"Italic\"]\)", "\!\(\*
-StyleBox[\"P2\",\nFontSlant->\"Italic\"]\)"},
+Map[Function[x,If[MissingQ[x], {Missing[]}, x . lst]], sliceSet]],
+AxesLabel->{"\!\(\*StyleBox[\"P1\",\nFontSlant->\"Italic\"]\)",
+ "\!\(\*StyleBox[\"P2\",\nFontSlant->\"Italic\"]\)"},
 PlotStyle->colours,
 LabelStyle->FontFamily->"Times New Roman",
 PlotLegends->Placed[PointLegend[legend,LegendMarkerSize->15,LegendMarkers->{{"\[FilledCircle]",15}}],Above],AspectRatio->1,
 PlotRange->{{-range(1-zoom), range(1-zoom)},{-range(1-zoom), range(1-zoom)}},
 PerformanceGoal->"Speed",
-ImageSize->610]
-]]
-}},
+ImageSize->610]]]}},
 Frame->True]
 ]
 
