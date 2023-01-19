@@ -445,17 +445,18 @@ This example can be reproduced with the code in `penguins_slicing_through_center
 
 We have seen that starting from $A_1$ using the manual controls to change the contribution of the second variable we could find a clear separation boundary indicating the relation between this variable (bill depth) and the Gentoo penguin species. Instead of rotating to a different projection, we might also change the view by moving the slice along one axis in the 4D space. Here we will continue our exploration of the dependence on `bd` and move the slice defined by $A_1$ to either large positive or negative values ($c^{\pm}_{bd} = \pm 1.5$ after centering and scaling). Thus we define $\mathbf{c}^{\pm} = (0, c^{\pm}_{bd}, 0, 0)$. Here we will also look at slices of the observed data points, using a thicker slice ($h=1.5$) to capture enough points in a given view.
 
-We start by a comparison of the two models and the data distribution shifting to $\mathbf{c}^{+}$, thus the slice is localized towards high values of bill depth in Figure \ref{slice1p}. We can see that all three slices (the two models and the data) contain almost no points from the third class (Gentoo), and that the decision boundary between the two models is very similar.
+We start by a comparison of the two models and the data distribution shifting to $\mathbf{c}^{+}$, thus the slice is localized towards high values of bill depth in top row of Figure \ref{slice1p}. We can see that all three slices (the two models and the data) contain almost no points from the third class (Gentoo), and that the decision boundary between the two models is very similar.
 
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.95\textwidth]{figures/slice1_p.pdf}}
 %\centerline{\includegraphics[width=0.32\textwidth]{figures/slice1_p_rf.png}
 %\includegraphics[width=0.32\textwidth]{figures/slice1_p_lda.png}
 %\includegraphics[width=0.32\textwidth]{figures/slice1_p_data.png}}
-\caption{Shifting the slice center allows for exploring the boundary in different subspaces. Here the center has been shifted out along the axis of bill depth (icon display at right represents slice center position). This region has no Gentoo. The two models have similar boundaries except that the RF is has a step shift in the middle.}
+\caption{Shifting the slice center allows for exploring the boundary in different subspaces. Here the center has been shifted along the axis of `bd` (icon display at right represents slice center position). (Top row) Center is at large values of `bd`, showing a region with no Gentoo. The two models have similar boundaries except that the LDA is more linear. (Bottom row) Center is at small values of `bd`, reveals a region where the models differ substantially. The RF model carves some area for Adelie, but LDA would only predict to be Gentoo or Chinstrap here. LDA better matches the observed data in this region.}
 \label{slice1p}
 \end{figure*}
 
+<!--
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.32\textwidth]{figures/slice1_m_rf.png}
 \includegraphics[width=0.32\textwidth]{figures/slice1_m_lda.png}
@@ -463,11 +464,11 @@ We start by a comparison of the two models and the data distribution shifting to
 \caption{Shifting the slice center in the negative direction of bill depth produces regions that are mostly Gentoo. The two models have very different boundaries: the nonlinear potential of RF can be seen here where still some subspaces would predict to be Adelie and Chinstrap.}
 \label{slice1m}
 \end{figure*}
+-->
 
+A more interesting comparison is found for $\mathbf{c}^{-}$, thus the slice localized towards low values of bill depth, shown in the bottom row of Figure \ref{slice1p}. The RF model (left) predicts all three species within this slice, with an interesting boundary for the third class (Gentoo). On the other hand the LDA model (middle) predominantly predicts the third class within the slice, this appears to be enforced through the linear structure of the model. Looking finally at the thick slice through the data we see that there are primarily observations from this class within the slice we can conclude that the two models have filled in the "empty" space (where we do not have any training observations) in very different ways and according to what we might expect given the model structure.
 
-A more interesting comparison is found for $\mathbf{c}^{-}$, thus the slice localized towards low values of bill depth, shown in Figure \ref{slice1m}. The RF model (left) predicts all three species within this slice, with an interesting boundary for the third class (Gentoo). On the other hand the LDA model (middle) predominantly predicts the third class within the slice, this appears to be enforced through the linear structure of the model. Looking finally at the thick slice through the data we see that there are primarily observations from this class within the slice we can conclude that the two models have filled in the "empty" space (where we do not have any training observations) in very different ways and according to what we might expect given the model structure.
-
-Finally it is interesting to compare the slice views to the projection of the models seen in Fig. \ref{proj1} to better understand how the boundaries change along the `bd` direction and where the differences in the projections come from.
+Finally, it is interesting to compare the slice views to the projection of the models seen in Fig. \ref{proj1} to better understand how the boundaries change along the `bd` direction and where the differences in the projections come from.
 
 This example can be reproduced with the code in penguins_shifting_slice_center.nb and a run through is shown in the second part of the video at https://vimeo.com/747590472.
 
