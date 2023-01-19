@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
  XXX If use new slice center control for fig 7, need to make a note of it here, updated the mathematica notebook and check text and captions correct.
 
+ XXX References need to be consistent, all initials or all full names, and all sentence case or title case on titles.
+ 
 **Editor**
 
 A referee, an Associate Editor (AE), and I have reviewed your paper. There's enthusiasm for your paper but a number of issues that came up in the reviews require additional attention.  As such, I'd like to offer the opportunity to submit a revised version that addresses the issues brought up by the AE and referee.
@@ -24,7 +26,7 @@ A referee, an Associate Editor (AE), and I have reviewed your paper. There's ent
 
 3- Your paper will be printed in black and white.  The online version will be in color but to accommodate printing without color please be sure you don't refer to color in either the figure captions or text and that all figures are still interpretable in black and white.
 
-\textcolor{blue}{Colour in figures has been changed to work in black and white as well as colour. Captions have been adjusted accordingly. TODO}
+\textcolor{blue}{Colour in figures has been changed to work in black and white as well as colour. Captions have been adjusted accordingly.}
 
 4- Please be sure all figures have font size of labels and any text in the figure of at least 10pt.
 
@@ -59,23 +61,23 @@ Major Issues
 
     – Define your notation better: $V_m$ is used without being defined, and it would probably be helpful to have a clearer mathematical definition of the relationship between your basis $A$ and $V_m$.
 
-\textcolor{blue}{see text in blue page 3, is this adequate?}  
+\textcolor{blue}{Done}  
 
 - What developments are specific to Mathematica and are not yet implemented in R? You allude several times to R's deficiencies in this space but don't ever explicitly spell out what is missing, beyond a nod to mouse tracking capabilities in Shiny (which would likely depend on the user's screen resolution, but should be fairly precise once you condition on that - why would Mathematica have better resolution for mouse controls?)
 Below is a set of comments relating to this issue, written as I read through the paper (so hopefully the chronology is preserved and you can see why this isn’t as direct as it
 should be).
 
-    - Page 7, line 46: "Mathematica provides much utility and versatility, such as inbuilt data visualization, data manipulation and analysis, dynamic functionality, and sym- bolic and numeric computation. Most of this inbuilt functionality is user-friendly and described in the Mathematica documentation; typically, numerous examples are provided within the documentation, and some possible issues are outlined there." The same could be said of R, so I'm not sure why this is relevant. It seems mostly like Mathematica propaganda.
+  - Page 7, line 46: "Mathematica provides much utility and versatility, such as inbuilt data visualization, data manipulation and analysis, dynamic functionality, and sym- bolic and numeric computation. Most of this inbuilt functionality is user-friendly and described in the Mathematica documentation; typically, numerous examples are provided within the documentation, and some possible issues are outlined there." The same could be said of R, so I'm not sure why this is relevant. It seems mostly like Mathematica propaganda.
     
-\textcolor{blue}{Modified}
+\textcolor{blue}{Modified accordingly.}
 
-      – Page 7-8: "Importantly for our work, it is relatively simple to create dynamic objects via the inbuilt commands Manipulate or DynamicModule. Control objects, such as sliders, locator panes, and input fields, can then be used on dynamic variables, and when there is a change in the dynamic variable the dynamic objects which contain that variable will be updated. This is the essential ingredient for this implementation of the manual tour." Again, the same dynamic control creation exists in Shiny, along with the basic reactivity to user inputs. It's hard to see why Mathematica is different here.
+  – Page 7-8: "Importantly for our work, it is relatively simple to create dynamic objects via the inbuilt commands Manipulate or DynamicModule. Control objects, such as sliders, locator panes, and input fields, can then be used on dynamic variables, and when there is a change in the dynamic variable the dynamic objects which contain that variable will be updated. This is the essential ingredient for this implementation of the manual tour." Again, the same dynamic control creation exists in Shiny, along with the basic reactivity to user inputs. It's hard to see why Mathematica is different here.
 
-\textcolor{blue}{This is better explained}
+\textcolor{blue}{This is better explained.}
 
-        – Page 8, line 11: "The most relevant inbuilt Mathematica function for our purpose is the LocatorPane. This creates a region on the screen where the position of the mouse is captured and then converted to input that updates the graphics functions, enabling the manual navigation of the tour."
+  – Page 8, line 11: "The most relevant inbuilt Mathematica function for our purpose is the LocatorPane. This creates a region on the screen where the position of the mouse is captured and then converted to input that updates the graphics functions, enabling the manual navigation of the tour."
     
-    - Finally, after all of this time, this is the one input that might be a bit harder to implement in R/Shiny, though I think via WebGL it should be workable. This is where the focus should be, rather than the previous two paragraphs, which are a distraction.
+  - Finally, after all of this time, this is the one input that might be a bit harder to implement in R/Shiny, though I think via WebGL it should be workable. This is where the focus should be, rather than the previous two paragraphs, which are a distraction.
 
 \textcolor{blue}{The first two paragraphs have been removed and the third restructured to explain why this is difficult in R/Shiny/rgl.}  
 
@@ -84,15 +86,17 @@ Minor issues and suggestions
 - Pg 2, line 8: "the more useful methods for data analysis need to work for arbitrary dimension."
 Perhaps instead: methods which work for arbitrary dimensions are more useful/have more general utility? Either way, dimension should be plural.
 
-\textcolor{blue}{done}
+\textcolor{blue}{Done}
 
 - Pg 2, line 17: "could theoretically show the viewer the data from all sides."
 It might be helpful to have a small figure here to demonstrate what this might mean, for those who aren't familiar with tours and/or who can't visualize n-dimensional space projections into 3D out of thin air. Alternately, link to e.g. a YouTube video showing what you mean by "from all sides"
 
+\textcolor{blue}{Links added}
 
 - Pg 2, line 23: "A video illustrating the capabilities is available through video library of ASA Statistical Graphics Section (2022)."
 Add "the" before video
-\textcolor{blue}{done}
+
+\textcolor{blue}{Done}
 
 **Reviewer 1**
 
@@ -104,23 +108,35 @@ In the Abstract you have mentioned "Some limited implementations has also been m
 
 Section 1 line 29 "The software section describes mathematica package"  mathematica should be capitalized as you did  through the paper in most cases.  Also since is the first time you have mentioned Mathematica you should include the reference here (Wolfram reference appears in page 4 line 26 for first time) 
 
-\textcolor{blue}{done}
+\textcolor{blue}{Done}
 
 Section 2: "manual tour allows the user to alter the coefficients of one (or more) variables" but in the explanation it is not clear what is  $V_m$  and how to alter the coefficients for more than one variable.
 
-\textcolor{blue}{definition of $V_m$ added but have not addressed the second part of the comment TODO}
+\textcolor{blue}{Definition of $V_m$ added and Figure 1 has been annotated to make the algorithm easier to understand. Controlling more than one variable is possible with the R implementation and this has been noted in the text.}
 
 In page 4 line 2.2 "The components corresponding to $V_m$ are directly controlled by cursor movement which updates row $m$ of $A$". Maybe a video will be illustrative in this sub-section.
 
+\textcolor{blue}{Interpreting this to be Section 2.2, not line 2.2. Annotation has been added to existing figure.}
+
 Section 3: will be useful to include a schematic diagram illustrating the interactivity 
+
+\textcolor{blue}{We're not sure what this refers to. The additional details and explanations of the algorithm are provided in the appendix. Additional refinement, and figure annotations, were made in the previous sections.}
 
 In the manual tour implementation.
 This part is difficult to follow, it is more clear after reading the application Section because you have included some videos but I think you need to include something here to help the reader.
+
+\textcolor{blue}{Additional explanation, clearer notation, and annotation of the plot has been done to help here.}
 
 In the introduction "The software section describes a mathematica package that is used for the application, and describes the interactive environment that would be desirable within R as new technology becomes available"
 I think you need to be more specific about the R limitations.
 Iin Section 3. Page 7, line 20 "One might implement such an interactive interface via R Shiny, but in particular the tracking of the mouse position in small increments might pose a challenge" This  is the only possible R limitation you have mentioned.
 
+\textcolor{blue}{Additional text has been added to explain why this is difficult in R/Shiny/rgl.}  
+
 Section 4: Page 10 line 36: Figure 3 summarizes (space)
 
+\textcolor{blue}{Thanks}
+
 Section 5: page 15 line 26 "If new technology for interactive graphics became available"  be more specific about the needed technology in R to implement the manual controls as you did with Mathematica
+
+\textcolor{blue}{Done}

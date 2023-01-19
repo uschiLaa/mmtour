@@ -96,19 +96,20 @@ most 3D rotation computer graphics applications,
 \textcolor{blue}{methods which work for arbitrary dimensions have more general utility}.
 A good approach is to show projections from an arbitrary dimensional
 space to create dynamic data visualizations called \emph{tours}. Tours
-involve views of high-dimensional (\(p\)) data with low-dimensional
-(\(d\)) projections. In his original paper on the grand tour,
-\citet{As85} provided several algorithms for tour paths that could
-theoretically show the viewer the data \emph{from all sides}. Prior to
-Asimov's work, there were numerous preparatory developments including
-\citet{tukey}'s PRIM-9. PRIM-9 had user-controlled rotations on
-coordinate axes, allowing one to manually tour through low-dimensional
-projections. (A video illustrating the capabilities is available through
-\textcolor{blue}{the} video library of \citet{ASA22}.) Steering through
-all possible projections is impossible, unlike Asimov's tours which
-allows one to quickly see many, many different projections. After Asimov
-there have been many tour developments, which are summarized in
-\citet{lee2021}.
+involve views of high-dimensional data with low-dimensional projections.
+In his original paper on the grand tour, \citet{As85} provided several
+algorithms for tour paths that could theoretically show the viewer the
+data \emph{from all sides}. (Various videos of tours, e.g.
+\citet{dataviewer}, \citet{gt-pp-video}, on the \citet{ASA22} illustrate
+this concept.) Prior to Asimov's work, there were numerous preparatory
+developments including \citet{tukey}'s PRIM-9. PRIM-9 had
+user-controlled rotations on coordinate axes, allowing one to manually
+tour through low-dimensional projections. (A video \citep{PRIM9-video}
+illustrating the capabilities is available through \textcolor{blue}{the}
+video library of \citet{ASA22}.) Steering through all possible
+projections is impossible, unlike Asimov's tours which allows one to
+quickly see many, many different projections. After Asimov there have
+been many tour developments, which are summarized in \citet{lee2021}.
 
 One such direction of work develops the ideas from PRIM-9, to provide
 manual control of a tour. \citet{cook_manual_1997} describe controls for
@@ -159,10 +160,10 @@ Mathematica notebooks that can be used to reproduce the applications.
 \section{How to construct a manual tour}\label{sec:method}}
 
 A manual tour allows the user to alter the coefficients of one (or more)
-variables contributing to a \(d\) dimensional projection. The initial
-ingredients are an orthonormal basis (\(A_{p\times d}\)) defining the
-projection of the data, and a variable id (\(m \in \{1, ..., p\}\))
-specifying which coefficient will be
+variables, of \(p\), contributing to a \(d\)-dimensional projection. The
+initial ingredients are an orthonormal basis (\(A_{p\times d}\))
+defining the projection of the data, and a variable id
+(\(m \in \{1, ..., p\}\)) specifying which coefficient will be
 \textcolor{blue}{changed: the $m^{th}$ row of $A_{p\times d}$ which we denote by $V_m$.}
 A method to update the values of the component of the controlled
 variable \(V_m\) is then needed.
@@ -230,13 +231,17 @@ directly controlled by cursor movement, which updates row \(m\) of
 
 This algorithm will produce the changes to a projection as illustrated
 in Figure \ref{fig:manualsequence}. The controlled variable, \(V_m\),
-corresponds to the black line, and sequential changes to row \(m\) of
-\(A\) can be seen to roughly follow a specified position (orange dot).
-Changes in the other components happen as a result of the
-orthonormalisation, but are uncontrolled.
+corresponds to the dark line, and sequential changes to row \(m\) of
+\(A\) can be seen to roughly follow a specified position (dot). Changes
+in the other components happen as a result of the orthonormalisation,
+but are uncontrolled.
+
+The algorithm will also allow for more than one variable to be
+controlled. This is more difficult to implement interactively, but is
+easy with scripting, as is available in the R implementation.
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{paper_files/figure-latex/manualsequence-1} \caption{Sequence of projections where contribution of one variable is controlled (black) is changed using unconstrained orthonormalisation. The dot (orange) indicates the chosen values for the controlled variable. It can be seen that the actual axis does not precisely match the chosen position, but it is close.}\label{fig:manualsequence}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/manualsequence-1} \caption{Sequence of projections where contribution of one variable is controlled (dark) is changed using unconstrained orthonormalisation. The dot indicates the chosen values for the controlled variable, $V_m$. It can be seen that the actual axis does not precisely match the chosen position, but it is close.}\label{fig:manualsequence}
 \end{figure}
 
 \hypertarget{refinements-to-enforce-exact-position}{%
@@ -349,7 +354,7 @@ which might allow for the experimentation to develop new techniques.
 \hypertarget{mathematica-package}{%
 \subsection{Mathematica package}\label{mathematica-package}}
 
-\textcolor{blue}{The Mathematica implementation relies on the inbuilt Mathematica function  `LocatorPane`. This function creates a region on the screen where the position of the mouse is captured and then converted to input that updates the graphics functions, enabling the manual navigation of the tour. We then use the graphics function `ListPlot` embedded in dynamic objects via  `DynamicModule` to produce the display. Control objects, such as sliders, locator panes, and input fields, are used on dynamic variables, and when there is a change in the dynamic variable the dynamic objects which contain that variable will be updated.}
+\textcolor{blue}{The Mathematica implementation relies on the inbuilt function  `LocatorPane`. This function creates a region on the screen where the position of the cursor is captured and then converted to input that updates the graphics functions, enabling the manual navigation of the tour. We then use the graphics function `ListPlot` embedded in dynamic objects via  `DynamicModule` to produce the display. User interface objects, such as sliders, locator panes, and input fields, are used to provide user control of slice thickness, center, scale and point size.}
 
 The examples presented in the application section below (and attached in
 notebook format in the supplementary material) all use our primary new
@@ -379,17 +384,21 @@ Appendix.
 \subsection{\texorpdfstring{Extensions to the R package
 \texttt{tourr}}{Extensions to the R package tourr}}\label{extensions-to-the-r-package-tourr}}
 
-The R package \texttt{tourr} provides numerous types of tours. An
-additional function, \texttt{radial\_tour()} has been constructed that
-will generate a sequence of projections that will decrease the
-coordinates for \(V_m\) to \(\boldsymbol{0}\) and back to the original
-values. It is applicable for any projection dimension, \(d\). Changing
-slice center manually can be accomplished with the new function,
-\texttt{manual\_slice()}. This changes the value of the center point
-(\(\mathbf{c}\)) of the slice, along a selected variable axis. It slices
-from the center of the data out to one side, back to the center, out to
-the opposite side, and then back to the center. The appendix contains a
-discussion of a possible visual guide for the slice center location.
+The R package \texttt{tourr} provides numerous types of tours, displayed
+as animations.
+
+The new function, \texttt{radial\_tour()} has been constructed that will
+generate a sequence of projections that will decrease the coordinates
+for \(V_m\) to \(\boldsymbol{0}\) and back to the original values. It is
+applicable for any projection dimension, \(d\). The script interface has
+one advantage over an interactive interface, in that two or more
+variables can be controlled simultaneously.
+
+Changing slice center manually can be accomplished with the new
+function, \texttt{manual\_slice()}. This changes the value of the center
+point (\(\mathbf{c}\)) of the slice, along a selected variable axis. It
+slices from the center of the data out to one side, back to the center,
+out to the opposite side, and then back to the center.
 
 \hypertarget{sec:examples}{%
 \section{Application}\label{sec:examples}}
@@ -654,6 +663,9 @@ The supplementary materials include:
 \item
   Appendix with additional details about manual controls, and
   Mathematica functions.
+\item
+  The \texttt{Rmd} file that generated the paper, containing the R code
+  to produce Figure 1.
 \item
   Animations illustrating the manual tour and slicing, matching the
   static figures in the paper. These are also available at

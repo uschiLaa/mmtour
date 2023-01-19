@@ -60,7 +60,7 @@ library(plotrix)
 # Introduction
 
 <!-- Background -->
-From a statistical perspective 3D is a rare data dimension, so unlike in most 3D rotation computer graphics applications, \textcolor{blue}{methods which work for arbitrary dimensions have more general utility}. A good approach is to show projections from an arbitrary dimensional space to create dynamic data visualizations called *tours*. Tours involve views of high-dimensional ($p$) data with low-dimensional ($d$) projections. In his original paper on the grand tour, @As85 provided several algorithms for tour paths that could theoretically show the viewer the data *from all sides*. Prior to Asimov's work, there were numerous preparatory developments including @tukey's PRIM-9. PRIM-9 had user-controlled rotations on coordinate axes, allowing one to manually tour through low-dimensional projections. (A video illustrating the capabilities is available through \textcolor{blue}{the} video library of @ASA22.) Steering through all possible projections is impossible, unlike Asimov's tours which allows one to quickly see many, many different projections. After Asimov there have been many tour developments, which are summarized in @lee2021. 
+From a statistical perspective 3D is a rare data dimension, so unlike in most 3D rotation computer graphics applications, \textcolor{blue}{methods which work for arbitrary dimensions have more general utility}. A good approach is to show projections from an arbitrary dimensional space to create dynamic data visualizations called *tours*. Tours involve views of high-dimensional  data with low-dimensional projections. In his original paper on the grand tour, @As85 provided several algorithms for tour paths that could theoretically show the viewer the data *from all sides*. (Various videos of tours, e.g. @dataviewer, @gt-pp-video, on the @ASA22 illustrate this concept.) Prior to Asimov's work, there were numerous preparatory developments including @tukey's PRIM-9. PRIM-9 had user-controlled rotations on coordinate axes, allowing one to manually tour through low-dimensional projections. (A video [@PRIM9-video] illustrating the capabilities is available through \textcolor{blue}{the} video library of @ASA22.) Steering through all possible projections is impossible, unlike Asimov's tours which allows one to quickly see many, many different projections. After Asimov there have been many tour developments, which are summarized in @lee2021. 
 
 <!-- Manual tours -->
 One such direction of work develops the ideas from PRIM-9, to provide manual control of a tour. @cook_manual_1997 describe controls for 1D (or 2D) projections, respectively in a 2D (or 3D) manipulation space, allowing the user to select any variable axis, and rotate it into, or out of, or around the projection through horizontal, vertical, oblique, radial or angular changes in value. @spyrison_spinifex_2020 refined this algorithm and implemented it to generate radial tour animation sequences. 
@@ -74,7 +74,7 @@ This paper explains the new manual controls for projection and slice tours. The 
 
 # How to construct a manual tour {#sec:method}
 
-A manual tour allows the user to alter the coefficients of one (or more) variables contributing to a $d$ dimensional projection. The initial ingredients are an orthonormal basis ($A_{p\times d}$) defining the projection of the data, and a variable id ($m \in \{1, ..., p\}$) specifying which coefficient will be \textcolor{blue}{changed: the $m^{th}$ row of $A_{p\times d}$ which we denote by $V_m$.} A method to update the values of the component of the controlled variable $V_m$ is then needed. 
+A manual tour allows the user to alter the coefficients of one (or more) variables, of $p$, contributing to a $d$-dimensional projection. The initial ingredients are an orthonormal basis ($A_{p\times d}$) defining the projection of the data, and a variable id ($m \in \{1, ..., p\}$) specifying which coefficient will be \textcolor{blue}{changed: the $m^{th}$ row of $A_{p\times d}$ which we denote by $V_m$.} A method to update the values of the component of the controlled variable $V_m$ is then needed. 
 
 ## Existing methods
 
@@ -113,10 +113,12 @@ $$
 Note: I removed the angular bracets since cdot denotes scalar product already (also used like this below for the slice definitions)
 -->    
 
-This algorithm will produce the changes to a projection as illustrated in Figure \ref{fig:manualsequence}. The controlled variable, $V_m$, corresponds to the black line, and sequential changes to row $m$ of $A$ can be seen to roughly follow a specified position (orange dot). Changes in the other components happen as a result of the orthonormalisation, but are uncontrolled. 
+This algorithm will produce the changes to a projection as illustrated in Figure \ref{fig:manualsequence}. The controlled variable, $V_m$, corresponds to the dark line, and sequential changes to row $m$ of $A$ can be seen to roughly follow a specified position (dot). Changes in the other components happen as a result of the orthonormalisation, but are uncontrolled. 
+
+The algorithm will also allow for more than one variable to be controlled. This is more difficult to implement interactively, but is easy with scripting, as is available in the R implementation.
 
 
-```{r manualsequence, out.width="100%", width=12, height=4, fig.cap="Sequence of projections where contribution of one variable is controlled (black) is changed using unconstrained orthonormalisation. The dot (orange) indicates the chosen values for the controlled variable. It can be seen that the actual axis does not precisely match the chosen position, but it is close."}
+```{r manualsequence, out.width="100%", width=12, height=4, fig.cap="Sequence of projections where contribution of one variable is controlled (dark) is changed using unconstrained orthonormalisation. The dot indicates the chosen values for the controlled variable, $V_m$. It can be seen that the actual axis does not precisely match the chosen position, but it is close."}
 source("../code/plot_basis.R")
 source("../code/linear_alg.R")
 
@@ -139,6 +141,8 @@ A <- tourr::orthonormalise(A)
 vchange <- 3
 eps <- 0.1
 plot_basis(A, vchange, vcol="black")
+text(A[vchange, 1], A[vchange, 2], expression(V[m]), pos=3, col="orange")
+points(A[vchange, 1], A[vchange, 2], pch=16, col="orange")
 
 # Iterate and save images
 # Unconstrained orthonormalisation
@@ -148,6 +152,7 @@ for (i in 1:3) {
   exact <- Anew[vchange,]
   Anew <- tourr::orthonormalise(Anew)
   plot_basis(Anew, vchange, vcol="black")
+  text(Anew[vchange, 1], Anew[vchange, 2], expression(V[m]), pos=3, col="orange")
   points(exact[1], exact[2], pch=16, col="orange")
 }
 
@@ -204,7 +209,7 @@ In addition, we also want to be able to look at slices of the data and select sl
 
 ## Mathematica package
 
-\textcolor{blue}{The Mathematica implementation relies on the inbuilt Mathematica function  `LocatorPane`. This function creates a region on the screen where the position of the mouse is captured and then converted to input that updates the graphics functions, enabling the manual navigation of the tour. We then use the graphics function `ListPlot` embedded in dynamic objects via  `DynamicModule` to produce the display. Control objects, such as sliders, locator panes, and input fields, are used on dynamic variables, and when there is a change in the dynamic variable the dynamic objects which contain that variable will be updated.} 
+\textcolor{blue}{The Mathematica implementation relies on the inbuilt function  `LocatorPane`. This function creates a region on the screen where the position of the cursor is captured and then converted to input that updates the graphics functions, enabling the manual navigation of the tour. We then use the graphics function `ListPlot` embedded in dynamic objects via  `DynamicModule` to produce the display. User interface objects, such as sliders, locator panes, and input fields, are used to provide user control of slice thickness, center, scale and point size.} 
 
 The examples presented in the application section below (and attached in notebook format in the supplementary material) all use our primary new function, `SliceDynamic`. This function typically accepts grouped data in the form of a matrix where the second last column details the name of the group and the last column details the group index (which can be one if there is only one group). After specifying the initial slice thickness and the slice range, the user is presented with an interactive display in which the control objects appear on the left and the slice visualization appears on the right. The user can change the orientation of the slice via the locator pane, which changes the projection matrix;  a slider controls the slice thickness; and there is an input field, which changes the slice center. The user can also change the appearance of the plot by zooming into the center or changing the point size with the sliders provided. It is worth noting that this zoom works best with data that has been centered and scaled. The projected data can be displayed to contrast it with the slice by ticking a box. The explicit projection matrix can also be displayed via another checkbox. This is especially useful when we wish to import a projection that was identified as interesting in the manual exploration into a later study, as shown in the applications below.
 
@@ -290,7 +295,11 @@ This function uses a different display for the projection that I find very usefu
 
 ## Extensions to the R package `tourr`
 
-The R package `tourr` provides numerous types of tours. An additional function, `radial_tour()` has been constructed that will generate a sequence of projections that will decrease the coordinates for $V_m$ to $\boldsymbol{0}$ and back to the original values. It is applicable for any projection dimension, $d$. Changing slice center manually can be accomplished with the new function, `manual_slice()`. This changes the value of the center point ($\mathbf{c}$) of the slice, along a selected variable axis. It slices from the center of the data out to one side, back to the center, out to the opposite side, and then back to the center. The appendix contains a discussion of a possible visual guide for the slice center location. 
+The R package `tourr` provides numerous types of tours, displayed as animations.
+
+The new function, `radial_tour()` has been constructed that will generate a sequence of projections that will decrease the coordinates for $V_m$ to $\boldsymbol{0}$ and back to the original values. It is applicable for any projection dimension, $d$. The script interface has one advantage over an interactive interface, in that two or more variables can be controlled simultaneously.
+
+Changing slice center manually can be accomplished with the new function, `manual_slice()`. This changes the value of the center point ($\mathbf{c}$) of the slice, along a selected variable axis. It slices from the center of the data out to one side, back to the center, out to the opposite side, and then back to the center. <!--The appendix contains a discussion of a possible visual guide for the slice center location.-->
 
 <!--
 I don't think the paper gains anything by having this section.
@@ -499,4 +508,5 @@ The supplementary materials include:
 - The Mathematica source code defining the new functions in mmtour.wl.
 - Three Mathematica notebooks with the code used in the application (corresponding to the three subsections).
 - Appendix with additional details about manual controls, and Mathematica functions.
+- The `Rmd` file that generated the paper, containing the R code to produce Figure 1.
 - Animations illustrating the manual tour and slicing, matching the static figures in the paper. These are also available at https://vimeo.com/747585410 and https://vimeo.com/747590472.
