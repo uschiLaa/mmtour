@@ -22,7 +22,11 @@ A referee, an Associate Editor (AE), and I have reviewed your paper. There's ent
 
 1- Your revision should not increase the length of the manuscript.
 
+\textcolor{blue}{Noted}
+
 2- I will download and run your code as part of the next round of reviews.  I suggest, but don't require, the tidyverse style for your code and, in any case, ask that you submit code that is documented and as user-friendly as possible.  Before resubmitting please run your code in a "clean" environment as issues such as required packages that aren't loaded or calls to files that don't exist are common and can delay publication (I'm not saying these exist in your case, just asking you to be aware!).
+
+\textcolor{blue}{Done - TODO check this}
 
 3- Your paper will be printed in black and white.  The online version will be in color but to accommodate printing without color please be sure you don't refer to color in either the figure captions or text and that all figures are still interpretable in black and white.
 
@@ -33,6 +37,8 @@ A referee, an Associate Editor (AE), and I have reviewed your paper. There's ent
 \textcolor{blue}{Done}
 
 Articles published in JCGS are ordinarily accompanied by online publication of the data and computer code used to illustrate the proposed methods. The goal is to enable readers to replicate much of the analysis and simulations described in a paper and to apply proposed methods in their own data without having to write code from scratch.  When it is not practical to include a whole dataset in the manuscript, the manuscript should state how the complete dataset can be obtained. Please let me know if you would not be able to publish your data for reasons of security or confidentiality. Please provide the computer code and/or data that you hope to publish along with your revision. I have attached the instructions for including online materials here.
+
+\textcolor{blue}{Done}
 
 **Associate Editor**
 
@@ -46,22 +52,34 @@ Major Issues
     - Code should be reproducible and not depend on user paths.
     - Data files should be uploaded along with code files (they don't seem to be part of supplemental material?)
     - Not having the ability to actually run the code (because the data wasn't included) makes it somewhat diﬀicult to assess the software side of this paper.
+    
+\textcolor{blue}{Done. Previously we provided the public github repo URL so that all files to reproduce could be downloaded. Here we have included all the files in the supplementary zip. XXX TODO Please check the list of Supplementary material in the paper.}
+   
 - Grammar: There are a lot of minor grammatical issues with this paper. I suggest utilizing a tool such as Grammarly to spot and fix them. The ones that I noticed as I read through the first section are detailed in minor issues below, but I am trying to focus more on the content than the style, so I will try to not nit-pick through the rest of the paper and trust that the authors can use the online tools.
+
+\textcolor{blue}{Done. Apologies for the grammatical errors.}
+
 - Cite your software packages appropriately - they're tools you depend on to do your work and should be cited in the same way papers are cited.
+
+\textcolor{blue}{Done. They were all cited, but not by our error, at the first mention.}
 
     – Page 3, line 28: Capitalize Mathematica and cite it appropriately. 
     
+\textcolor{blue}{Done.}
+    
     – Page 3, line 32: Cite R 
+
+\textcolor{blue}{Done.}
     
     – Page 7, line 28: Cite Shiny
     
-\textcolor{blue}{Done - the citations were there, but not placed at the first mention.}  
+\textcolor{blue}{Done.}
 
 - Notation
 
     – Define your notation better: $V_m$ is used without being defined, and it would probably be helpful to have a clearer mathematical definition of the relationship between your basis $A$ and $V_m$.
 
-\textcolor{blue}{Done}  
+\textcolor{blue}{Done.}  
 
 - What developments are specific to Mathematica and are not yet implemented in R? You allude several times to R's deficiencies in this space but don't ever explicitly spell out what is missing, beyond a nod to mouse tracking capabilities in Shiny (which would likely depend on the user's screen resolution, but should be fairly precise once you condition on that - why would Mathematica have better resolution for mouse controls?)
 Below is a set of comments relating to this issue, written as I read through the paper (so hopefully the chronology is preserved and you can see why this isn’t as direct as it
@@ -86,17 +104,17 @@ Minor issues and suggestions
 - Pg 2, line 8: "the more useful methods for data analysis need to work for arbitrary dimension."
 Perhaps instead: methods which work for arbitrary dimensions are more useful/have more general utility? Either way, dimension should be plural.
 
-\textcolor{blue}{Done}
+\textcolor{blue}{Done.}
 
 - Pg 2, line 17: "could theoretically show the viewer the data from all sides."
 It might be helpful to have a small figure here to demonstrate what this might mean, for those who aren't familiar with tours and/or who can't visualize n-dimensional space projections into 3D out of thin air. Alternately, link to e.g. a YouTube video showing what you mean by "from all sides"
 
-\textcolor{blue}{Links added}
+\textcolor{blue}{Links added.}
 
 - Pg 2, line 23: "A video illustrating the capabilities is available through video library of ASA Statistical Graphics Section (2022)."
 Add "the" before video
 
-\textcolor{blue}{Done}
+\textcolor{blue}{Done.}
 
 **Reviewer 1**
 
@@ -106,9 +124,11 @@ Some comments:
 
 In the Abstract you have mentioned "Some limited implementations has also been made available in the R package tourr" but in Sub-Section 3.2 you can mention in more detail the limitations in tourr implementation
 
+\textcolor{blue}{More explanation has been added, and more details in the tourr implementation section.}
+
 Section 1 line 29 "The software section describes mathematica package"  mathematica should be capitalized as you did  through the paper in most cases.  Also since is the first time you have mentioned Mathematica you should include the reference here (Wolfram reference appears in page 4 line 26 for first time) 
 
-\textcolor{blue}{Done}
+\textcolor{blue}{Done.}
 
 Section 2: "manual tour allows the user to alter the coefficients of one (or more) variables" but in the explanation it is not clear what is  $V_m$  and how to alter the coefficients for more than one variable.
 
@@ -135,8 +155,8 @@ Iin Section 3. Page 7, line 20 "One might implement such an interactive interfac
 
 Section 4: Page 10 line 36: Figure 3 summarizes (space)
 
-\textcolor{blue}{Thanks}
+\textcolor{blue}{Thanks.}
 
 Section 5: page 15 line 26 "If new technology for interactive graphics became available"  be more specific about the needed technology in R to implement the manual controls as you did with Mathematica
 
-\textcolor{blue}{Done}
+\textcolor{blue}{Done.}
