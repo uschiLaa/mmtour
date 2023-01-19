@@ -103,11 +103,12 @@ Some comments:
 In the Abstract you have mentioned "Some limited implementations has also been made available in the R package tourr" but in Sub-Section 3.2 you can mention in more detail the limitations in tourr implementation
 
 Section 1 line 29 "The software section describes mathematica package"  mathematica should be capitalized as you did  through the paper in most cases.  Also since is the first time you have mentioned Mathematica you should include the reference here (Wolfram reference appears in page 4 line 26 for first time) 
+
 \textcolor{blue}{done}
 
 Section 2: "manual tour allows the user to alter the coefficients of one (or more) variables" but in the explanation it is not clear what is  $V_m$  and how to alter the coefficients for more than one variable.
 
-\textcolor{blue}{definition of $V_m$ added but have not addressed the second part of the comment}
+\textcolor{blue}{definition of $V_m$ added but have not addressed the second part of the comment TODO}
 
 In page 4 line 2.2 "The components corresponding to $V_m$ are directly controlled by cursor movement which updates row $m$ of $A$". Maybe a video will be illustrative in this sub-section.
 

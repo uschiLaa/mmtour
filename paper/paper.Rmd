@@ -90,7 +90,7 @@ The methods for updating component values in @cook_manual_1997 (and utilized in 
 
 ## A new simpler and broadly applicable approach
 
-The new approach emerged from experiments on the tour using the linear algebra capabilities, and relatively new interactive graphics interface, available in Mathematica [@Mathematica]. The components corresponding to $V_m$ are directly controlled by cursor movement, which updates row $m$ of $A$. The updated matrix is then orthonormalised. 
+The new approach emerged from experiments on the tour using the linear algebra capabilities, and relatively new interactive graphics interface, available in Mathematica. The components corresponding to $V_m$ are directly controlled by cursor movement, which updates row $m$ of $A$. The updated matrix is then orthonormalised. 
 
 ### Algorithm 
 
@@ -476,7 +476,7 @@ This example can be reproduced with the code in penguins_shifting_slice_center.n
 
 This short note has described new technology for manually interacting with tours. The manual control of projection coefficients is most useful for assessing variable importance to perceived structure, but can be generally used for steering a viewer through high-dimensional space. Changing the center of a slice manually enables exploring the space orthogonal to a projection, specifically in the direction of a single variable. This is a new tool, and as shown in the example, when used with the slice tour can be very useful for understanding boundaries of classifiers. This is also likely a useful method for examining low-dimensional non-linear manifolds, and also functions of multiple parameters.
 
-Mathematica provided a useful sandbox to experiment with the ideas presented in this paper. Most of the data, though, is first constructed using R, especially the classification boundaries. If new technology for interactive graphics becomes available in R it would be useful to create a tighter coupling of models and visualization to allow exploring and comparing fits. 
+Mathematica provided a useful sandbox to experiment with the ideas presented in this paper. Most of the data, though, is first constructed using R, especially the classification boundaries. If new technology for interactive graphics with precise cursor control becomes available in R it would be useful to create a tighter coupling of models and visualization to allow exploring and comparing fits. 
 
 <!-- Recap contribution
 
