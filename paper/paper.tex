@@ -327,14 +327,30 @@ Mathematica interface), and a numeric input to specify the center point
 \(c\) explicitly. The display will update based on these input values,
 in particular the view will jump to a new slice when \(c\) is changed.
 
-\textcolor{blue}{One might implement such an interactive interface in R, for example using `shiny` [@shinym], with `plotly` [@plotly] drawing. It could be possible with `rgl` [@rgl] but this package is focused on 3D, not the arbitrary $p$-D of tours. The primary tool needed is the tracking of the cursor position in small increments and it is not readily available in R. The `plotly` package is designed to add on to `ggplot2` graphics, not to be a programmable interactive graphics system. It would have been possible with the `cranvas` system [@cranvas] or `rJava` [@rJava] but neither has a graphics toolkit that operates across platforms today. What we have chosen to do is to use the interactivity of Mathematica to experiment, and to implement as an animation in the `tourr` [@tourr] package. There is hope that better interactivity will be available for R soon, perhaps in javascript, which might allow for experimentation to develop new techniques as available in Mathematica.}
+\textcolor{blue}{Within R, the natural implementation for an interactive interface would use}
+\texttt{shiny} \citep{shinym} with \texttt{plotly} \citep{plotly}
+drawing. However, the \texttt{plotly} package is designed to add on to
+\texttt{ggplot2} graphics, not to be a programmable interactive graphics
+system. It lacks capability to implement the primary tool needed for a
+manual tour, that is the tracking of the cursor position in small
+increments. In theory, the historical \texttt{locator()} function of
+base R should provide the necessary capability, but it's behavior is not
+consistent between graphical devices. The cursor position control is
+possible with \texttt{rgl} \citep{rgl} but this package is focused on
+3D, not the arbitrary dimension of tours. The level of interactivity
+would have been possible with the \texttt{cranvas} system
+\citep{cranvas} or \texttt{rJava} \citep{rJava} but neither has a
+graphics toolkit that currently operates across platforms. What we have
+chosen to do is to use the interactivity of Mathematica to experiment,
+and to implement as an animation in the \texttt{tourr} \citep{tourr}
+package. There is hope that better interactivity will be available for R
+soon, perhaps in javascript \citep[e.g.][\citet{detourr}]{langevitour},
+which might allow for the experimentation to develop new techniques.
 
 \hypertarget{mathematica-package}{%
 \subsection{Mathematica package}\label{mathematica-package}}
 
 \textcolor{blue}{The Mathematica implementation relies on the inbuilt Mathematica function  `LocatorPane`. This function creates a region on the screen where the position of the mouse is captured and then converted to input that updates the graphics functions, enabling the manual navigation of the tour. We then use the graphics function `ListPlot` embedded in dynamic objects via  `DynamicModule` to produce the display. Control objects, such as sliders, locator panes, and input fields, are used on dynamic variables, and when there is a change in the dynamic variable the dynamic objects which contain that variable will be updated.}
-
-\textcolor{blue}{Di will explain what part and why is difficult in R, also check grammar}
 
 The examples presented in the application section below (and attached in
 notebook format in the supplementary material) all use our primary new
