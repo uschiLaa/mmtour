@@ -720,17 +720,13 @@ StyleBox[\"colourFunc\",\nFontSlant->\"Italic\"]\):A list of colours or the inbu
 The first colour will correspond to the flag of the lowest index and so on.";
 
 
-Clear[SliceDynamicCC]
 SliceDynamicCC[data_,projMat_,height_,heightRange_, legendQ_:1,flagQ_:1, colorFunc_:ColorData[97]]:=
 DynamicModule[{
 lst=If[TrueQ[projMat=="random"],RandomMatrix[data, legendQ + flagQ],projMat],
 (*centre/outline variables are used for the centre guide*)
-centreLst = If[StringQ[data[[1, 1]]],
-(*Maybe store max and min values in variables?*)
-Array[( Max[data[[2;;-1, #]]]-4 Min[data[[2;;-1, #]]])/(4 ( Max[data[[2;;-1, #]]]-Min[data[[2;;-1, #]]])) {- Sin[(2 \[Pi](# - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],
-      Cos[(2\[Pi](#- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}&, Length[data[[1]]]-(legendQ + flagQ)],
-Array[( Max[data[[All, #]]]-4 Min[data[[All, #]]])/(4 ( Max[data[[All, #]]]-Min[data[[All, #]]])) {- Sin[(2 \[Pi](# - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],
-      Cos[(2\[Pi](#- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}&, Length[data[[1]]]-(legendQ + flagQ)] ],
+centreLst =Array[{-0.625Sin[(2 \[Pi](# - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],
+0.625Cos[(2\[Pi](#- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}&,
+Length[data[[1]]]-(legendQ + flagQ)],
 centreCopy =Array[{-Sin[(2 \[Pi](# - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],
 Cos[(2\[Pi](#- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}&,
 Length[data[[1]]]-(legendQ + flagQ)],
@@ -744,7 +740,7 @@ RangeHelper[data[[2;;-1,1;;-(1+ legendQ + flagQ)]]],
 RangeHelper[data[[All, 1;;-(1+ legendQ + flagQ)]]]], 
 arrowData={Circle[{0.,0.},1.]},legend={}, colours={},
 zoom=0.,h=height//N,dataSets, pntSize=0.0115,
-boolVal = False,showMat=False},
+boolVal = False,showMat=False, displaycentre = {}},
 
 (*Visuals for projection control*)
 If[StringQ[data[[1, 1]]], 
@@ -774,12 +770,15 @@ PointSize[Dynamic[pntSize]]}]],
 Grid[{{Column[{
 LocatorPane[Dynamic[centreLst, 
 (For[i = 1,i<=Length[centreCopy],i++,
-centreLst[[i]]= #[[i]] . centreCopy[[i]] centreCopy[[i]];
+centreLst[[i]]=#[[i]] . centreCopy[[i]] centreCopy[[i]];
 If[#[[i]] . centreCopy[[i]]>1., centreLst[[i]] = centreCopy[[i]]];If[#[[i]] . centreCopy[[i]]<0.25,centreLst[[i]]=0.25{-Sin[(2 \[Pi](i - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],Cos[(2\[Pi](i- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}]
 ])&],
 Graphics[{EdgeForm[{Gray, Dashed}],White,Polygon[centreCopy], Polygon[3/4 centreCopy], Polygon[1/2 centreCopy],Polygon[1/4 centreCopy], Black,centreLines,centreText, PointSize[0.0325],Point[Dynamic[centreLst]],outline }], 
 Appearance->None],
 
+Style["Centre Point:", FontFamily->"Times New Roman"],
+
+Grid[{{Style[Dynamic[displaycentre], FontFamily->"Times New Roman"]}},ItemSize->{15, 4},Alignment->Top],
 Style["Slice Height:"Dynamic[h], FontFamily->"Times New Roman"], 
 Slider[Dynamic[h],heightRange],
 Style["Zoom Scale:"Dynamic[Round[(zoom + 0.2)/(0.999 + 0.2),0.001]], FontFamily->"Times New Roman"],
@@ -808,6 +807,8 @@ Do[With[{i=i},AppendTo[centre,
 (0.75-(Norm[centreLst[[i]]]-0.25))/0.75 Min[data[[All, i]] ]+ ((Norm[centreLst[[i]]]-0.25))/0.75 Max[data[[All, i]]]]] ,
 {i,1,Length[centreLst]}]
 ];
+
+displaycentre = centre;
 
 Do[Do[If[Re[genDist[xPrime[dataSets[[i,j, 1;;- (1 +  legendQ + flagQ)]], lst],cPrime[centre, lst]]]<h,
 AppendTo[slice, dataSets[[i,j,1;;-(1 + legendQ + flagQ)]]];
