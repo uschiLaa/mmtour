@@ -720,13 +720,17 @@ StyleBox[\"colourFunc\",\nFontSlant->\"Italic\"]\):A list of colours or the inbu
 The first colour will correspond to the flag of the lowest index and so on.";
 
 
+Clear[SliceDynamicCC]
 SliceDynamicCC[data_,projMat_,height_,heightRange_, legendQ_:1,flagQ_:1, colorFunc_:ColorData[97]]:=
 DynamicModule[{
 lst=If[TrueQ[projMat=="random"],RandomMatrix[data, legendQ + flagQ],projMat],
 (*centre/outline variables are used for the centre guide*)
-centreLst =Array[{-0.625Sin[(2 \[Pi](# - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],
-0.625Cos[(2\[Pi](#- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}&,
-Length[data[[1]]]-(legendQ + flagQ)],
+centreLst = If[StringQ[data[[1, 1]]],
+(*Maybe store max and min values in variables?*)
+Array[( Max[data[[2;;-1, #]]]-4 Min[data[[2;;-1, #]]])/(4 ( Max[data[[2;;-1, #]]]-Min[data[[2;;-1, #]]])) {- Sin[(2 \[Pi](# - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],
+      Cos[(2\[Pi](#- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}&, Length[data[[1]]]-(legendQ + flagQ)],
+Array[( Max[data[[All, #]]]-4 Min[data[[All, #]]])/(4 ( Max[data[[All, #]]]-Min[data[[All, #]]])) {- Sin[(2 \[Pi](# - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],
+      Cos[(2\[Pi](#- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}&, Length[data[[1]]]-(legendQ + flagQ)] ],
 centreCopy =Array[{-Sin[(2 \[Pi](# - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],
 Cos[(2\[Pi](#- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}&,
 Length[data[[1]]]-(legendQ + flagQ)],
@@ -770,7 +774,7 @@ PointSize[Dynamic[pntSize]]}]],
 Grid[{{Column[{
 LocatorPane[Dynamic[centreLst, 
 (For[i = 1,i<=Length[centreCopy],i++,
-centreLst[[i]]=#[[i]] . centreCopy[[i]] centreCopy[[i]];
+centreLst[[i]]= #[[i]] . centreCopy[[i]] centreCopy[[i]];
 If[#[[i]] . centreCopy[[i]]>1., centreLst[[i]] = centreCopy[[i]]];If[#[[i]] . centreCopy[[i]]<0.25,centreLst[[i]]=0.25{-Sin[(2 \[Pi](i - 1.))/(Length[data[[1]]]-(legendQ + flagQ))],Cos[(2\[Pi](i- 1.))/(Length[data[[1]]]-(legendQ + flagQ))]}]
 ])&],
 Graphics[{EdgeForm[{Gray, Dashed}],White,Polygon[centreCopy], Polygon[3/4 centreCopy], Polygon[1/2 centreCopy],Polygon[1/4 centreCopy], Black,centreLines,centreText, PointSize[0.0325],Point[Dynamic[centreLst]],outline }], 
