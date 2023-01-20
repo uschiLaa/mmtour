@@ -571,14 +571,11 @@ to capture enough points in a given view.
 
 We start by a comparison of the two models and the data distribution
 shifting to \(\mathbf{c}^{+}\), thus the slice is localized towards high
-values of bill depth in top row of Figure \ref{slice1p}. The star glyph
-at right indicates the slice center value, which shows that it is higher
-on \texttt{bd} and at the middle value for the other variables. This
-slice center guide is as proposed in \citet{condviz2}, and more details
-can be found in the Appendix. We can see that all three slices (the two
-models and the data) contain almost no points from the third class
-(Gentoo), and that the decision boundary between the two models is very
-similar.
+values of bill depth in top row of Figure \ref{slice1p}.
+\textcolor{blue}{The star glyph at right indicates the slice center value, which shows that it is higher on `bd` and at the middle value for the other variables. This slice center guide is as proposed in @condviz2, and more details can be found in the Appendix.}
+We can see that all three slices (the two models and the data) contain
+almost no points from the third class (Gentoo), and that the decision
+boundary between the two models is very similar.
 
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.95\textwidth]{figures/slice1_p.pdf}}
@@ -591,18 +588,17 @@ similar.
 
 A more interesting comparison is found for \(\mathbf{c}^{-}\), thus the
 slice localized towards low values of bill depth, shown in the bottom
-row of Figure \ref{slice1p}. (The star glyph at right indicates the
-slice center value, which shows that it is lower on \texttt{bd} and at
-the middle value for the other variables.) The RF model (left) predicts
-all three species within this slice, with an interesting boundary for
-the third class (Gentoo). On the other hand the LDA model (middle)
-predominantly predicts the third class within the slice, this appears to
-be enforced through the linear structure of the model. Looking finally
-at the thick slice through the data we see that there are primarily
-observations from this class within the slice we can conclude that the
-two models have filled in the ``empty'' space (where we do not have any
-training observations) in very different ways and according to what we
-might expect given the model structure.
+row of Figure \ref{slice1p}.
+\textcolor{blue}{(The star glyph at right indicates the slice center value, which shows that it is lower on `bd` and at the middle value for the other variables.)}
+The RF model (left) predicts all three species within this slice, with
+an interesting boundary for the third class (Gentoo). On the other hand
+the LDA model (middle) predominantly predicts the third class within the
+slice, this appears to be enforced through the linear structure of the
+model. Looking finally at the thick slice through the data we see that
+there are primarily observations from this class within the slice we can
+conclude that the two models have filled in the ``empty'' space (where
+we do not have any training observations) in very different ways and
+according to what we might expect given the model structure.
 
 Finally, it is interesting to compare the slice views to the projection
 of the models seen in Fig. \ref{proj1} to better understand how the
