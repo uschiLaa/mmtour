@@ -13,6 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
  XXX References need to be consistent, all initials or all full names, and all sentence case or title case on titles.
  
+ XXX Check that slicing explanation mentions scaling the data!
+ 
 **Editor**
 
 A referee, an Associate Editor (AE), and I have reviewed your paper. There's enthusiasm for your paper but a number of issues that came up in the reviews require additional attention.  As such, I'd like to offer the opportunity to submit a revised version that addresses the issues brought up by the AE and referee.
