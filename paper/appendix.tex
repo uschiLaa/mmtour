@@ -77,7 +77,7 @@ graphics; multivariate data; dynamic graphics
 position}\label{refinements-to-enforce-exact-position}}
 
 The problem with the new simple method (Algorithm 1) is that the precise
-values for \(V_m\) cannot be specified because the orthonormalisation
+values for \(V_m\) cannot be specified because the orthonormalization
 will change them.
 
 \hypertarget{adjustment-method-1}{%
@@ -112,7 +112,7 @@ which ensures that
 
 If \(d>2\) the process would be sequentially repeated in the same manner
 that Gram-Schmidt is applied sequentially to orthormalise the columns of
-a matrix. If \(d=1\) no orthonormalisation is needed, and the projection
+a matrix. If \(d=1\) no orthonormalization is needed, and the projection
 vector would simply need to be normalized after each adjustment.
 
 \begin{figure}
@@ -133,8 +133,8 @@ projection matrix is expressed as
 Movement of the cursor takes the two components \({a_{m1},a_{m2}}\) into
 a selected new value \({a^*_{m1},a^*_{m2}}\). Although the motion is
 constrained by \(a^{*2}_{m1}+a^{*2}_{m2}\leq 1\), this is not sufficient
-to guarantee orthonormality of the new projection matrix. One possible
-algorithm to achieve this is
+to guarantee the orthonormality of the new projection matrix. One
+possible algorithm to achieve this is
 
 \begin{enumerate}
 \item Cursor movement takes ${a_{m1},a_{m2}}\to {a^*_{m1},a^*_{m2}}$, called $V_m$ above.
@@ -142,7 +142,7 @@ algorithm to achieve this is
 \begin{enumerate}
 \item For row $m$ one chooses $a^*_{m3}=\sqrt{1-a^{*2}_{m1}-a^{*2}_{m1}},~a^*_{m,k>3}=0$
 \item For other rows, $a_{i\neq m,j\geq3}$ random selections in the range $(-1,1)$ are made.
-\item The Gram-Schmidt algorithm is then used to obtain an orthonormal basis taking $e_m$ as the first vector (which is already normalized), and then proceeding as usual $e_1\to e_1-(e_1\cdot e_m) e_m$, $e_1\to e_1/(e_1\cdot e_1)$, etc, resulting in $A^{**}$.
+\item The Gram-Schmidt algorithm is then used to obtain an orthonormal basis taking $e_m$ as the first vector (which is already normalized), and then $e_1\to e_1-(e_1\cdot e_m) e_m$, $e_1\to e_1/(e_1\cdot e_1)$, etc, resulting in $A^{**}$.
 \end{enumerate}
 \item this results in the orthonormal basis $O^*$ and a new projection matrix with $A^{**}_{m1}=a^*_{m1},~A^{**}_{m2}=a^*_{m2}$.
 \end{enumerate}
@@ -153,7 +153,7 @@ it renders projections in a way that is not continuous and may be
 distracting. This can be alleviated by replacing the random completion
 with a rule restricting the size of the jumps, for example in step (b)
 the values \(a_{i\neq m,j\geq3}\) can be left unchanged before
-orthogonalisation.
+orthogonalization.
 
 \begin{align}
 O=~~~& \begin{pNiceArray}{ccccc}[first-row,first-col]
@@ -174,13 +174,13 @@ e_p \to&a_{p1} & a_{p2} &\cdot &\cdots & a_{pp}
 
 We could also take a similar approach without completing the basis,
 through rotation within the \(d\)-dimensional hyperplane defined by the
-new projection. In that case we would again start from \(A^*\) as above,
-and then rotate the basis such that the first direction is aligned with
-the selected variable \(m\). Applying Gram-Schmid within that basis
-definition will not alter the direction for the first vector, thus the
-direction of \(m\) remains fixed to what was selected with the cursor.
-By adjusting the normalization procedure we can also ensure that the
-lenght remains as selcted manually by the user.
+new projection. In that case, we would again start from \(A^*\) as
+above, and then rotate the basis such that the first direction is
+aligned with the selected variable \(m\). Applying Gram-Schmid within
+that basis definition will not alter the direction for the first vector,
+thus the direction of \(m\) remains fixed to what was selected with the
+cursor. By adjusting the normalization procedure we can also ensure that
+the length remains as selected manually by the user.
 
 \hypertarget{slice-center-guide}{%
 \section{Slice center guide}\label{slice-center-guide}}
@@ -195,7 +195,7 @@ position of the point is marked by a polygon on radial axes indicating
 its position relative to the variable minimum to maximum values.
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{appendix_files/figure-latex/anchornav-1} \caption{Visual guide for the slice center. Variable axes are displayed in polar coordinates, where the center corresponds to minimum value and outer end corresponds to maximum value. The position of the center corresponds to the dark polygon. If the center is at the center of the data, this will be displayed as a regular polygon (A), and plots B, C show it's position when moving the center along one axis.}\label{fig:anchornav}
+\includegraphics[width=1\linewidth]{appendix_files/figure-latex/anchornav-1} \caption{Visual guide for the slice center. Variable axes are displayed in polar coordinates, where the center corresponds to the minimum value and the outer end corresponds to the maximum value. The position of the center corresponds to the dark polygon. If the center is at the center of the data, this will be displayed as a regular polygon (A), and plots B and C show its position when moving the center along one axis.}\label{fig:anchornav}
 \end{figure}
 
 \hypertarget{software-details}{%
@@ -248,7 +248,7 @@ choose specific colors for the entry colorFunc. For example,
 \{Red,White,Green\} would display groups 1 (red) and 3 (green) while
 making 2 invisible.
 
-\textcolor{blue}{The slice centre position is controlled via numerical input along each axis in the original command `SliceDynamic`. This provides numerical feedback on the position of the centre. For easier navigation but without the numerical feedback, an implementation of the slice centre control via a visual display like the one in Figure \ref{fig:anchornav} is provided in `SliceDynamicCC`.}
+\textcolor{blue}{The slice center position is controlled via numerical input along each axis in the original command `SliceDynamic`. This provides numerical feedback on the position of the center. For easier navigation but without the numerical feedback, an implementation of the slice center control via a visual display like the one in Figure \ref{fig:anchornav} is provided in `SliceDynamicCC`.}
 
 The package includes the additional functions not used in the example
 application: \texttt{ProjectionPlot}, \texttt{Projected2DSliderPlot},
@@ -309,7 +309,7 @@ exist inside the slice and outside it. This function differs from
 \texttt{SliceDynamic} in that it looks at only one data set but displays
 both the points inside and outside the slice. The display panel allows
 the user to specify the size of both sets of points (inside and outside)
-along with the slice height, center point and zoom level. The function
+along with the slice height, center point, and zoom level. The function
 and its arguments are given below:
 
 \texttt{VisualiseSliceDynamic{[}data,\ projmat,\ height,\ heightRange{]}}
@@ -317,7 +317,7 @@ and its arguments are given below:
 \begin{itemize}
 \tightlist
 \item
-  \texttt{data}: A data matrix containing only one group. In this case
+  \texttt{data}: A data matrix containing only one group. In this case,
   the data matrix should not contain column labels.
 \item
   \texttt{projmat}: The initial projection matrix. It is possible to

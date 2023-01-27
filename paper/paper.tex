@@ -78,7 +78,7 @@ structure changes in local subspaces. The Mathematica package as well as
 example notebooks are provided, which contain functions enabling the
 user to experiment with these new manual controls, with one specifically
 for exploring regions and boundaries produced by classification models.
-The advantage of Mathematica is its linear algebra capabilities, and
+The advantage of Mathematica is its linear algebra capabilities and
 interactive cursor location controls. Some limited implementation has
 also been made available in the R package \tt{tourr}. 
 \end{abstract}
@@ -100,57 +100,58 @@ involve views of high-dimensional data with low-dimensional projections.
 In his original paper on the grand tour, \citet{As85} provided several
 algorithms for tour paths that could theoretically show the viewer the
 data \emph{from all sides}. (Various videos of tours, e.g.
-\citet{dataviewer}, \citet{gt-pp-video}, on the \citet{ASA22} illustrate
-this concept.) Prior to Asimov's work, there were numerous preparatory
-developments including \citet{tukey}'s PRIM-9. PRIM-9 had
+\citet{dataviewer}, \citet{gt-pp-video}, on the \citet{ASA22},
+illustrate this concept.) Prior to Asimov's work, there were numerous
+preparatory developments including \citet{tukey}'s PRIM-9. PRIM-9 had
 user-controlled rotations on coordinate axes, allowing one to manually
 tour through low-dimensional projections. (A video \citep{PRIM9-video}
 illustrating the capabilities is available through \textcolor{blue}{the}
 video library of \citet{ASA22}.) Steering through all possible
-projections is impossible, unlike Asimov's tours which allows one to
-quickly see many, many different projections. After Asimov there have
+projections is impossible, unlike Asimov's tours which allow one to
+quickly see many, many different projections. After Asimov, there have
 been many tour developments, which are summarized in \citet{lee2021}.
 
 One such direction of work develops the ideas from PRIM-9, to provide
 manual control of a tour. \citet{cook_manual_1997} describe controls for
 1D (or 2D) projections, respectively in a 2D (or 3D) manipulation space,
-allowing the user to select any variable axis, and rotate it into, or
-out of, or around the projection through horizontal, vertical, oblique,
+allowing the user to select any variable axis, and rotate it into, out
+of, or around the projection through horizontal, vertical, oblique,
 radial or angular changes in value. \citet{spyrison_spinifex_2020}
 refined this algorithm and implemented it to generate radial tour
 animation sequences.
 
-Manual controls are especially useful for assessing sensitivity of
+Manual controls are especially useful for assessing the sensitivity of
 structure to particular elements of the projection. There are many
 places where it is useful. In exploratory data analysis, where one sees
 clusters in a projection, one may ask whether some variables can be
 removed from the projection without affecting the clustering. For
 interpreting models, one can reduce or increase a variable's
-contribution to examine the variable importance. Having the user
+contribution, to examine the variable importance. Having the user
 interact with a projection is extremely valuable for understanding
 high-dimensional data. However, these algorithms have two problems: (1)
 the pre-processing of creating a manipulation space overly complicates
-the algorithm, (2) extending to higher dimensional control is difficult.
+the algorithm, and (2) extending to higher dimensional control is
+difficult.
 
-Another potentially useful manual control, is to allow the user to
-choose the position of the center of a slice. The slice tour was
-introduced in \citet{slicetour}. It operates by converting the
-projection plane into a slice, by removing or de-emphasizing points that
-are further than a fixed orthogonal distance from the plane. The
-projection plane is usually thought of as passing through the center of
-the data. Manual control would allow the user to change the position of
-the center point, by shifting it along a coordinate axis, while keeping
-the orientation of the projection plane fixed. The purpose would be to
-explore how or if the shape of the data, in the space orthogonal to the
-projection, changes as one gets away from the center. It would also
-allow the user to interactively decide on the thickness of the slice.
+Another potentially useful manual control is to allow the user to choose
+the position of the center of a slice. The slice tour was introduced in
+\citet{slicetour}. It operates by converting the projection plane into a
+slice, by removing or de-emphasizing points that are further than a
+fixed orthogonal distance from the plane. The projection plane is
+usually thought of as passing through the center of the data. Manual
+control would allow the user to change the position of the center point,
+by shifting it along a coordinate axis, while keeping the orientation of
+the projection plane fixed. The purpose would be to explore how or if
+the shape of the data, in the space orthogonal to the projection,
+changes as one gets away from the center. It would also allow the user
+to interactively decide on the thickness of the slice.
 
 This paper explains the new manual controls for projection and slice
 tours. The next section describes the new algorithm for manual control,
 for both projections and slices. The use of these methods is illustrated
 to compare and contrast boundaries constructed by different classifiers.
 The software section describes a Mathematica \citep{Mathematica} package
-that is used for the application, and describes the interactive
+that is used for the application and describes the interactive
 environment that would be desirable within R \citep{rref} as new
 technology becomes available. The paper is accompanied by an appendix
 with more details and adjustments to the manual controls, and three
@@ -180,7 +181,7 @@ projection. In this space, the coefficient of the controlled variable
 ranges between -1 and 1. Movements of a cursor are recorded and
 converted into changes in the values of \(V_m\) thus changing the
 displayed 2D projection. The algorithm also provided constraints to
-horizontal, vertical, radial or angular motions only. The construction
+horizontal, vertical, radial, or angular motions only. The construction
 of the manipulation space overly complicates the manual controls,
 especially when considering possible techniques that will apply to
 arbitrary \(d\).
@@ -189,11 +190,11 @@ arbitrary \(d\).
 \subsection{A new simpler and broadly applicable
 approach}\label{a-new-simpler-and-broadly-applicable-approach}}
 
-The new approach emerged from experiments on the tour using the linear
-algebra capabilities, and relatively new interactive graphics interface,
-available in Mathematica. The components corresponding to \(V_m\) are
-directly controlled by cursor movement, which updates row \(m\) of
-\(A\). The updated matrix is then orthonormalised.
+The new approach emerged from experiments on the tour using linear
+algebra capabilities, and a relatively new interactive graphics
+interface, available in Mathematica. The components corresponding to
+\(V_m\) are directly controlled by cursor movement, which updates row
+\(m\) of \(A\). The updated matrix is then orthonormalized.
 
 \hypertarget{algorithm}{%
 \subsubsection{Algorithm}\label{algorithm}}
@@ -233,15 +234,15 @@ This algorithm will produce the changes to a projection as illustrated
 in Figure \ref{fig:manualsequence}. The controlled variable, \(V_m\),
 corresponds to the dark line, and sequential changes to row \(m\) of
 \(A\) can be seen to roughly follow a specified position (dot). Changes
-in the other components happen as a result of the orthonormalisation,
-but are uncontrolled.
+in the other components happen as a result of the orthonormalization but
+are uncontrolled.
 
 The algorithm will also allow for more than one variable to be
 controlled. This is more difficult to implement interactively, but is
 easy with scripting, as is available in the R implementation.
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{paper_files/figure-latex/manualsequence-1} \caption{Sequence of projections where contribution of one variable is controlled (dark) is changed using unconstrained orthonormalisation. The dot indicates the chosen values for the controlled variable, $V_m$. It can be seen that the actual axis does not precisely match the chosen position, but it is close.}\label{fig:manualsequence}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/manualsequence-1} \caption{Sequence of projections where the contribution of one variable is controlled (dark) is changed using unconstrained orthonormalization. The dot indicates the chosen values for the controlled variable, $V_m$. It can be seen that the actual axis does not precisely match the chosen position, but it is close.}\label{fig:manualsequence}
 \end{figure}
 
 \hypertarget{refinements-to-enforce-exact-position}{%
@@ -249,11 +250,11 @@ easy with scripting, as is available in the R implementation.
 position}\label{refinements-to-enforce-exact-position}}
 
 The problem with the new simple method is that it is not faithful to the
-precise values for \(V_m\) because the orthonormalisation will change
+precise values for \(V_m\) because the orthonormalization will change
 them. Even though these changes are for the most part imperceptible, one
 may wish to avoid them and there are numerous ways that this can be
 enforced, a few are detailed in the Appendix. These primarily differ in
-how the remaining variables are adjusted during orthonormalisation.
+how the remaining variables are adjusted during orthonormalization.
 
 \hypertarget{manual-control-for-slices}{%
 \subsection{Manual control for slices}\label{manual-control-for-slices}}
@@ -261,7 +262,7 @@ how the remaining variables are adjusted during orthonormalisation.
 To better explore the space we combine the manual controls for the
 projection with manual controls for slicing. A slice is a section of the
 data that is defined by a projection, a center point that is anchoring
-it in the high-dimensional space and the slice thickness \(h\)
+it in the high-dimensional space, and the slice thickness \(h\)
 \citep{slicetour}. A data point is inside the slice if its orthogonal
 distance from the projection plane (passing through the center point) is
 below the thickness \(h\). This orthogonal distance is computed in terms
@@ -292,8 +293,8 @@ component orthogonal to the projection plane.
 \hypertarget{changing-the-thickness}{%
 \subsubsection{Changing the thickness}\label{changing-the-thickness}}
 
-In addition it is also useful to interactively change the slice
-thickness \(h\) (also called the slice radius), in particular to find
+In addition, it is also useful to interactively change the slice
+thickness \(h\) (also called the slice radius), in particular, to find
 the preferred value for exploring the input data. For guidance the
 estimates of the number of points inside the slice as a function of the
 original sample size \(N\) and the number of dimensions \(p\) from
@@ -314,7 +315,7 @@ able to track the mouse position and adjust the projection based on the
 \textcolor{blue}{user's cursor position}. The user can select one axis
 (corresponding to one variable) by clicking on it, and then adjust the
 position of that axis by dragging it. In practice, the closest axis will
-be selected, and the dragging results in tracking of the mouse position
+be selected, and the dragging results in tracking the mouse position
 which will update the projection in small steps, such that no further
 interpolation is required.
 
@@ -329,16 +330,16 @@ switch to change between projection and slice view, a slider that
 adjusts the slice thickness, \(h\) (named \texttt{height} in the
 Mathematica interface), and a numeric input to specify the center point
 \(c\) explicitly. The display will update based on these input values,
-in particular the view will jump to a new slice when \(c\) is changed.
+in particular, the view will jump to a new slice when \(c\) is changed.
 
 \textcolor{blue}{Within R, the natural implementation for an interactive interface would use}
 \texttt{shiny} \citep{shinym} with \texttt{plotly} \citep{plotly}
-drawing. However, the \texttt{plotly} package is designed to add on to
+drawing. However, the \texttt{plotly} package is designed to add to
 \texttt{ggplot2} graphics, not to be a programmable interactive graphics
-system. It lacks capability to implement the primary tool needed for a
-manual tour, that is the tracking of the cursor position in small
+system. It lacks the capability to implement the primary tool needed for
+a manual tour, which is the tracking of the cursor position in small
 increments. In theory, the historical \texttt{locator()} function of
-base R should provide the necessary capability, but it's behavior is not
+base R should provide the necessary capability, but its behavior is not
 consistent between graphical devices. The cursor position control is
 possible with \texttt{rgl} \citep{rgl} but this package is focused on
 3D, not the arbitrary dimension of tours. The level of interactivity
@@ -346,15 +347,16 @@ would have been possible with the \texttt{cranvas} system
 \citep{cranvas} or \texttt{rJava} \citep{rJava} but neither has a
 graphics toolkit that currently operates across platforms. What we have
 chosen to do is to use the interactivity of Mathematica to experiment,
-and to implement as an animation in the \texttt{tourr} \citep{tourr}
-package. There is hope that better interactivity will be available for R
-soon, perhaps in javascript \citep[e.g.][\citet{detourr}]{langevitour},
-which might allow for the experimentation to develop new techniques.
+and to implement the resulting ideas as an animation in the
+\texttt{tourr} \citep{tourr} package. There is hope that better
+interactivity will be available for R soon, perhaps in javascript
+\citep[e.g.][\citet{detourr}]{langevitour}, which might allow for the
+experimentation to develop new techniques.
 
 \hypertarget{mathematica-package}{%
 \subsection{Mathematica package}\label{mathematica-package}}
 
-\textcolor{blue}{The Mathematica implementation relies on the inbuilt function  `LocatorPane`. This function creates a region on the screen where the position of the cursor is captured and then converted to input that updates the graphics functions, enabling the manual navigation of the tour. We then use the graphics function `ListPlot` embedded in dynamic objects via  `DynamicModule` to produce the display. User interface objects, such as sliders, locator panes, and input fields, are used to provide user control of slice thickness, center, scale and point size.}
+\textcolor{blue}{The Mathematica implementation relies on the inbuilt function  `LocatorPane`. This function creates a region on the screen where the position of the cursor is captured and then converted to input that updates the graphics functions, enabling the manual navigation of the tour. We then use the graphics function `ListPlot` embedded in dynamic objects via  `DynamicModule` to produce the display. User interface objects, such as sliders, locator panes, and input fields, are used to provide user control of slice thickness, center, scale, and point size.}
 
 The examples presented in the application section below (and attached in
 notebook format in the supplementary material) all use our primary new
@@ -392,7 +394,7 @@ applicable for any projection dimension, \(d\). The script interface has
 one advantage over an interactive interface, in that two or more
 variables can be controlled simultaneously.
 
-Changing slice center manually can be accomplished with the new
+Changing the slice center manually can be accomplished with the new
 function, \texttt{manual\_slice()}. This changes the value of the center
 point (\(\mathbf{c}\)) of the slice, along a selected variable axis. It
 slices from the center of the data out to one side, back to the center,
@@ -407,7 +409,7 @@ out to the opposite side, and then back to the center.
 
 }
 
-\caption{Scatterplot matrix of the (standardised) penguins data. The three species are reasonably different in size, with Gentoo distinguised from the other two on body depth relative to flipper length and body mass.}\label{fig:penguins-scatmat}
+\caption{Scatterplot matrix of the (standardized) penguins data. The three species are reasonably different in size, with Gentoo distinguished from the other two on body depth relative to flipper length and body mass.}\label{fig:penguins-scatmat}
 \end{figure}
 
 To illustrate the usefulness of the manual controls we use the 4D
@@ -417,12 +419,12 @@ can be explored and better understood on projections and slices through
 4D space. Figure \ref{fig:penguins-scatmat} shows a scatterplot matrix
 of this data. There are four variables
 (\texttt{bl\ =\ bill\_length\_mm,\ bd\ =\ bill\_depth\_mm,\ fl\ =\ flipper\_length\_mm,\ bm\ =\ body\_mass\_g})
-measuring the size of the penguins from three species (Adelie, Chinstrap
-and Gentoo). The scatterplot matrix shows that the three species appear
-to be likely separable, and that at least the Gentoo can be
-distinguished from the other two species when \texttt{bd} is paired with
-\texttt{fl} or \texttt{bm}. The steps for exploring boundaries in this
-example are as follows:
+measuring the size of the penguins from three species (Adelie,
+Chinstrap, and Gentoo). The scatterplot matrix shows that the three
+species appear to be likely separable and that at least the Gentoo can
+be distinguished from the other two species when \texttt{bd} is paired
+with \texttt{fl} or \texttt{bm}. The steps for exploring boundaries in
+this example are as follows:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -469,21 +471,21 @@ to show the LDA model (middle plot) and the actual data (right plot).
 What can be seen is the linearity of the LDA model, where the boundaries
 are linear and oblique to the variable axes. And, interestingly, this
 particular projection of the original data shows very distinct clusters
-of the three species. That means, the obscuring of the boundaries
-between groups for both of the models is driven by what is happening in
-the orthogonal space to the plane of the selected projection.
+of the three species. That means the obscuring of the boundaries between
+groups for both of the models is driven by what is happening in the
+orthogonal space to the plane of the selected projection.
 
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.95\textwidth]{figures/proj1.pdf}}
 %\centerline{\includegraphics[width=0.32\textwidth]{figures/proj1_rf.png}
 %\includegraphics[width=0.32\textwidth]{figures/proj1_lda.png}
 %\includegraphics[width=0.32\textwidth]{figures/proj1_data.png}}
-\caption{A projection identified using the manual tour, because it shows differences in classification boundaries induced by different models. A RF model produces blocky, rectangular, boundaries, while the LDA model produces oblique linear boundaries. For comparison, in this projection the data shows the three groups are almost perfectly separable.}
+\caption{A projection identified using the manual tour because it shows differences in classification boundaries induced by different models. An RF model produces blocky, rectangular, boundaries, while the LDA model produces oblique linear boundaries. For comparison, in this projection, the data shows the three groups are almost perfectly separable.}
 \label{proj1}
 \end{figure*}
 
 This example can be reproduced with the code in
-penguins\_exploring\_manually.nb and a run through is shown in the video
+penguins\_exploring\_manually.nb and a run-through is shown in the video
 at \url{https://vimeo.com/747585410}.
 
 \hypertarget{slicing-through-the-center}{%
@@ -492,7 +494,7 @@ center}\label{slicing-through-the-center}}
 
 We now continue the investigation by slicing orthogonally to the
 projection \(A_1\). For both models we look at a thin (\(h=0.5\)) slice
-through the center, \(\mathbf{c}^0 = (0,0,0,0)\). At first we explore
+through the center, \(\mathbf{c}^0 = (0,0,0,0)\). At first, we explore
 how changing the projection away from \(A_1\) can help with
 understanding the boundary better. For our example, notice that \(A_1\)
 does not contain any contribution from the second variable
@@ -514,19 +516,19 @@ Chinstrap and Gentoo is where they differ.
 The RF is almost straight in this view, as something we might expect
 from a tree model where splitting occurs on single variables only.
 However, it is straight in a combination of the second and third
-variable (\texttt{bd} and \texttt{fl}). By examining the scatterplot
+variables (\texttt{bd} and \texttt{fl}). By examining the scatterplot
 matrix, we can understand how this boundary was built: on each of
-\texttt{bd} and \texttt{fl} it is possible to cut on a value where most
+\texttt{bd} and \texttt{fl}, it is possible to cut on a value where most
 of the Gentoo penguins are different from the other two species for any
 tree, and likely only one is needed. Thus the forest construction is
 providing a sample of trees that use one variable or the other variable
 to split, producing the blocky boundary on the combination of the two.
 
-In contrast, the LDA boundary has an oblique split between the two, and
+In contrast, the LDA boundary has an oblique split between the two and
 roughly divides the space into three similarly sized areas. It is almost
 like a textbook illustration of how LDA works for two variables (2D)
 where by assuming the clusters have equal variance-covariance, it places
-a boundary half-way between the group means.
+a boundary halfway between the group means.
 
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.95\textwidth]{figures/proj2.pdf}}
@@ -534,14 +536,14 @@ a boundary half-way between the group means.
 %\includegraphics[width=0.45\textwidth]{figures/slice1_lda.png}}
 %\centerline{\includegraphics[width=0.45\textwidth]{figures/slice2_rf.png}
 %\includegraphics[width=0.45\textwidth]{figures/slice2_lda.png}}
-\caption{Comparing slices from two different projections $A_1$ (top row) and $A_2$ (bottom row), to compare and contrast classification boundaries induced by two models RF and LDA. A thin slice through the center of the data is shown. The plot of the data shows that the Gentoo group (light grey/green) is less separated in $A_1$, and the rotation to $A_2$ produces a bigger gap. The boundaries between groups are clear in $A_2$ also. The LDA boundary is more oblique between Gentoo and Chinstrap than the RF, which is too close to the Chinstrap group. On the other hand between Adelie and Gentoo, the RF is better situated about half-way between the two groups. Interestingly, the RF boundaries, which can be highly nonlinear, albeit blocky, are relatively linear for this problem. }
+\caption{Comparing slices from two different projections $A_1$ (top row) and $A_2$ (bottom row), to compare and contrast classification boundaries induced by two models RF and LDA. A thin slice through the center of the data is shown. The plot of the data shows that the Gentoo group (light grey/green) is less separated in $A_1$, and the rotation to $A_2$ produces a bigger gap. The boundaries between groups are clear in $A_2$ also. The LDA boundary is more oblique between Gentoo and Chinstrap than the RF, which is too close to the Chinstrap group. On the other hand between Adelie and Gentoo, the RF is better situated about halfway between the two groups. Interestingly, the RF boundaries, which can be highly nonlinear, albeit blocky, are relatively linear for this problem. }
 \label{slice1}
 \end{figure*}
 
 Finally, to determine which model describes the boundaries better,
 compare them with the \(A_2\) projection of the data (bottom row of
 Figure \ref{slice1}). Gentoo is more separated from the other two in
-this projection, and one can imagine that the trees in the forest has
+this projection, and one can imagine that the trees in the forest have
 greedily grasped any one of many places to make a split to separate the
 group. It might be argued though the that RF boundary is cut too close
 to the Chinstrap species, and might lead to some unnecessary
@@ -549,7 +551,7 @@ misclassification with new data. The LDA boundary is better placed for
 all species.
 
 This example can be reproduced with the code in
-\texttt{penguins\_slicing\_through\_center.nb} and a run through is
+\texttt{penguins\_slicing\_through\_center.nb} and a run-through is
 shown in the first part of the video at
 \url{https://vimeo.com/747590472}.
 
@@ -569,12 +571,12 @@ after centering and scaling). Thus we define
 at slices of the observed data points, using a thicker slice (\(h=1.5\))
 to capture enough points in a given view.
 
-We start by a comparison of the two models and the data distribution
+We start with a comparison of the two models and the data distribution
 shifting to \(\mathbf{c}^{+}\), thus the slice is localized towards high
-values of bill depth in top row of Figure \ref{slice1p}.
+values of bill depth in the top row of Figure \ref{slice1p}.
 \textcolor{blue}{The star glyph at right indicates the slice center value, which shows that it is higher on `bd` and at the middle value for the other variables. This slice center guide is as proposed in @condviz2, and more details can be found in the Appendix.}
 We can see that all three slices (the two models and the data) contain
-almost no points from the third class (Gentoo), and that the decision
+almost no points from the third class (Gentoo) and that the decision
 boundary between the two models is very similar.
 
 \begin{figure*}[ht]
@@ -582,7 +584,7 @@ boundary between the two models is very similar.
 %\centerline{\includegraphics[width=0.32\textwidth]{figures/slice1_p_rf.png}
 %\includegraphics[width=0.32\textwidth]{figures/slice1_p_lda.png}
 %\includegraphics[width=0.32\textwidth]{figures/slice1_p_data.png}}
-\caption{Shifting the slice center allows for exploring the boundary in different subspaces. Here the center has been shifted along the axis of `bd` (icon display at right represents slice center position). (Top row) Center is at large values of `bd`, showing a region with no Gentoo. The two models have similar boundaries except that the LDA is more linear. (Bottom row) Center is at small values of `bd`, reveals a region where the models differ substantially. The RF model carves some area for Adelie, but LDA would only predict to be Gentoo or Chinstrap here. LDA better matches the observed data in this region.}
+\caption{Shifting the slice center allows for exploring the boundary in different subspaces. Here the center has been shifted along the axis of `bd` (icon display at right represents slice center position). (Top row) The center is at large values of `bd`, showing a region with no Gentoo. The two models have similar boundaries except that the LDA is more linear. (Bottom row) The center is at small values of `bd`, revealing a region where the models differ substantially. The RF model carves some area for Adelie, but LDA would only predict to be Gentoo or Chinstrap here. LDA better matches the observed data in this region.}
 \label{slice1p}
 \end{figure*}
 
@@ -591,7 +593,7 @@ slice localized towards low values of bill depth, shown in the bottom
 row of Figure \ref{slice1p}.
 \textcolor{blue}{(The star glyph at right indicates the slice center value, which shows that it is lower on `bd` and at the middle value for the other variables.)}
 The RF model (left) predicts all three species within this slice, with
-an interesting boundary for the third class (Gentoo). On the other hand
+an interesting boundary for the third class (Gentoo). On the other hand,
 the LDA model (middle) predominantly predicts the third class within the
 slice, this appears to be enforced through the linear structure of the
 model. Looking finally at the thick slice through the data we see that
@@ -606,7 +608,7 @@ boundaries change along the \texttt{bd} direction and where the
 differences in the projections come from.
 
 This example can be reproduced with the code in
-penguins\_shifting\_slice\_center.nb and a run through is shown in the
+penguins\_shifting\_slice\_center.nb and a run-through is shown in the
 second part of the video at \url{https://vimeo.com/747590472}.
 
 \hypertarget{sec:discussion}{%
@@ -614,13 +616,13 @@ second part of the video at \url{https://vimeo.com/747590472}.
 
 This short note has described new technology for manually interacting
 with tours. The manual control of projection coefficients is most useful
-for assessing variable importance to perceived structure, but can be
+for assessing variable importance to the perceived structure but can be
 generally used for steering a viewer through high-dimensional space.
 Changing the center of a slice manually enables exploring the space
 orthogonal to a projection, specifically in the direction of a single
 variable. This is a new tool, and as shown in the example, when used
-with the slice tour can be very useful for understanding boundaries of
-classifiers. This is also likely a useful method for examining
+with the slice tour can be very useful for understanding the boundaries
+of classifiers. This is also likely a useful method for examining
 low-dimensional non-linear manifolds, and also functions of multiple
 parameters.
 
@@ -639,7 +641,7 @@ The authors gratefully acknowledge the support of the Australian
 Research Council and the ResearchFirst undergraduate research program at
 Monash University. The paper was written in \texttt{rmarkdown}
 \citep{rmarkdown} using \texttt{knitr} \citep{knitr}. The scatterplot
-matrix of the penguins data was produced by the GGally \citep{GGally}
+matrix of the penguins' data was produced by the GGally \citep{GGally}
 package built on ggplot2 \citep{ggplot2} graphics. We thank the
 Institute of Statistics, BOKU, for their hospitality while part of this
 work was conducted.
