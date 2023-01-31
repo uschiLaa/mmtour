@@ -1,6 +1,6 @@
 ## ----setup, include=FALSE--------------------------------------------------------------------
 knitr::opts_chunk$set(
-  echo = FALSE, 
+  echo = FALSE,
   message = FALSE,
   warning = FALSE)
 
@@ -9,11 +9,11 @@ knitr::opts_chunk$set(
 # Load libraries
 library(tourr)
 library(plotrix)
-
+library(here)
 
 ## ----manualsequence, out.width="100%", width=12, height=4, fig.cap="Sequence of projections where the contribution of one variable is controlled (dark) is changed using unconstrained orthonormalization. The dot indicates the chosen values for the controlled variable, $V_m$. It can be seen that the actual axis does not precisely match the chosen position, but it is close."----
-source("../src/plot_basis.R")
-source("../src/linear_alg.R")
+source(here("../src/plot_basis.R"))
+source(here("../src/linear_alg.R"))
 
 # Base plot set up
 plot.new()
@@ -29,7 +29,7 @@ A <- matrix(runif(p*d, min=-1), ncol=d, byrow=TRUE)
 colnames(A) <- c("P1", "P2")
 rownames(A) <- paste0("V", 1:p)
 A <- tourr::orthonormalise(A)
-  
+
 # Now set a new position
 vchange <- 3
 eps <- 0.1
@@ -74,7 +74,7 @@ penguins_data <- penguins[, c(1,3, 4, 5, 6)] %>%
          "fl"="flipper_length_mm",
          "bm"="body_mass_g")
 #ggscatmat(penguins_data, columns = 2:5, col="species") +
-# library(paletteer) 
+# library(paletteer)
 # rcartocolor::ag_Sunset
 # rcartocolor::ag_GrnYl
 # RColorBrewer::Spectral
@@ -84,49 +84,49 @@ penguins_data <- penguins[, c(1,3, 4, 5, 6)] %>%
 clrs <- c("#245668FF", "#EA4F88FF", "#ABDDA4FF")
 penguins_diag <- tibble(x=1, y=c(3,2,1),
      species=levels(penguins_data$species))
-pscat <- ggpairs(penguins_data, columns = 2:5, 
-          mapping = ggplot2::aes(color = species, 
+pscat <- ggpairs(penguins_data, columns = 2:5,
+          mapping = ggplot2::aes(color = species,
                                  fill = species),
           upper = list(continuous = "points"),
           diag = list(continuous = "densityDiag")) +
 #  scale_colour_manual("", values=c("Adelie" = "#5E82B6", "Chinstrap" = "#E19C24", "Gentoo" = "#8FB132")) +
 #  scale_fill_manual("", values=c("Adelie" = "#5E82B6", "Chinstrap" = "#E19C24", "Gentoo" = "#8FB132")) +
   scale_colour_manual("", values=c("Adelie" = clrs[1], "Chinstrap" = clrs[2], "Gentoo" = clrs[3])) +
-  scale_fill_manual("", values=c("Adelie" = clrs[1], "Chinstrap" = clrs[2], "Gentoo" = clrs[3])) 
-pscat[1,1] <- ggplot(penguins_diag, 
-                     aes(x=x, 
-                         y=y, 
-                         label=species, 
-                         colour=species)) + 
+  scale_fill_manual("", values=c("Adelie" = clrs[1], "Chinstrap" = clrs[2], "Gentoo" = clrs[3]))
+pscat[1,1] <- ggplot(penguins_diag,
+                     aes(x=x,
+                         y=y,
+                         label=species,
+                         colour=species)) +
   geom_text() +
   scale_colour_manual("", values=c("Adelie" = clrs[1], "Chinstrap" = clrs[2], "Gentoo" = clrs[3])) +
   ylim(c(0,4))
-pscat[2,2] <- ggplot(penguins_diag, 
+pscat[2,2] <- ggplot(penguins_diag,
                      aes(x=x,
-                         y=y, 
-                         label=species, 
-                         colour=species)) + 
+                         y=y,
+                         label=species,
+                         colour=species)) +
   geom_text() +
   scale_colour_manual("", values=c("Adelie" = clrs[1], "Chinstrap" = clrs[2], "Gentoo" = clrs[3])) +
   ylim(c(0,4))
-pscat[3,3] <- ggplot(penguins_diag, 
+pscat[3,3] <- ggplot(penguins_diag,
                      aes(x=x,
-                         y=y, 
-                         label=species, 
-                         colour=species)) + 
+                         y=y,
+                         label=species,
+                         colour=species)) +
   geom_text() +
   scale_colour_manual("", values=c("Adelie" = clrs[1], "Chinstrap" = clrs[2], "Gentoo" = clrs[3])) +
   ylim(c(0,4))
-pscat[4,4] <- ggplot(penguins_diag, 
+pscat[4,4] <- ggplot(penguins_diag,
                      aes(x=x,
-                         y=y, 
-                         label=species, 
-                         colour=species)) + 
+                         y=y,
+                         label=species,
+                         colour=species)) +
   geom_text() +
   scale_colour_manual("", values=c("Adelie" = clrs[1], "Chinstrap" = clrs[2], "Gentoo" = clrs[3])) +
   ylim(c(0,4))
 pscat + theme_bw() +
-  theme(aspect.ratio=1, 
+  theme(aspect.ratio=1,
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         axis.text = element_blank(),
