@@ -2,7 +2,7 @@ This folder contains all data files, source scripts and example scripts to repro
 
 - The data/ folder contains three .csv files with the data input used both by the R example scripts and the Mathematica notebooks
 - The mathematica/ folder contains the Mathematica source code in src/ and the example notebooks using the penguins data in notebooks/. All paths within the notebooks are relative and work within this folder structure
-- The R/ folder contains the R source code, the code to reproduce the example from the raw datain example/ and the scripts to reproduce results from the main paper and appendix in paper/. We use .Rproj files together with the `here` package such that all paths will work within the provided folder structure.
+- The R/ folder contains the R source code, the code to reproduce the example from the raw data in example/ and the scripts to reproduce results from the main paper and appendix in paper/. We use .Rproj files together with the `here` package such that all paths will work within the provided folder structure.
 
 GETTING STARTED:
 
