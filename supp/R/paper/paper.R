@@ -49,19 +49,6 @@ for (i in 1:3) {
   points(exact[1], exact[2], pch=16, col="orange")
 }
 
-# Iterate and save images
-# Constrained orthonormalisation
-#Anew <- A
-#plot_basis(A, vchange, vcol="black")
-#for (i in 1:3) {
-#  Anew[vchange,] <- A[vchange,]*(1-i*eps)
-#  exact <- Anew[vchange,]
-#  Anew <- orthonormalise_frozen(Anew, vchange)
-#  plot_basis(Anew, vchange, vcol="black")
-#  points(exact[1], exact[2], pch=16, col="orange")
-#}
-
-
 ## ----penguins-scatmat, out.width="60%", width=10, height=10, fig.align='center', fig.cap="Scatterplot matrix of the (standardized) penguins data. The three species are reasonably different in size, with Gentoo distinguished from the other two on body depth relative to flipper length and body mass."----
 library(tidyverse)
 library(palmerpenguins)
@@ -73,14 +60,6 @@ penguins_data <- penguins[, c(1,3, 4, 5, 6)] %>%
          "bd"="bill_depth_mm",
          "fl"="flipper_length_mm",
          "bm"="body_mass_g")
-#ggscatmat(penguins_data, columns = 2:5, col="species") +
-# library(paletteer)
-# rcartocolor::ag_Sunset
-# rcartocolor::ag_GrnYl
-# RColorBrewer::Spectral
-# clrs <- c("#245668FF", "#39AB7EFF", "#A9DC67FF")
-# clrs <- c("#4B2991FF", "#EA4F88FF", "#F6A97AFF")
-# clrs <- c("#4B2991FF", "#39AB7EFF", "#F6A97AFF")
 clrs <- c("#245668FF", "#EA4F88FF", "#ABDDA4FF")
 penguins_diag <- tibble(x=1, y=c(3,2,1),
      species=levels(penguins_data$species))
@@ -89,8 +68,6 @@ pscat <- ggpairs(penguins_data, columns = 2:5,
                                  fill = species),
           upper = list(continuous = "points"),
           diag = list(continuous = "densityDiag")) +
-#  scale_colour_manual("", values=c("Adelie" = "#5E82B6", "Chinstrap" = "#E19C24", "Gentoo" = "#8FB132")) +
-#  scale_fill_manual("", values=c("Adelie" = "#5E82B6", "Chinstrap" = "#E19C24", "Gentoo" = "#8FB132")) +
   scale_colour_manual("", values=c("Adelie" = clrs[1], "Chinstrap" = clrs[2], "Gentoo" = clrs[3])) +
   scale_fill_manual("", values=c("Adelie" = clrs[1], "Chinstrap" = clrs[2], "Gentoo" = clrs[3]))
 pscat[1,1] <- ggplot(penguins_diag,
