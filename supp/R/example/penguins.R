@@ -20,7 +20,8 @@ lda_samples <- penguins_lda %>%
 
 animate_slice(lda_samples[,1:4], col = lda_samples$species, v_rel = 0.01)
 
-write_csv(lda_samples[, c(1:4,6,12)], file = here("../../data/penguins_lda.csv"))
+# Write the result, if necessary
+# write_csv(lda_samples[, c(1:4,6,12)], file = here("../../data/penguins_lda.csv"))
 
 set.seed(21)
 penguins_rf <- classifly(penguins_data, species ~ . , randomForest)
@@ -32,7 +33,8 @@ rf_samples <- penguins_rf %>%
 
 animate_slice(rf_samples[,1:4], col = rf_samples$species, v_rel = 0.01)
 
-write_csv(rf_samples[, c(1:4,6, 12)], file = here("../../data/penguins_rf.csv"))
+# Write the result, if necessary
+# write_csv(rf_samples[, c(1:4,6, 12)], file = here("../../data/penguins_rf.csv"))
 
 # Plots for paper
 library(GGally)
@@ -44,10 +46,10 @@ ggscatmat(penguins_lda, columns = 1:4, col="species", alpha=0.1)
 
 
 # saving the data to look at in mathematica
-penguins_data %>%
-  dplyr::select(c(2,3,4,5,1)) %>%
-  mutate(species_flag =
-           as.numeric(factor(species,
-                             levels = # making sure we have the same flags
-                               levels(as.factor(rf_samples$species))))) %>%
-  write_csv(file = here("../../data/penguins.csv"))
+# penguins_data %>%
+#   dplyr::select(c(2,3,4,5,1)) %>%
+#   mutate(species_flag =
+#            as.numeric(factor(species,
+#                              levels = # making sure we have the same flags
+#                                levels(as.factor(rf_samples$species))))) %>%
+# write_csv(file = here("../../data/penguins.csv"))
