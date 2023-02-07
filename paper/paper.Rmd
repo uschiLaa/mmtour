@@ -60,7 +60,7 @@ library(plotrix)
 # Introduction
 
 <!-- Background -->
-From a statistical perspective 3D is a rare data dimension, so unlike in most 3D rotation computer graphics applications, \textcolor{blue}{methods which work for arbitrary dimensions have more general utility}. A good approach is to show projections from an arbitrary dimensional space to create dynamic data visualizations called *tours*. Tours involve views of high-dimensional data with low-dimensional projections. In his original paper on the grand tour, @As85 provided several algorithms for tour paths that could theoretically show the viewer the data *from all sides*. (Various videos of tours, e.g. @dataviewer, @gt-pp-video, on the @ASA22, illustrate this concept.) Prior to Asimov's work, there were numerous preparatory developments including @tukey's PRIM-9. PRIM-9 had user-controlled rotations on coordinate axes, allowing one to manually tour through low-dimensional projections. (A video [@PRIM9-video] illustrating the capabilities is available through \textcolor{blue}{the} video library of @ASA22.) Steering through all possible projections is impossible, unlike Asimov's tours which allow one to quickly see many, many different projections. After Asimov, there have been many tour developments, which are summarized in @lee2021. 
+From a statistical perspective 3D is a rare data dimension, so unlike in most 3D rotation computer graphics applications, \textcolor{blue}{methods which work for arbitrary dimensions have more general utility}. A good approach is to show projections from an arbitrary dimensional space to create dynamic data visualizations called *tours*. Tours involve views of high-dimensional data with low-dimensional projections. In his original paper on the grand tour, @As85 provided several algorithms for tour paths that could theoretically show the viewer the data *from all sides*. \textcolor{blue}{(Various videos of tours, e.g.} @dataviewer, @gt-pp-video, on the @ASA22, \textcolor{blue}{illustrate this concept.)} Prior to Asimov's work, there were numerous preparatory developments including @tukey's PRIM-9. PRIM-9 had user-controlled rotations on coordinate axes, allowing one to manually tour through low-dimensional projections. (A video [@PRIM9-video] illustrating the capabilities is available through \textcolor{blue}{the} video library of @ASA22.) Steering through all possible projections is impossible, unlike Asimov's tours which allow one to quickly see many, many different projections. After Asimov, there have been many tour developments, which are summarized in @lee2021. 
 
 <!-- Manual tours -->
 One such direction of work develops the ideas from PRIM-9, to provide manual control of a tour. @cook_manual_1997 describe controls for 1D (or 2D) projections, respectively in a 2D (or 3D) manipulation space, allowing the user to select any variable axis, and rotate it into, out of, or around the projection through horizontal, vertical, oblique, radial or angular changes in value. @spyrison_spinifex_2020 refined this algorithm and implemented it to generate radial tour animation sequences. 
@@ -95,7 +95,7 @@ The new approach emerged from experiments on the tour using linear algebra capab
 ### Algorithm 
 
 1. Provide $A$, and $m$. (Note that $m$ could also be automatically chosen as the component that is closest to the cursor position.)
-2. Change values in row $m$, for example, if $d=2$ gives 
+2. Change values in row $m$, for example, if $d=2$ 
 $$
 A^* = [ \boldsymbol{a}^*_1~\boldsymbol{a}^*_2 ] = \left[ \begin{array}{cc} a_{11} & a_{12}\\
                               \vdots & \vdots \\
@@ -108,6 +108,8 @@ $$
 3. Orthonormalise $A^*$, using Gram-Schmidt. 
     i. Normalise $\boldsymbol{a}^*_1$ and $\boldsymbol{a}^*_2$.
     ii. $\boldsymbol{a}^*_2 = \boldsymbol{a}^*_2 - (\boldsymbol{a}^*_1\cdot\boldsymbol{a}^*_2)\boldsymbol{a}^*_1$.
+    
+\textcolor{red}{a2 should be normalised after the second step? Fig 1: this is now showing tracking, with the yellow dot moving in each image?}    
     
 <!--
 Note: I removed the angular brackets since cdot denotes scalar product already (also used like this below for the slice definitions)
@@ -193,13 +195,17 @@ The interactions in the axis display need to be mapped back onto the current pro
 
 In addition, we also want to be able to look at slices of the data and select slicing parameters interactively. Here we have implemented a switch to change between projection and slice view, a slider that adjusts the slice thickness, $h$ (named `height` in the Mathematica interface), and a numeric input to specify the center point $c$ explicitly. The display will update based on these input values, in particular, the view will jump to a new slice when $c$ is changed.<!-- (though an interpolation might also be useful).-->
 
-\textcolor{blue}{Within R, the natural implementation for an interactive interface would use} `shiny` [@shinym] with `plotly` [@plotly] drawing. However, the `plotly` package is designed to add to `ggplot2` graphics, not to be a programmable interactive graphics system. It lacks the capability to implement the primary tool needed for a manual tour, which is the tracking of the cursor position in small increments. In theory, the historical `locator()` function of base R should provide the necessary capability, but its behavior is not consistent between graphical devices. The cursor position control is possible with `rgl` [@rgl] but this package is focused on 3D, not the arbitrary dimension of tours. The level of interactivity would have been possible with the `cranvas` system [@cranvas] or `rJava` [@rJava] but neither has a graphics toolkit that currently operates across platforms.  What we have chosen to do is to use the interactivity of Mathematica to experiment, and to implement the resulting ideas as an animation in the `tourr` [@tourr] package. There is hope that better interactivity will be available for R soon, perhaps in javascript [e.g. @langevitour, @detourr], which might allow for the experimentation to develop new techniques. 
+\textcolor{blue}{Within R, the natural implementation for an interactive interface would use} `shiny` [@shinym] with `plotly` [@plotly] drawing. However, the `plotly` package is designed to add to `ggplot2` [@ggplot2] graphics, not to be a programmable interactive graphics system. It lacks the capability to implement the primary tool needed for a manual tour, which is the tracking of the cursor position in small increments. In theory, the historical `locator()` function of base R should provide the necessary capability, but its behavior is not consistent between graphical devices. The cursor position control is possible with `rgl` [@rgl] but this package is focused on 3D, not the arbitrary dimension of tours. The level of interactivity would have been possible with the `cranvas` system [@cranvas] or `rJava` [@rJava] but neither has a graphics toolkit that currently operates across platforms.  What we have chosen to do is to use the interactivity of Mathematica to experiment, and to implement the resulting ideas as an animation in the `tourr` [@tourr] package. There is hope that better interactivity will be available for R soon, perhaps in javascript [e.g. @langevitour, @detourr], which might allow for the experimentation to develop new techniques. 
+
+\textcolor{red}{plotly does 3D graphs that can be dragged as well, maybe need to clarify further? Are there any references that document shortcomings? Maybe this paragraph should be a subsection?}    
 
 ## Mathematica package
 
 \textcolor{blue}{The Mathematica implementation relies on the inbuilt function  `LocatorPane`. This function creates a region on the screen where the position of the cursor is captured and then converted to input that updates the graphics functions, enabling the manual navigation of the tour. We then use the graphics function `ListPlot` embedded in dynamic objects via  `DynamicModule` to produce the display. User interface objects, such as sliders, locator panes, and input fields, are used to provide user control of slice thickness, center, scale, and point size.} 
 
-The examples presented in the application section below (and attached in notebook format in the supplementary material) all use our primary new function, `SliceDynamic`. This function typically accepts grouped data in the form of a matrix where the second last column details the name of the group and the last column details the group index (which can be one if there is only one group). After specifying the initial slice thickness and the slice range, the user is presented with an interactive display in which the control objects appear on the left and the slice visualization appears on the right. The user can change the orientation of the slice via the locator pane, which changes the projection matrix;  a slider controls the slice thickness; and there is an input field, which changes the slice center. The user can also change the appearance of the plot by zooming into the center or changing the point size with the sliders provided. It is worth noting that this zoom works best with data that has been centered and scaled. The projected data can be displayed to contrast it with the slice by ticking a box. The explicit projection matrix can also be displayed via another checkbox. This is especially useful when we wish to import a projection that was identified as interesting in the manual exploration into a later study, as shown in the applications below. More details about the implementation and usage instructions are given in the Appendix.
+The examples presented in the application section below (and attached in notebook format in the supplementary material) all use our primary new function, `SliceDynamic`. This function typically accepts grouped data in the form of a matrix where the second last column details the name of the group and the last column details the group index (which can be one if there is only one group). After specifying the initial slice thickness and the slice range, the user is presented with an interactive display in which the control objects appear on the left and the slice visualization appears on the right. The user can change the orientation of the slice via the locator pane, which changes the projection matrix;  a slider controls the slice thickness; and there is an input field, which changes the slice center.
+\textcolor{red}{insert sentence about new slice position display here.}
+The user can also change the appearance of the plot by zooming into the center or changing the point size with the sliders provided. It is worth noting that this zoom works best with data that has been centered and scaled. The projected data can be displayed to contrast it with the slice by ticking a box. The explicit projection matrix can also be displayed via another checkbox. This is especially useful when we wish to import a projection that was identified as interesting in the manual exploration into a later study, as shown in the applications below. More details about the implementation and usage instructions are given in the Appendix.
 
 
 ## Extensions to the R package `tourr`
@@ -220,7 +226,7 @@ Potential adjustments for future work include better visualization of the curren
 
 # Application {#sec:examples}
 
-```{r penguins-scatmat, out.width="60%", width=10, height=10, fig.align='center', fig.cap="Scatterplot matrix of the (standardized) penguins data. The three species are reasonably different in size, with Gentoo distinguished from the other two on body depth relative to flipper length and body mass."}
+```{r penguins-scatmat, out.width="60%", width=10, height=10, fig.align='center', fig.cap="Scatterplot matrix of the (standardized) penguins data. The three species are reasonably different in size, with Gentoo distinguished from the other two on bill depth relative to flipper length and body mass."}
 library(tidyverse)
 library(palmerpenguins)
 library(GGally)
@@ -353,7 +359,7 @@ This example can be reproduced with the code in `penguins_slicing_through_center
 
 We have seen that starting from $A_1$ using the manual controls to change the contribution of the second variable we could find a clear separation boundary indicating the relation between this variable (bill depth) and the Gentoo penguin species. Instead of rotating to a different projection, we might also change the view by moving the slice along one axis in the 4D space. Here we will continue our exploration of the dependence on `bd` and move the slice defined by $A_1$ to either large positive or negative values ($c^{\pm}_{bd} = \pm 1.5$ after centering and scaling). Thus we define $\mathbf{c}^{\pm} = (0, c^{\pm}_{bd}, 0, 0)$. Here we will also look at slices of the observed data points, using a thicker slice ($h=1.5$) to capture enough points in a given view.
 
-We start with a comparison of the two models and the data distribution shifting to $\mathbf{c}^{+}$, thus the slice is localized towards high values of bill depth in the top row of Figure \ref{slice1p}. \textcolor{blue}{The star glyph at right indicates the slice center value, which shows that it is higher on `bd` and at the middle value for the other variables. This slice center guide is as proposed in @condviz2, and more details can be found in the Appendix.} We can see that all three slices (the two models and the data) contain almost no points from the third class (Gentoo) and that the decision boundary between the two models is very similar.
+We start with a comparison of the two models and the data distribution shifting to $\mathbf{c}^{+}$, thus the slice is localized towards high values of bill depth in the top row of Figure \ref{slice1p}. \textcolor{blue}{The star glyph at the right indicates the slice center value, which shows that it is higher on `bd` and at the middle value for the other variables. This slice center guide is as proposed in @condviz2, and more details can be found in the Appendix.} We can see that all three slices (the two models and the data) contain almost no points from the third class (Gentoo) and that the decision boundary between the two models is very similar.
 
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.95\textwidth]{figures/slice1_p.pdf}}
@@ -384,7 +390,9 @@ This example can be reproduced with the code in penguins_shifting_slice_center.n
 
 This short note has described new technology for manually interacting with tours. The manual control of projection coefficients is most useful for assessing variable importance to the perceived structure but can be generally used for steering a viewer through high-dimensional space. Changing the center of a slice manually enables exploring the space orthogonal to a projection, specifically in the direction of a single variable. This is a new tool, and as shown in the example, when used with the slice tour can be very useful for understanding the boundaries of classifiers. This is also likely a useful method for examining low-dimensional non-linear manifolds, and also functions of multiple parameters.
 
-Mathematica provided a useful sandbox to experiment with the ideas presented in this paper. Most of the data, though, is first constructed using R, especially the classification boundaries. If new technology for interactive graphics with precise cursor control becomes available in R it would be useful to create a tighter coupling of models and visualization to allow exploring and comparing fits. 
+Mathematica provided a useful sandbox to experiment with the ideas presented in this paper. 
+Most of the data, though, is first constructed using R, especially the classification boundaries. \textcolor{red}{what should this say?}
+If new technology for interactive graphics with precise cursor control becomes available in R it would be useful to create a tighter coupling of models and visualization to allow exploring and comparing fits. 
 
 <!-- Recap contribution
 
@@ -407,6 +415,6 @@ The supplementary materials include:
 - The Mathematica source code defining the new functions in mmtour.wl.
 - Three Mathematica notebooks with the code used in the application (corresponding to the three subsections).
 - Appendix with additional details about manual controls, and Mathematica functions.
-- The `Rmd` file that generated the paper, containing the R code to produce Figure 1.
 - Data files for the examples.
+- R code to reproduce the example data, Figures 1 and 2 in the paper and Figures 1 and 2 in the appendix.
 - Animations illustrating the manual tour and slicing, matching the static figures in the paper. These are also available at https://vimeo.com/747585410 and https://vimeo.com/747590472.

@@ -99,17 +99,19 @@ space to create dynamic data visualizations called \emph{tours}. Tours
 involve views of high-dimensional data with low-dimensional projections.
 In his original paper on the grand tour, \citet{As85} provided several
 algorithms for tour paths that could theoretically show the viewer the
-data \emph{from all sides}. (Various videos of tours, e.g.
-\citet{dataviewer}, \citet{gt-pp-video}, on the \citet{ASA22},
-illustrate this concept.) Prior to Asimov's work, there were numerous
-preparatory developments including \citet{tukey}'s PRIM-9. PRIM-9 had
-user-controlled rotations on coordinate axes, allowing one to manually
-tour through low-dimensional projections. (A video \citep{PRIM9-video}
-illustrating the capabilities is available through \textcolor{blue}{the}
-video library of \citet{ASA22}.) Steering through all possible
-projections is impossible, unlike Asimov's tours which allow one to
-quickly see many, many different projections. After Asimov, there have
-been many tour developments, which are summarized in \citet{lee2021}.
+data \emph{from all sides}.
+\textcolor{blue}{(Various videos of tours, e.g.} \citet{dataviewer},
+\citet{gt-pp-video}, on the \citet{ASA22},
+\textcolor{blue}{illustrate this concept.)} Prior to Asimov's work,
+there were numerous preparatory developments including \citet{tukey}'s
+PRIM-9. PRIM-9 had user-controlled rotations on coordinate axes,
+allowing one to manually tour through low-dimensional projections. (A
+video \citep{PRIM9-video} illustrating the capabilities is available
+through \textcolor{blue}{the} video library of \citet{ASA22}.) Steering
+through all possible projections is impossible, unlike Asimov's tours
+which allow one to quickly see many, many different projections. After
+Asimov, there have been many tour developments, which are summarized in
+\citet{lee2021}.
 
 One such direction of work develops the ideas from PRIM-9, to provide
 manual control of a tour. \citet{cook_manual_1997} describe controls for
@@ -206,7 +208,7 @@ interface, available in Mathematica. The components corresponding to
   Provide \(A\), and \(m\). (Note that \(m\) could also be automatically
   chosen as the component that is closest to the cursor position.)
 \item
-  Change values in row \(m\), for example, if \(d=2\) gives \[
+  Change values in row \(m\), for example, if \(d=2\) \[
   A^* = [ \boldsymbol{a}^*_1~\boldsymbol{a}^*_2 ] = \left[ \begin{array}{cc} a_{11} & a_{12}\\
                              \vdots & \vdots \\
                              a^*_{m1} & a^*_{m2}\\
@@ -229,6 +231,8 @@ interface, available in Mathematica. The components corresponding to
     \(\boldsymbol{a}^*_2 = \boldsymbol{a}^*_2 - (\boldsymbol{a}^*_1\cdot\boldsymbol{a}^*_2)\boldsymbol{a}^*_1\).
   \end{enumerate}
 \end{enumerate}
+
+\textcolor{red}{a2 should be normalised after the second step? Fig 1: this is now showing tracking, with the yellow dot moving in each image?}
 
 This algorithm will produce the changes to a projection as illustrated
 in Figure \ref{fig:manualsequence}. The controlled variable, \(V_m\),
@@ -335,23 +339,25 @@ in particular, the view will jump to a new slice when \(c\) is changed.
 \textcolor{blue}{Within R, the natural implementation for an interactive interface would use}
 \texttt{shiny} \citep{shinym} with \texttt{plotly} \citep{plotly}
 drawing. However, the \texttt{plotly} package is designed to add to
-\texttt{ggplot2} graphics, not to be a programmable interactive graphics
-system. It lacks the capability to implement the primary tool needed for
-a manual tour, which is the tracking of the cursor position in small
-increments. In theory, the historical \texttt{locator()} function of
-base R should provide the necessary capability, but its behavior is not
-consistent between graphical devices. The cursor position control is
-possible with \texttt{rgl} \citep{rgl} but this package is focused on
-3D, not the arbitrary dimension of tours. The level of interactivity
-would have been possible with the \texttt{cranvas} system
-\citep{cranvas} or \texttt{rJava} \citep{rJava} but neither has a
-graphics toolkit that currently operates across platforms. What we have
-chosen to do is to use the interactivity of Mathematica to experiment,
-and to implement the resulting ideas as an animation in the
-\texttt{tourr} \citep{tourr} package. There is hope that better
-interactivity will be available for R soon, perhaps in javascript
-\citep[e.g.][\citet{detourr}]{langevitour}, which might allow for the
-experimentation to develop new techniques.
+\texttt{ggplot2} \citep{ggplot2} graphics, not to be a programmable
+interactive graphics system. It lacks the capability to implement the
+primary tool needed for a manual tour, which is the tracking of the
+cursor position in small increments. In theory, the historical
+\texttt{locator()} function of base R should provide the necessary
+capability, but its behavior is not consistent between graphical
+devices. The cursor position control is possible with \texttt{rgl}
+\citep{rgl} but this package is focused on 3D, not the arbitrary
+dimension of tours. The level of interactivity would have been possible
+with the \texttt{cranvas} system \citep{cranvas} or \texttt{rJava}
+\citep{rJava} but neither has a graphics toolkit that currently operates
+across platforms. What we have chosen to do is to use the interactivity
+of Mathematica to experiment, and to implement the resulting ideas as an
+animation in the \texttt{tourr} \citep{tourr} package. There is hope
+that better interactivity will be available for R soon, perhaps in
+javascript \citep[e.g.][\citet{detourr}]{langevitour}, which might allow
+for the experimentation to develop new techniques.
+
+\textcolor{red}{plotly does 3D graphs that can be dragged as well, maybe need to clarify further? Are there any references that document shortcomings? Maybe this paragraph should be a subsection?}
 
 \hypertarget{mathematica-package}{%
 \subsection{Mathematica package}\label{mathematica-package}}
@@ -369,16 +375,18 @@ display in which the control objects appear on the left and the slice
 visualization appears on the right. The user can change the orientation
 of the slice via the locator pane, which changes the projection matrix;
 a slider controls the slice thickness; and there is an input field,
-which changes the slice center. The user can also change the appearance
-of the plot by zooming into the center or changing the point size with
-the sliders provided. It is worth noting that this zoom works best with
-data that has been centered and scaled. The projected data can be
-displayed to contrast it with the slice by ticking a box. The explicit
-projection matrix can also be displayed via another checkbox. This is
-especially useful when we wish to import a projection that was
-identified as interesting in the manual exploration into a later study,
-as shown in the applications below. More details about the
-implementation and usage instructions are given in the Appendix.
+which changes the slice center.
+\textcolor{red}{insert sentence about new slice position display here.}
+The user can also change the appearance of the plot by zooming into the
+center or changing the point size with the sliders provided. It is worth
+noting that this zoom works best with data that has been centered and
+scaled. The projected data can be displayed to contrast it with the
+slice by ticking a box. The explicit projection matrix can also be
+displayed via another checkbox. This is especially useful when we wish
+to import a projection that was identified as interesting in the manual
+exploration into a later study, as shown in the applications below. More
+details about the implementation and usage instructions are given in the
+Appendix.
 
 \hypertarget{extensions-to-the-r-package-tourr}{%
 \subsection{\texorpdfstring{Extensions to the R package
@@ -409,7 +417,7 @@ out to the opposite side, and then back to the center.
 
 }
 
-\caption{Scatterplot matrix of the (standardized) penguins data. The three species are reasonably different in size, with Gentoo distinguished from the other two on body depth relative to flipper length and body mass.}\label{fig:penguins-scatmat}
+\caption{Scatterplot matrix of the (standardized) penguins data. The three species are reasonably different in size, with Gentoo distinguished from the other two on bill depth relative to flipper length and body mass.}\label{fig:penguins-scatmat}
 \end{figure}
 
 To illustrate the usefulness of the manual controls we use the 4D
@@ -574,7 +582,7 @@ to capture enough points in a given view.
 We start with a comparison of the two models and the data distribution
 shifting to \(\mathbf{c}^{+}\), thus the slice is localized towards high
 values of bill depth in the top row of Figure \ref{slice1p}.
-\textcolor{blue}{The star glyph at right indicates the slice center value, which shows that it is higher on `bd` and at the middle value for the other variables. This slice center guide is as proposed in @condviz2, and more details can be found in the Appendix.}
+\textcolor{blue}{The star glyph at the right indicates the slice center value, which shows that it is higher on `bd` and at the middle value for the other variables. This slice center guide is as proposed in @condviz2, and more details can be found in the Appendix.}
 We can see that all three slices (the two models and the data) contain
 almost no points from the third class (Gentoo) and that the decision
 boundary between the two models is very similar.
@@ -628,10 +636,11 @@ parameters.
 
 Mathematica provided a useful sandbox to experiment with the ideas
 presented in this paper. Most of the data, though, is first constructed
-using R, especially the classification boundaries. If new technology for
-interactive graphics with precise cursor control becomes available in R
-it would be useful to create a tighter coupling of models and
-visualization to allow exploring and comparing fits.
+using R, especially the classification boundaries.
+\textcolor{red}{what should this say?} If new technology for interactive
+graphics with precise cursor control becomes available in R it would be
+useful to create a tighter coupling of models and visualization to allow
+exploring and comparing fits.
 
 \hypertarget{acknowledgements}{%
 \section*{Acknowledgements}\label{acknowledgements}}
@@ -666,10 +675,10 @@ The supplementary materials include:
   Appendix with additional details about manual controls, and
   Mathematica functions.
 \item
-  The \texttt{Rmd} file that generated the paper, containing the R code
-  to produce Figure 1.
-\item
   Data files for the examples.
+\item
+  R code to reproduce the example data, Figures 1 and 2 in the paper and
+  Figures 1 and 2 in the appendix.
 \item
   Animations illustrating the manual tour and slicing, matching the
   static figures in the paper. These are also available at

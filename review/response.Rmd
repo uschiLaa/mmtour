@@ -11,9 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
  XXX If use new slice center control for fig 7, need to make a note of it here, updated the mathematica notebook and check text and captions correct.
 
- XXX References need to be consistent, all initials or all full names, and all sentence case or title case on titles.
+ XXX References need to be consistent, all initials or all full names, and all sentence case or title case on titles. - Done
  
- XXX Check that slicing explanation mentions scaling the data!
+ XXX Check that slicing explanation mentions scaling the data! - where should this go?
  
 **Editor**
 
@@ -53,9 +53,10 @@ Major Issues
 - Reproducibility:
     - Code should be reproducible and not depend on user paths.
     - Data files should be uploaded along with code files (they don't seem to be part of supplemental material?)
-    - Not having the ability to actually run the code (because the data wasn't included) makes it somewhat diﬀicult to assess the software side of this paper.
+    - Not having the ability to actually run the code (because the data wasn't included) makes it somewhat difficult to assess the software side of this paper.
     
 \textcolor{blue}{Done. Previously we provided the public github repo URL so that all files to reproduce could be downloaded. Here we have included all the files in the supplementary zip. XXX TODO Please check the list of Supplementary material in the paper.}
+\textcolor{red}{I think it is complete, but maybe can be structured better, to discuss}
    
 - Grammar: There are a lot of minor grammatical issues with this paper. I suggest utilizing a tool such as Grammarly to spot and fix them. The ones that I noticed as I read through the first section are detailed in minor issues below, but I am trying to focus more on the content than the style, so I will try to not nit-pick through the rest of the paper and trust that the authors can use the online tools.
 
@@ -63,7 +64,7 @@ Major Issues
 
 - Cite your software packages appropriately - they're tools you depend on to do your work and should be cited in the same way papers are cited.
 
-\textcolor{blue}{Done. They were all cited, but not by our error, at the first mention.}
+\textcolor{blue}{Done. They were all cited, but not, by our error, at the first mention.}
 
     – Page 3, line 28: Capitalize Mathematica and cite it appropriately. 
     
@@ -100,6 +101,8 @@ should be).
   - Finally, after all of this time, this is the one input that might be a bit harder to implement in R/Shiny, though I think via WebGL it should be workable. This is where the focus should be, rather than the previous two paragraphs, which are a distraction.
 
 \textcolor{blue}{The first two paragraphs have been removed and the third restructured to explain why this is difficult in R/Shiny/rgl.}  
+\textcolor{red}{Maybe have a single reply to all these points? It seems the blue text color in the paper is not there for all changes (paragraph on shiny is fully new?).}
+
 
 Minor issues and suggestions
 
