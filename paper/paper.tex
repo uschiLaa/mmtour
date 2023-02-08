@@ -92,26 +92,24 @@ graphics; multivariate data; dynamic graphics
 \section{Introduction}\label{introduction}}
 
 From a statistical perspective 3D is a rare data dimension, so unlike in
-most 3D rotation computer graphics applications,
-\textcolor{blue}{methods which work for arbitrary dimensions have more general utility}.
-A good approach is to show projections from an arbitrary dimensional
-space to create dynamic data visualizations called \emph{tours}. Tours
-involve views of high-dimensional data with low-dimensional projections.
-In his original paper on the grand tour, \citet{As85} provided several
-algorithms for tour paths that could theoretically show the viewer the
-data \emph{from all sides}.
-\textcolor{blue}{(Various videos of tours, e.g.} \citet{dataviewer},
-\citet{gt-pp-video}, on the \citet{ASA22},
-\textcolor{blue}{illustrate this concept.)} Prior to Asimov's work,
-there were numerous preparatory developments including \citet{tukey}'s
-PRIM-9. PRIM-9 had user-controlled rotations on coordinate axes,
-allowing one to manually tour through low-dimensional projections. (A
-video \citep{PRIM9-video} illustrating the capabilities is available
-through \textcolor{blue}{the} video library of \citet{ASA22}.) Steering
-through all possible projections is impossible, unlike Asimov's tours
-which allow one to quickly see many, many different projections. After
-Asimov, there have been many tour developments, which are summarized in
-\citet{lee2021}.
+most 3D rotation computer graphics applications, methods which work for
+arbitrary dimensions have more general utility. A good approach is to
+show projections from an arbitrary dimensional space to create dynamic
+data visualizations called \emph{tours}. Tours involve views of
+high-dimensional data with low-dimensional projections. In his original
+paper on the grand tour, \citet{As85} provided several algorithms for
+tour paths that could theoretically show the viewer the data \emph{from
+all sides}. (Various videos of tours, e.g. \citet{dataviewer},
+\citet{gt-pp-video}, on the \citet{ASA22}, illustrate this concept.)
+Prior to Asimov's work, there were numerous preparatory developments
+including \citet{tukey}'s PRIM-9. PRIM-9 had user-controlled rotations
+on coordinate axes, allowing one to manually tour through
+low-dimensional projections. (A video \citep{PRIM9-video} illustrating
+the capabilities is available through the video library of
+\citet{ASA22}.) Steering through all possible projections is impossible,
+unlike Asimov's tours which allow one to quickly see many, many
+different projections. After Asimov, there have been many tour
+developments, which are summarized in \citet{lee2021}.
 
 One such direction of work develops the ideas from PRIM-9, to provide
 manual control of a tour. \citet{cook_manual_1997} describe controls for
@@ -166,10 +164,10 @@ A manual tour allows the user to alter the coefficients of one (or more)
 variables, of \(p\), contributing to a \(d\)-dimensional projection. The
 initial ingredients are an orthonormal basis (\(A_{p\times d}\))
 defining the projection of the data, and a variable id
-(\(m \in \{1, ..., p\}\)) specifying which coefficient will be
-\textcolor{blue}{changed: the $m^{th}$ row of $A_{p\times d}$ which we denote by $V_m$.}
-A method to update the values of the component of the controlled
-variable \(V_m\) is then needed.
+(\(m \in \{1, ..., p\}\)) specifying which coefficient will be changed:
+the \(m^{th}\) row of \(A_{p\times d}\) which we denote by \(V_m\). A
+method to update the values of the component of the controlled variable
+\(V_m\) is then needed.
 
 \hypertarget{existing-methods}{%
 \subsection{Existing methods}\label{existing-methods}}
@@ -226,13 +224,13 @@ interface, available in Mathematica. The components corresponding to
   \def\labelenumii{\roman{enumii}.}
   \tightlist
   \item
-    Normalise \(\boldsymbol{a}^*_1\) and \(\boldsymbol{a}^*_2\).
+    Normalise \(\boldsymbol{a}^*_1\).
   \item
     \(\boldsymbol{a}^*_2 = \boldsymbol{a}^*_2 - (\boldsymbol{a}^*_1\cdot\boldsymbol{a}^*_2)\boldsymbol{a}^*_1\).
+  \item
+    Normalise \(\boldsymbol{a}^*_2\).
   \end{enumerate}
 \end{enumerate}
-
-\textcolor{red}{a2 should be normalised after the second step? Fig 1: this is now showing tracking, with the yellow dot moving in each image?}
 
 This algorithm will produce the changes to a projection as illustrated
 in Figure \ref{fig:manualsequence}. The controlled variable, \(V_m\),
@@ -246,7 +244,7 @@ controlled. This is more difficult to implement interactively, but is
 easy with scripting, as is available in the R implementation.
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{paper_files/figure-latex/manualsequence-1} \caption{Sequence of projections where the contribution of one variable is controlled (dark) is changed using unconstrained orthonormalization. The dot indicates the chosen values for the controlled variable, $V_m$. It can be seen that the actual axis does not precisely match the chosen position, but it is close.}\label{fig:manualsequence}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/manualsequence-1} \caption{Sequence of projections where the contribution of one variable is controlled (dark). The dot indicates the chosen values for the controlled variable, $V_m$. The change is tracking the chosen value after unconstrained orthonormalization. It can be seen that the actual axis does not precisely match the chosen position, but it is close.}\label{fig:manualsequence}
 \end{figure}
 
 \hypertarget{refinements-to-enforce-exact-position}{%
@@ -318,17 +316,17 @@ The implementation of the manual tour as suggested here requires the
 visualization of the current projection in terms of an axis display (see
 Figure \ref{fig:manualsequence} for an example). This display should be
 able to track the mouse position and adjust the projection based on the
-\textcolor{blue}{user's cursor position}. The user can select one axis
-(corresponding to one variable) by clicking on it, and then adjust the
-position of that axis by dragging it. In practice, the closest axis will
-be selected, and the dragging results in tracking the mouse position
-which will update the projection in small steps, such that no further
-interpolation is required.
+user's cursor position. The user can select one axis (corresponding to
+one variable) by clicking on it, and then adjust the position of that
+axis by dragging it. In practice, the closest axis will be selected, and
+the dragging results in tracking the mouse position which will update
+the projection in small steps, such that no further interpolation is
+required.
 
 The interactions in the axis display need to be mapped back onto the
 current projection matrix, which will then be orthonormalized and
-\textcolor{blue}{re-displayed}. A second, linked display shows the
-projected data in sync with the updates from the axis display.
+re-displayed. A second, linked display shows the projected data in sync
+with the updates from the axis display.
 
 In addition, we also want to be able to look at slices of the data and
 select slicing parameters interactively. Here we have implemented a
@@ -338,8 +336,8 @@ Mathematica interface), and a numeric input to specify the center point
 \(c\) explicitly. The display will update based on these input values,
 in particular, the view will jump to a new slice when \(c\) is changed.
 
-\textcolor{blue}{Within R, the natural implementation for an interactive interface would use}
-\texttt{shiny} \citep{shinym} with \texttt{plotly} \citep{plotly}
+Within R, the natural implementation for an interactive interface would
+use \texttt{shiny} \citep{shinym} with \texttt{plotly} \citep{plotly}
 drawing. However, the \texttt{plotly} package is designed to add to
 \texttt{ggplot2} \citep{ggplot2} graphics, not to be a programmable
 interactive graphics system. It lacks the capability to implement the
@@ -362,7 +360,15 @@ which might allow for the experimentation to develop new techniques.
 \hypertarget{mathematica-package}{%
 \subsection{Mathematica package}\label{mathematica-package}}
 
-\textcolor{blue}{The Mathematica implementation relies on the inbuilt function  `LocatorPane`. This function creates a region on the screen where the position of the cursor is captured and then converted to input that updates the graphics functions, enabling the manual navigation of the tour. We then use the graphics function `ListPlot` embedded in dynamic objects via  `DynamicModule` to produce the display. User interface objects, such as sliders, locator panes, and input fields, are used to provide user control of slice thickness, center, scale, and point size.}
+The Mathematica implementation relies on the inbuilt function
+\texttt{LocatorPane}. This function creates a region on the screen where
+the position of the cursor is captured and then converted to input that
+updates the graphics functions, enabling the manual navigation of the
+tour. We then use the graphics function \texttt{ListPlot} embedded in
+dynamic objects via \texttt{DynamicModule} to produce the display. User
+interface objects, such as sliders, locator panes, and input fields, are
+used to provide user control of slice thickness, center, scale, and
+point size.
 
 The examples presented in the application section below (and attached in
 notebook format in the supplementary material) all use our primary new
@@ -374,19 +380,17 @@ thickness and the slice range, the user is presented with an interactive
 display in which the control objects appear on the left and the slice
 visualization appears on the right. The user can change the orientation
 of the slice via the locator pane, which changes the projection matrix;
-a slider controls the slice thickness; and there is an input field,
-which changes the slice center.
-\textcolor{red}{insert sentence about new slice position display here.}
-The user can also change the appearance of the plot by zooming into the
-center or changing the point size with the sliders provided. It is worth
-noting that this zoom works best with data that has been centered and
-scaled. The projected data can be displayed to contrast it with the
-slice by ticking a box. The explicit projection matrix can also be
-displayed via another checkbox. This is especially useful when we wish
-to import a projection that was identified as interesting in the manual
-exploration into a later study, as shown in the applications below. More
-details about the implementation and usage instructions are given in the
-Appendix.
+a slider controls the slice thickness; and there is an input field or an
+interactive star glyph, to change the slice center. The user can also
+change the appearance of the plot by zooming into the center or changing
+the point size with the sliders provided. It is worth noting that this
+zoom works best with data that has been centered and scaled. The
+projected data can be displayed to contrast it with the slice by ticking
+a box. The explicit projection matrix can also be displayed via another
+checkbox. This is especially useful when we wish to import a projection
+that was identified as interesting in the manual exploration into a
+later study, as shown in the applications below. More details about the
+implementation and usage instructions are given in the Appendix.
 
 \hypertarget{extensions-to-the-r-package-tourr}{%
 \subsection{\texorpdfstring{Extensions to the R package
@@ -581,11 +585,14 @@ to capture enough points in a given view.
 
 We start with a comparison of the two models and the data distribution
 shifting to \(\mathbf{c}^{+}\), thus the slice is localized towards high
-values of bill depth in the top row of Figure \ref{slice1p}.
-\textcolor{blue}{The star glyph at the right indicates the slice center value, which shows that it is higher on `bd` and at the middle value for the other variables. This slice center guide is as proposed in @condviz2, and more details can be found in the Appendix.}
-We can see that all three slices (the two models and the data) contain
-almost no points from the third class (Gentoo) and that the decision
-boundary between the two models is very similar.
+values of bill depth in the top row of Figure \ref{slice1p}. The star
+glyph at the right indicates the slice center value, which shows that it
+is higher on \texttt{bd} and at the middle value for the other
+variables. This slice center guide is as proposed in \citet{condviz2},
+and more details can be found in the Appendix. We can see that all three
+slices (the two models and the data) contain almost no points from the
+third class (Gentoo) and that the decision boundary between the two
+models is very similar.
 
 \begin{figure*}[ht]
 \centerline{\includegraphics[width=0.95\textwidth]{figures/slice1_p.pdf}}
@@ -598,17 +605,18 @@ boundary between the two models is very similar.
 
 A more interesting comparison is found for \(\mathbf{c}^{-}\), thus the
 slice localized towards low values of bill depth, shown in the bottom
-row of Figure \ref{slice1p}.
-\textcolor{blue}{(The star glyph at right indicates the slice center value, which shows that it is lower on `bd` and at the middle value for the other variables.)}
-The RF model (left) predicts all three species within this slice, with
-an interesting boundary for the third class (Gentoo). On the other hand,
-the LDA model (middle) predominantly predicts the third class within the
-slice, this appears to be enforced through the linear structure of the
-model. Looking finally at the thick slice through the data we see that
-there are primarily observations from this class within the slice we can
-conclude that the two models have filled in the ``empty'' space (where
-we do not have any training observations) in very different ways and
-according to what we might expect given the model structure.
+row of Figure \ref{slice1p}. (The star glyph at right indicates the
+slice center value, which shows that it is lower on \texttt{bd} and at
+the middle value for the other variables.) The RF model (left) predicts
+all three species within this slice, with an interesting boundary for
+the third class (Gentoo). On the other hand, the LDA model (middle)
+predominantly predicts the third class within the slice, this appears to
+be enforced through the linear structure of the model. Looking finally
+at the thick slice through the data we see that there are primarily
+observations from this class within the slice we can conclude that the
+two models have filled in the ``empty'' space (where we do not have any
+training observations) in very different ways and according to what we
+might expect given the model structure.
 
 Finally, it is interesting to compare the slice views to the projection
 of the models seen in Fig. \ref{proj1} to better understand how the
@@ -635,12 +643,12 @@ low-dimensional non-linear manifolds, and also functions of multiple
 parameters.
 
 Mathematica provided a useful sandbox to experiment with the ideas
-presented in this paper. Most of the data, though, is first constructed
-using R, especially the classification boundaries.
-\textcolor{red}{what should this say?} If new technology for interactive
-graphics with precise cursor control becomes available in R it would be
-useful to create a tighter coupling of models and visualization to allow
-exploring and comparing fits.
+presented in this paper. However, we have used R for the statistical
+data analysis and modeling in our example, as is the standard approach
+in the community. Since the proposed visualization should ideally be
+integrated within this workflow, the new methods should also be
+implemented as interactive graphics accessible from R once new
+technology with precise cursor control becomes available.
 
 \hypertarget{acknowledgements}{%
 \section*{Acknowledgements}\label{acknowledgements}}

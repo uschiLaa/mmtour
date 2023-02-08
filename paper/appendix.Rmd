@@ -235,7 +235,7 @@ The function renders a manual tour with controls that allow the user to navigate
 This function can be used for ungrouped data by setting legendQ and flagQ to 0.
 To remove a group from the visual display, the user can choose specific colors for the entry colorFunc. For example, {Red,White,Green} would display groups 1 (red) and 3 (green) while making 2 invisible.
 
-\textcolor{blue}{The slice center position is controlled via numerical input along each axis in the original command `SliceDynamic`. This provides numerical feedback on the position of the center. For easier navigation but without the numerical feedback, an implementation of the slice center control via a visual display like the one in Figure \ref{fig:anchornav} is provided in `SliceDynamicCC`.}
+The slice center position is controlled via numerical input along each axis in the original command `SliceDynamic`. This provides numerical feedback on the position of the center. For easier navigation but without the numerical feedback, an implementation of the slice center control via a visual display like the one in Figure \ref{fig:anchornav} is provided in `SliceDynamicCC`.
 
 The package includes the additional functions not used in the example application: `ProjectionPlot`, `Projected2DSliderPlot`, and `VisualiseSliceDyanmic`.
 
