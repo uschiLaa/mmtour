@@ -347,19 +347,17 @@ primary tool needed for a manual tour, which is the tracking of the
 cursor position in small increments. In theory, the historical
 \texttt{locator()} function of base R should provide the necessary
 capability, but its behavior is not consistent between graphical
-devices. The cursor position control is possible with \texttt{rgl}
-\citep{rgl} but this package is focused on 3D, not the arbitrary
-dimension of tours. The level of interactivity would have been possible
-with the \texttt{cranvas} system \citep{cranvas} or \texttt{rJava}
-\citep{rJava} but neither has a graphics toolkit that currently operates
-across platforms. What we have chosen to do is to use the interactivity
-of Mathematica to experiment, and to implement the resulting ideas as an
-animation in the \texttt{tourr} \citep{tourr} package. There is hope
-that better interactivity will be available for R soon, perhaps in
-javascript \citep[e.g.][\citet{detourr}]{langevitour}, which might allow
-for the experimentation to develop new techniques.
-
-\textcolor{red}{plotly does 3D graphs that can be dragged as well, maybe need to clarify further? Are there any references that document shortcomings? Maybe this paragraph should be a subsection?}
+devices. The cursor position control is possible for 3D plots with
+\texttt{rgl} \citep{rgl} and \texttt{plotly} but these not the arbitrary
+dimension needed for tours. The level of interactivity would have been
+possible with the \texttt{cranvas} system \citep{cranvas} or
+\texttt{rJava} \citep{rJava} but neither has a graphics toolkit that
+currently operates across platforms. What we have chosen to do is to use
+the interactivity of Mathematica to experiment, and to implement the
+resulting ideas as an animation in the \texttt{tourr} \citep{tourr}
+package. There is hope that better interactivity will be available for R
+soon, perhaps in javascript \citep[e.g.][\citet{detourr}]{langevitour},
+which might allow for the experimentation to develop new techniques.
 
 \hypertarget{mathematica-package}{%
 \subsection{Mathematica package}\label{mathematica-package}}
