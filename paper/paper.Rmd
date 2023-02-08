@@ -408,9 +408,7 @@ The authors gratefully acknowledge the support of the Australian Research Counci
 
 # Supplementary material {-}
 
-The source material and animated gifs for this paper are available at [https://github.com/uschiLaa/mmtour](https://github.com/uschiLaa/mmtour).
-
-The supplementary materials include:
+The source material and animated gifs for this paper are available at [https://github.com/uschiLaa/mmtour](https://github.com/uschiLaa/mmtour). The supplementary materials include:
 
 - The Mathematica source code defining the new functions in mmtour.wl.
 - Three Mathematica notebooks with the code used in the application (corresponding to the three subsections).
