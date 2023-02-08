@@ -170,7 +170,7 @@ To better explore the space we combine the manual controls for the projection wi
 v_i^2 = ||\mathbf{x}_i' - \mathbf{c}'||^2 = \mathbf{x}_i'^2 + \mathbf{c}'^2 - 2 \mathbf{x}_i'\cdot\mathbf{c}' ,
 \label{eq:slice}
 \end{equation}
-with $\mathbf{c}' = \mathbf{c} - (\mathbf{c}\cdot \mathbf{a}_1) \mathbf{a}_1 - (\mathbf{c}\cdot \mathbf{a}_2 )\mathbf{a}_2$, $\mathbf{x}_i' = \mathbf{x}_i - (\mathbf{x}_i\cdot \mathbf{a}_1) \mathbf{a}_1 - (\mathbf{x}_i\cdot \mathbf{a}_2) \mathbf{a}_2$ and $\mathbf{a}_k, k=1,2 (=d)$ denoting the columns of the projection matrix, $\mathbf{A}=(\mathbf{a}_1, \mathbf{a}_2)$.
+with $\mathbf{c}' = \mathbf{c} - (\mathbf{c}\cdot \mathbf{a}_1) \mathbf{a}_1 - (\mathbf{c}\cdot \mathbf{a}_2 )\mathbf{a}_2$, $\mathbf{x}_i' = \mathbf{x}_i - (\mathbf{x}_i\cdot \mathbf{a}_1) \mathbf{a}_1 - (\mathbf{x}_i\cdot \mathbf{a}_2) \mathbf{a}_2$ and $\mathbf{a}_k, k=1,2 (=d)$ denoting the columns of the projection matrix, $\mathbf{A}=(\mathbf{a}_1, \mathbf{a}_2)$. Although not required, manual control of slices works more understandably if the data is first standardized. 
 
 ### Shifting the center
 
@@ -408,9 +408,7 @@ The authors gratefully acknowledge the support of the Australian Research Counci
 
 # Supplementary material {-}
 
-The source material and animated gifs for this paper are available at [https://github.com/uschiLaa/mmtour](https://github.com/uschiLaa/mmtour).
-
-The supplementary materials include:
+The source material and animated gifs for this paper are available at [https://github.com/uschiLaa/mmtour](https://github.com/uschiLaa/mmtour). The supplementary materials include:
 
 - The Mathematica source code defining the new functions in mmtour.wl.
 - Three Mathematica notebooks with the code used in the application (corresponding to the three subsections).
