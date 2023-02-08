@@ -9,12 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
- XXX If use new slice center control for fig 7, need to make a note of it here, updated the mathematica notebook and check text and captions correct.
 
- XXX References need to be consistent, all initials or all full names, and all sentence case or title case on titles. - Done
- 
- XXX Check that slicing explanation mentions scaling the data! - where should this go?
- 
 **Editor**
 
 A referee, an Associate Editor (AE), and I have reviewed your paper. There's enthusiasm for your paper but a number of issues that came up in the reviews require additional attention.  As such, I'd like to offer the opportunity to submit a revised version that addresses the issues brought up by the AE and referee.
@@ -28,7 +23,7 @@ A referee, an Associate Editor (AE), and I have reviewed your paper. There's ent
 
 2- I will download and run your code as part of the next round of reviews.  I suggest, but don't require, the tidyverse style for your code and, in any case, ask that you submit code that is documented and as user-friendly as possible.  Before resubmitting please run your code in a "clean" environment as issues such as required packages that aren't loaded or calls to files that don't exist are common and can delay publication (I'm not saying these exist in your case, just asking you to be aware!).
 
-\textcolor{blue}{Done - TODO check this}
+\textcolor{blue}{Done}
 
 3- Your paper will be printed in black and white.  The online version will be in color but to accommodate printing without color please be sure you don't refer to color in either the figure captions or text and that all figures are still interpretable in black and white.
 
